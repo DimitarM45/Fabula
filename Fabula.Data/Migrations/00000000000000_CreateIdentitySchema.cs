@@ -1,5 +1,6 @@
 ﻿namespace Fabula.Data.Migrations;
 
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 using System;
