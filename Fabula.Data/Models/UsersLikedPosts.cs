@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Mapping table for users and the stories they've liked")]
+[Comment("Mapping table for users and the posts they've liked")]
 
-public class UsersLikedStories
+public class UsersLikedPosts
 {
     [Required]
     [Comment("Id of user")]
@@ -16,9 +16,9 @@ public class UsersLikedStories
     public ApplicationUser User { get; set; } = null!;
 
     [Required]
-    [Comment("Id of story")]
+    [Comment("Id of post")]
 
-    public Guid StoryId { get; set; }
+    public Guid PostId { get; set; }
 
-    public Story Story { get; set; } = null!;
+    public Post Post { get; set; } = null!;
 }

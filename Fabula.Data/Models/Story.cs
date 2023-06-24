@@ -19,6 +19,8 @@ public class Story
         Likes = new HashSet<UsersLikedStories>();
     }
 
+    [Comment("Id of the story")]
+
     public Guid Id { get; set; }
 
     [Required]
@@ -46,6 +48,7 @@ public class Story
     public string Synopsys { get; set; } = null!;
 
     [Required]
+    [Comment("Id of story author")]
 
     public string AuthorId { get; set; } = null!;
 
@@ -63,7 +66,6 @@ public class Story
     public DateTime? DeletedOn { get; set; }
 
     [Required]
-    [Comment("Users who've liked a story")]
 
     public IEnumerable<UsersLikedStories> Likes { get; set; }
 

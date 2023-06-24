@@ -1,6 +1,6 @@
 using Fabula.Data;
+using Fabula.Data.Models;
 
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +13,14 @@ builder.Services.AddDbContext<FabulaDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = true;
+    // TODO change RequireConfirmedAccount to true after implementing working email confirmation
+    // TODO research and implement personal data protection
+    // TODO implement custom identity
+
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Stores.ProtectPersonalData = false;
 })
 .AddEntityFrameworkStores<FabulaDbContext>();
 

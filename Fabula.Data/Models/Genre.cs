@@ -17,6 +17,7 @@ public class Genre
     }
 
     [Required]
+    [Comment("Id of the genre")]
 
     public int Id { get; set; }
 

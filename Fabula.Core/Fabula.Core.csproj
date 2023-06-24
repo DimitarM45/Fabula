@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Fabula.Data\Fabula.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

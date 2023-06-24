@@ -26,6 +26,21 @@ public static class ValidationConstants
         public const int NameMaxLength = 50;
     }
 
+    public static class Post
+    {
+        public const int TitleMinLength = 3;
+        public const int TitleMaxLength = 50;
+
+        public const int ContentMinLength = 10;
+        public const int ContentMaxLength = 2000;
+    }
+
+    public static class Comment
+    {
+        public const int ContentMinLength = 1;
+        public const int ContentMaxLength = 200;
+    }
+
     public static class ApplicationUser
     {
         public const int BioMinLength = 0;

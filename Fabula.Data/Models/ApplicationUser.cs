@@ -17,6 +17,7 @@ public class ApplicationUser : IdentityUser
         Friends = new HashSet<ApplicationUser>();
         WrittenStories = new HashSet<Story>();
         LikedStories = new HashSet<UsersLikedStories>();
+        LikedComments = new HashSet<UsersLikedComments>();
     }
 
     [Required]
@@ -47,4 +48,8 @@ public class ApplicationUser : IdentityUser
     public IEnumerable<Story> WrittenStories { get; set; }
 
     public IEnumerable<UsersLikedStories> LikedStories { get; set; }
+
+    public IEnumerable<UsersLikedPosts> LikedPosts { get; set; }
+
+    public IEnumerable<UsersLikedComments> LikedComments { get; set; }
 }

@@ -3,8 +3,11 @@
 using Core.ViewModels;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using System.Diagnostics;
+
+[Authorize]
 
 public class HomeController : Controller
 {
@@ -15,10 +18,14 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [AllowAnonymous]
+
     public IActionResult Index()
     {
         return View();
     }
+
+    [AllowAnonymous]
 
     public IActionResult Privacy()
     {

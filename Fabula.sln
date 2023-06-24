@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula", "Fabula\Fabula.csproj", "{95A845D5-63CF-495C-93ED-6E766704FB53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula", "Fabula\Fabula.csproj", "{95A845D5-63CF-495C-93ED-6E766704FB53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Core", "Fabula.Core\Fabula.Core.csproj", "{6BB6C7ED-D1CA-4364-97A3-20DEC398A96F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Core", "Fabula.Core\Fabula.Core.csproj", "{6BB6C7ED-D1CA-4364-97A3-20DEC398A96F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Common", "Fabula.Common\Fabula.Common.csproj", "{6EFCFB39-18C4-4B41-8A77-ACC2FF0CD74A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Common", "Fabula.Common\Fabula.Common.csproj", "{6EFCFB39-18C4-4B41-8A77-ACC2FF0CD74A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Data", "Fabula.Data\Fabula.Data.csproj", "{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Data", "Fabula.Data\Fabula.Data.csproj", "{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Seeding", "Fabula.Seeding\Fabula.Seeding.csproj", "{452B73D7-0130-488B-82DD-CB9B719601EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{452B73D7-0130-488B-82DD-CB9B719601EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{452B73D7-0130-488B-82DD-CB9B719601EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{452B73D7-0130-488B-82DD-CB9B719601EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{452B73D7-0130-488B-82DD-CB9B719601EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
