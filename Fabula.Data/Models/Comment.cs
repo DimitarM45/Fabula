@@ -12,9 +12,7 @@ public class Comment
 {
     public Comment()
     {
-        Id = Guid.NewGuid();
-
-        Likes = new HashSet<UsersLikedComments>();
+        Likes = new HashSet<UserLikedComment>();
     }
 
     [Comment("Id of the comment")]
@@ -30,9 +28,20 @@ public class Comment
     [Required]
     [Comment("Id of the comment author")]
 
-    public string AuthorId { get; set; } = null!;
+    public Guid AuthorId { get; set; }
+
+    [Required]
 
     public ApplicationUser Author { get; set; } = null!;
+
+    [Required]
+    [Comment("Id of piece")]
+
+    public Guid PieceId { get; set; }
+
+    [Required]
+
+    public Piece Piece { get; set; } = null!;
 
     [Required]
     [Comment("Date of publishing")]
@@ -45,5 +54,5 @@ public class Comment
 
     public DateTime? DeletedOn { get; set; }
 
-    public IEnumerable<UsersLikedComments> Likes { get; set; }
+    public IEnumerable<UserLikedComment> Likes { get; set; }
 }

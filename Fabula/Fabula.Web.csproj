@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-Fabula-a95a7a9e-807e-4c9f-8a6e-dc0748ea100f</UserSecretsId>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,22 @@
   <ItemGroup>
     <ProjectReference Include="..\Fabula.Core\Fabula.Core.csproj" />
     <ProjectReference Include="..\Fabula.Data\Fabula.Data.csproj" />
+    <ProjectReference Include="..\Fabula.Web.Infrastructure\Fabula.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\Fabula.Web.ViewModels\Fabula.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Views\Shared\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\js\" />
+    <Folder Include="wwwroot\lib\bootstrap\" />
+    <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
+    <Folder Include="wwwroot\lib\jquery-validation-unobtrusive\" />
+    <Folder Include="wwwroot\lib\jquery-validation\" />
+    <Folder Include="wwwroot\lib\jquery-validation\dist\" />
+    <Folder Include="wwwroot\lib\jquery\" />
+    <Folder Include="wwwroot\lib\jquery\dist\" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ public static class ValidationConstants
         public const int UrlMaxLength = 2084;
     }
 
-    public static class Story
+    public static class Piece
     {
         public const int TitleMinLength = 3;
         public const int TitleMaxLength = 100;
@@ -20,25 +20,43 @@ public static class ValidationConstants
         public const int SynopsysMaxLength = 2000;
     }
 
-    public static class Genre
+    public static class Form
     {
         public const int NameMinLength = 3;
         public const int NameMaxLength = 50;
     }
 
-    public static class Post
+    public static class Subgenre
     {
-        public const int TitleMinLength = 3;
-        public const int TitleMaxLength = 50;
+        public const int NameMinLength = 3;
+        public const int NameMaxLength = 75;
+    }
 
-        public const int ContentMinLength = 10;
-        public const int ContentMaxLength = 2000;
+    public static class Tag
+    {
+        public const int NameMinLength = 5;
+        public const int NameMaxLength = 75;
     }
 
     public static class Comment
     {
         public const int ContentMinLength = 1;
         public const int ContentMaxLength = 200;
+    }
+
+    public static class List
+    {
+        public const int TitleMinLength = 3;
+        public const int TitleMaxLength = 75;
+
+        public const int DescriptionMinLength = 10;
+        public const int DescriptionMaxLength = 2000;
+    }
+
+    public static class Rating
+    {
+        public const int MinValue = 1;
+        public const int MaxValue = 5;
     }
 
     public static class ApplicationUser

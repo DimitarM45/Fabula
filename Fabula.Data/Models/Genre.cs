@@ -1,23 +1,22 @@
 ﻿namespace Fabula.Data.Models;
 
-using static Common.ValidationConstants.Genre;
-using static Common.ValidationConstants.Shared;
+using static Common.ValidationConstants.Subgenre;
 
 using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Story genres")]
+[Comment("Genre of a piece")]
 
 public class Genre
 {
     public Genre()
     {
-        Stories = new HashSet<Story>();
+        Stories = new HashSet<Piece>();
     }
 
     [Required]
-    [Comment("Id of the genre")]
+    [Comment("Id of genre")]
 
     public int Id { get; set; }
 
@@ -27,11 +26,5 @@ public class Genre
 
     public string Name { get; set; } = null!;
 
-    [Required]
-    [MaxLength(UrlMaxLength)]
-    [Comment("Picture for genre page")]
-
-    public string PictureUrl { get; set; } = null!;
-
-    public IEnumerable<Story> Stories { get; set; }
+    public IEnumerable<Piece> Stories { get; set; }
 }

@@ -1,4 +1,4 @@
-namespace Fabula.Core.ViewModels;
+namespace Fabula.Web.ViewModels.Home;
 
 public class ErrorViewModel
 {

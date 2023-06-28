@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33801.468
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula", "Fabula\Fabula.csproj", "{95A845D5-63CF-495C-93ED-6E766704FB53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Web", "Fabula\Fabula.Web.csproj", "{95A845D5-63CF-495C-93ED-6E766704FB53}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Core", "Fabula.Core\Fabula.Core.csproj", "{6BB6C7ED-D1CA-4364-97A3-20DEC398A96F}"
 EndProject
@@ -11,7 +11,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Common", "Fabula.Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Data", "Fabula.Data\Fabula.Data.csproj", "{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Seeding", "Fabula.Seeding\Fabula.Seeding.csproj", "{452B73D7-0130-488B-82DD-CB9B719601EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Seeding", "Fabula.Seeding\Fabula.Seeding.csproj", "{452B73D7-0130-488B-82DD-CB9B719601EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{610A9A68-CCCA-42D6-8D59-60B3B5E44278}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{6E0695D6-C3F6-4256-92C2-C9661B2433C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Web.ViewModels", "Fabula.Web.ViewModels\Fabula.Web.ViewModels.csproj", "{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Web.Infrastructure", "Fabula.Web.Infrastructure\Fabula.Web.Infrastructure.csproj", "{1A093EF5-B342-42B8-9CC1-44900204F697}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,9 +47,23 @@ Global
 		{452B73D7-0130-488B-82DD-CB9B719601EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{452B73D7-0130-488B-82DD-CB9B719601EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{452B73D7-0130-488B-82DD-CB9B719601EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A093EF5-B342-42B8-9CC1-44900204F697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A093EF5-B342-42B8-9CC1-44900204F697}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A093EF5-B342-42B8-9CC1-44900204F697}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A093EF5-B342-42B8-9CC1-44900204F697}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{95A845D5-63CF-495C-93ED-6E766704FB53} = {610A9A68-CCCA-42D6-8D59-60B3B5E44278}
+		{7FF6C4FD-2705-4471-8E8E-3D1A0672C15E} = {6E0695D6-C3F6-4256-92C2-C9661B2433C5}
+		{6ADA723F-0270-40E7-B5C5-29FEB6BF87F5} = {610A9A68-CCCA-42D6-8D59-60B3B5E44278}
+		{1A093EF5-B342-42B8-9CC1-44900204F697} = {610A9A68-CCCA-42D6-8D59-60B3B5E44278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC52624A-45C9-4ED1-8E74-B5F3B179F8C9}

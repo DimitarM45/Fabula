@@ -3,10 +3,9 @@ using Fabula.Data.Models;
 
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<FabulaDbContext>(options =>
     options.UseSqlServer(connectionString));
@@ -15,28 +14,38 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
-    // TODO change RequireConfirmedAccount to true after implementing working email confirmation
-    // TODO research and implement personal data protection
-    // TODO implement custom identity
+    options.SignIn.RequireConfirmedAccount =
+        builder.Configuration.GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
 
-    options.SignIn.RequireConfirmedAccount = false;
-    options.Stores.ProtectPersonalData = false;
+    options.Password.RequireLowercase =
+        builder.Configuration.GetValue<bool>("Identity:Password:RequireLowercase");
+
+    options.Password.RequireUppercase =
+        builder.Configuration.GetValue<bool>("Identity:Password:RequireUppercase");
+
+    options.Password.RequireDigit =
+        builder.Configuration.GetValue<bool>("Identity:Password:RequireDigit");
+
+    options.Password.RequireNonAlphanumeric =
+        builder.Configuration.GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
+
+    options.Password.RequiredLength =
+        builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })
 .AddEntityFrameworkStores<FabulaDbContext>();
 
 builder.Services.AddControllersWithViews();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -48,9 +57,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
 app.Run();

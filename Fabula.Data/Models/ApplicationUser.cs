@@ -10,14 +10,19 @@ using System.ComponentModel.DataAnnotations;
 
 [Comment("Users")]
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUser : IdentityUser<Guid>
 {
     public ApplicationUser()
     {
-        Friends = new HashSet<ApplicationUser>();
-        WrittenStories = new HashSet<Story>();
-        LikedStories = new HashSet<UsersLikedStories>();
-        LikedComments = new HashSet<UsersLikedComments>();
+        Followers = new HashSet<ApplicationUser>();
+        WrittenPieces = new HashSet<Piece>();
+        FavoritePieces = new HashSet<UserFavoritePiece>();
+        Ratings = new HashSet<Rating>();
+        CreatedLists = new HashSet<List>();
+        FollowedLists = new HashSet<UserFollowedList>();
+        LikedLists = new HashSet<UserLikedList>();
+        WrittenComments = new HashSet<Comment>();
+        LikedComments = new HashSet<UserLikedComment>();
     }
 
     [Required]
@@ -43,13 +48,25 @@ public class ApplicationUser : IdentityUser
 
     public string? Bio { get; set; } = null!;
 
-    public IEnumerable<ApplicationUser> Friends { get; set; }
+    [Comment("User date of birth")]
 
-    public IEnumerable<Story> WrittenStories { get; set; }
+    public DateTime? BirthDate { get; set; }
 
-    public IEnumerable<UsersLikedStories> LikedStories { get; set; }
+    public IEnumerable<ApplicationUser> Followers { get; set; }
 
-    public IEnumerable<UsersLikedPosts> LikedPosts { get; set; }
+    public IEnumerable<Piece> WrittenPieces { get; set; }
 
-    public IEnumerable<UsersLikedComments> LikedComments { get; set; }
+    public IEnumerable<UserFavoritePiece> FavoritePieces { get; set; }
+
+    public IEnumerable<Rating> Ratings { get; set; }
+
+    public IEnumerable<List> CreatedLists { get; set; }
+
+    public IEnumerable<UserFollowedList> FollowedLists { get; set; }
+
+    public IEnumerable<UserLikedList> LikedLists { get; set; }
+
+    public IEnumerable<Comment> WrittenComments { get; set; }
+
+    public IEnumerable<UserLikedComment> LikedComments { get; set; }
 }

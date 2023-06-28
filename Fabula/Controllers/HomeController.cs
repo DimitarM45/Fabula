@@ -1,6 +1,6 @@
-﻿namespace Fabula.Controllers;
+﻿namespace Fabula.Web.Controllers;
 
-using Core.ViewModels;
+using ViewModels.Home;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -11,11 +11,9 @@ using System.Diagnostics;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController()
     {
-        _logger = logger;
+        
     }
 
     [AllowAnonymous]

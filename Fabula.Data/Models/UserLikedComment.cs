@@ -6,12 +6,14 @@ using System.ComponentModel.DataAnnotations;
 
 [Comment("Mapping table for users and the comments they've liked")]
 
-public class UsersLikedComments
+public class UserLikedComment
 {
     [Required]
     [Comment("Id of user")]
 
-    public string UserId { get; set; } = null!;
+    public Guid UserId { get; set; }
+
+    [Required]
 
     public ApplicationUser User { get; set; } = null!;
 
@@ -19,6 +21,8 @@ public class UsersLikedComments
     [Comment("Id of comment")]
 
     public Guid CommentId { get; set; }
+
+    [Required]
 
     public Comment Comment { get; set; } = null!;
 }

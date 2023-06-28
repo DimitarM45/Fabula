@@ -9,9 +9,24 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.HasMany(au => au.WrittenStories)
-            .WithOne(s => s.Author)
-            .HasForeignKey(s => s.AuthorId)
-            .OnDelete(DeleteBehavior.ClientCascade);
+        builder.HasMany(au => au.WrittenPieces)
+            .WithOne(p => p.Author)
+            .HasForeignKey(p => p.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(au => au.CreatedLists)
+            .WithOne(l => l.Creator)
+            .HasForeignKey(l => l.CreatorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(au => au.WrittenComments)
+            .WithOne(c => c.Author)
+            .HasForeignKey(c => c.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(au => au.WrittenPieces)
+            .WithOne(p => p.Author)
+            .HasForeignKey(p => p.AuthorId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
