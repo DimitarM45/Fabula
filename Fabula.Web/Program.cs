@@ -2,6 +2,7 @@ using Fabula.Data;
 using Fabula.Data.Models;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

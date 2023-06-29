@@ -71,15 +71,6 @@ public class Piece
 
     public bool hasAdultContent { get; set; }
 
-    [Required]
-    [Comment("Id of form")]
-
-    public int FormId { get; set; }
-
-    [Required]
-
-    public Form Form { get; set; } = null!;
-
     public IEnumerable<Tag> Tags { get; set; }
 
     public IEnumerable<Genre> Genres { get; set; }

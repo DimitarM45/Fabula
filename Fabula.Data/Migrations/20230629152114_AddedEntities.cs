@@ -61,21 +61,6 @@ namespace Fabula.Data.Migrations
                 comment: "Users");
 
             migrationBuilder.CreateTable(
-                name: "Forms",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false, comment: "Id of the form")
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, comment: "Name of form"),
-                    PictureUrl = table.Column<string>(type: "nvarchar(2084)", maxLength: 2084, nullable: false, comment: "Picture that loosely describes form")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Forms", x => x.Id);
-                },
-                comment: "Literary forms (e.g. prose, poetry");
-
-            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -90,7 +75,7 @@ namespace Fabula.Data.Migrations
                 comment: "Genre of a piece");
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "Tag",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false, comment: "Id of tag")
@@ -99,7 +84,7 @@ namespace Fabula.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.PrimaryKey("PK_Tag", x => x.Id);
                 },
                 comment: "Tags for better categorisation of literary works");
 
@@ -246,7 +231,6 @@ namespace Fabula.Data.Migrations
                     PublishedOn = table.Column<DateTime>(type: "datetime2", nullable: false, comment: "Date of publishing"),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true, comment: "Date and time of deletion of the piece. Note: A nullable type is used for the purposes of documenting both whether a piece has been deleted and also when the operation took place."),
                     hasAdultContent = table.Column<bool>(type: "bit", nullable: false, comment: "Adult content flag of the piece"),
-                    FormId = table.Column<int>(type: "int", nullable: false, comment: "Id of form"),
                     ListId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -256,12 +240,6 @@ namespace Fabula.Data.Migrations
                         name: "FK_Pieces_AspNetUsers_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Pieces_Forms_FormId",
-                        column: x => x.FormId,
-                        principalTable: "Forms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -392,9 +370,9 @@ namespace Fabula.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PieceTag_Tags_TagsId",
+                        name: "FK_PieceTag_Tag_TagsId",
                         column: x => x.TagsId,
-                        principalTable: "Tags",
+                        principalTable: "Tag",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -548,11 +526,6 @@ namespace Fabula.Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pieces_FormId",
-                table: "Pieces",
-                column: "FormId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Pieces_ListId",
                 table: "Pieces",
                 column: "ListId");
@@ -638,16 +611,13 @@ namespace Fabula.Data.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "Tags");
+                name: "Tag");
 
             migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Pieces");
-
-            migrationBuilder.DropTable(
-                name: "Forms");
 
             migrationBuilder.DropTable(
                 name: "Lists");

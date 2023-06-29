@@ -20,13 +20,7 @@ public static class ValidationConstants
         public const int SynopsysMaxLength = 2000;
     }
 
-    public static class Form
-    {
-        public const int NameMinLength = 3;
-        public const int NameMaxLength = 50;
-    }
-
-    public static class Subgenre
+    public static class Genre
     {
         public const int NameMinLength = 3;
         public const int NameMaxLength = 75;
@@ -66,5 +60,11 @@ public static class ValidationConstants
 
         public const int NameMinLength = 1;
         public const int NameMaxLength = 150;
+
+        public const int UsernameMinLength = 5;
+        public const int UsernameMaxLength = 30;
+
+        public const int EmailMinLength = 3;
+        public const int EmailMaxLength = 320;
     }
 }

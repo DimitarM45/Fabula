@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Data.Models;
 
-using static Common.ValidationConstants.Subgenre;
+using static Common.ValidationConstants.Genre;
 
 using Microsoft.EntityFrameworkCore;
 

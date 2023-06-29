@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fabula.Data.Migrations
 {
     [DbContext(typeof(FabulaDbContext))]
-    [Migration("20230628134319_AddedEntities")]
+    [Migration("20230629152114_AddedEntities")]
     partial class AddedEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.16")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -164,34 +164,6 @@ namespace Fabula.Data.Migrations
                     b.HasComment("Comments made by users");
                 });
 
-            modelBuilder.Entity("Fabula.Data.Models.Form", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasComment("Id of the form");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasComment("Name of form");
-
-                    b.Property<string>("PictureUrl")
-                        .IsRequired()
-                        .HasMaxLength(2084)
-                        .HasColumnType("nvarchar(2084)")
-                        .HasComment("Picture that loosely describes form");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Forms");
-
-                    b.HasComment("Literary forms (e.g. prose, poetry");
-                });
-
             modelBuilder.Entity("Fabula.Data.Models.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -285,10 +257,6 @@ namespace Fabula.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasComment("Date and time of deletion of the piece. Note: A nullable type is used for the purposes of documenting both whether a piece has been deleted and also when the operation took place.");
 
-                    b.Property<int>("FormId")
-                        .HasColumnType("int")
-                        .HasComment("Id of form");
-
                     b.Property<Guid?>("ListId")
                         .HasColumnType("uniqueidentifier");
 
@@ -315,8 +283,6 @@ namespace Fabula.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("FormId");
 
                     b.HasIndex("ListId");
 
@@ -380,7 +346,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tag");
 
                     b.HasComment("Tags for better categorisation of literary works");
                 });
@@ -671,19 +637,11 @@ namespace Fabula.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Fabula.Data.Models.Form", "Form")
-                        .WithMany("Pieces")
-                        .HasForeignKey("FormId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Fabula.Data.Models.List", null)
                         .WithMany("Pieces")
                         .HasForeignKey("ListId");
 
                     b.Navigation("Author");
-
-                    b.Navigation("Form");
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.Rating", b =>
@@ -886,11 +844,6 @@ namespace Fabula.Data.Migrations
             modelBuilder.Entity("Fabula.Data.Models.Comment", b =>
                 {
                     b.Navigation("Likes");
-                });
-
-            modelBuilder.Entity("Fabula.Data.Models.Form", b =>
-                {
-                    b.Navigation("Pieces");
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.List", b =>

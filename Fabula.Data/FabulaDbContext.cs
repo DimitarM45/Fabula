@@ -17,11 +17,7 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
 
     public DbSet<Piece>? Pieces { get; set; }
 
-    public DbSet<Form>? Forms { get; set; }
-
     public DbSet<Rating>? Ratings { get; set; }
-
-    public DbSet<Tag>? Tags { get; set; }
 
     public DbSet<Genre>? Genres { get; set; }
 

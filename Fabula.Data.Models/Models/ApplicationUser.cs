@@ -37,11 +37,10 @@ public class ApplicationUser : IdentityUser<Guid>
 
     public string LastName { get; set; } = null!;
 
-    [Required]
     [MaxLength(UrlMaxLength)]
     [Comment("A url which leads to the user's profile picture")]
 
-    public string ProfilePictureUrl { get; set; } = null!;
+    public string? ProfilePictureUrl { get; set; } = null!;
 
     [MaxLength(BioMaxLength)]
     [Comment("User bio description")]
