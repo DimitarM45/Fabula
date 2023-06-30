@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Mapping table for users and the pieces they've favorited")]
+[Comment("Mapping table for users and the compositions they've favorited")]
 
-public class UserFavoritePiece
+public class UserFavoriteComposition
 {
     [Required]
     [Comment("Id of user")]
@@ -18,11 +18,11 @@ public class UserFavoritePiece
     public ApplicationUser User { get; set; } = null!;
 
     [Required]
-    [Comment("Id of piece")]
+    [Comment("Id of composition")]
 
-    public Guid PieceId { get; set; }
+    public Guid CompositionId { get; set; }
 
     [Required]
 
-    public Piece Piece { get; set; } = null!;
+    public Composition Composition { get; set; } = null!;
 }

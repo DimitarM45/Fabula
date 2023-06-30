@@ -5,20 +5,20 @@ using Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class UserFavoritePieceConfiguration : IEntityTypeConfiguration<UserFavoritePiece>
+public class UserFavoritePieceConfiguration : IEntityTypeConfiguration<UserFavoriteComposition>
 {
-    public void Configure(EntityTypeBuilder<UserFavoritePiece> builder)
+    public void Configure(EntityTypeBuilder<UserFavoriteComposition> builder)
     {
-        builder.HasKey(up => new { up.UserId, up.PieceId });
+        builder.HasKey(up => new { up.UserId, up.CompositionId });
 
         builder.HasOne(up => up.User)
-            .WithMany(u => u.FavoritePieces)
+            .WithMany(u => u.FavoriteCompositions)
             .HasForeignKey(up => up.UserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(up => up.Piece)
+        builder.HasOne(up => up.Composition)
             .WithMany(p => p.Favorites)
-            .HasForeignKey(up => up.PieceId)
+            .HasForeignKey(up => up.CompositionId)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

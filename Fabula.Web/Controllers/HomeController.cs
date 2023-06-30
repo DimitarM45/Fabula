@@ -11,11 +11,6 @@ using System.Diagnostics;
 
 public class HomeController : Controller
 {
-    public HomeController()
-    {
-        
-    }
-
     [AllowAnonymous]
 
     public IActionResult Index()

@@ -12,7 +12,7 @@ public class List
 {
     public List()
     {
-        Pieces = new HashSet<Piece>();
+        Compositions = new HashSet<Composition>();
         Likes = new HashSet<UserLikedList>();
         Followers = new HashSet<UserFollowedList>();
     }
@@ -59,7 +59,7 @@ public class List
 
     public ApplicationUser Creator { get; set; } = null!;
 
-    public IEnumerable<Piece> Pieces { get; set; }
+    public IEnumerable<Composition> Compositions { get; set; }
 
     public IEnumerable<UserLikedList> Likes { get; set; }
 

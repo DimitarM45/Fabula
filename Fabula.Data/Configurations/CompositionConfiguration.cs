@@ -1,25 +1,22 @@
 ﻿namespace Fabula.Data.Configurations;
 
 using Models;
-using Seeding.Seeders;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class PieceConfiguration : IEntityTypeConfiguration<Piece>
+public class CompositionConfiguration : IEntityTypeConfiguration<Composition>
 {
-    public void Configure(EntityTypeBuilder<Piece> builder)
+    public void Configure(EntityTypeBuilder<Composition> builder)
     {
         builder.HasOne(p => p.Author)
-            .WithMany(a => a.WrittenPieces)
+            .WithMany(a => a.WrittenCompositions)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasMany(p => p.Comments)
-            .WithOne(c => c.Piece)
-            .HasForeignKey(c => c.PieceId)
+            .WithOne(c => c.Composition)
+            .HasForeignKey(c => c.CompositionId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        //builder.HasData(PieceSeeder.SeedPieces());
     }
 }

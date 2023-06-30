@@ -12,7 +12,7 @@ public class Tag
 {
     public Tag()
     {
-        Pieces = new HashSet<Piece>();    
+        Compositions = new HashSet<Composition>();    
     }
 
     [Required]
@@ -26,5 +26,5 @@ public class Tag
 
     public string Name { get; set; } = null!;
 
-    public IEnumerable<Piece> Pieces { get; set; }
+    public IEnumerable<Composition> Compositions { get; set; }
 }

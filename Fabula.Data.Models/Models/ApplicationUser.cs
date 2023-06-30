@@ -15,8 +15,8 @@ public class ApplicationUser : IdentityUser<Guid>
     public ApplicationUser()
     {
         Followers = new HashSet<ApplicationUser>();
-        WrittenPieces = new HashSet<Piece>();
-        FavoritePieces = new HashSet<UserFavoritePiece>();
+        WrittenCompositions = new HashSet<Composition>();
+        FavoriteCompositions = new HashSet<UserFavoriteComposition>();
         Ratings = new HashSet<Rating>();
         CreatedLists = new HashSet<List>();
         FollowedLists = new HashSet<UserFollowedList>();
@@ -54,9 +54,9 @@ public class ApplicationUser : IdentityUser<Guid>
 
     public IEnumerable<ApplicationUser> Followers { get; set; }
 
-    public IEnumerable<Piece> WrittenPieces { get; set; }
+    public IEnumerable<Composition> WrittenCompositions { get; set; }
 
-    public IEnumerable<UserFavoritePiece> FavoritePieces { get; set; }
+    public IEnumerable<UserFavoriteComposition> FavoriteCompositions { get; set; }
 
     public IEnumerable<Rating> Ratings { get; set; }
 

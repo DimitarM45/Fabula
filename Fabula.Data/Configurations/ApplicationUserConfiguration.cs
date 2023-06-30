@@ -9,7 +9,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        builder.HasMany(au => au.WrittenPieces)
+        builder.HasMany(au => au.WrittenCompositions)
             .WithOne(p => p.Author)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
@@ -24,7 +24,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             .HasForeignKey(c => c.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasMany(au => au.WrittenPieces)
+        builder.HasMany(au => au.WrittenCompositions)
             .WithOne(p => p.Author)
             .HasForeignKey(p => p.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);

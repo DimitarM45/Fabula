@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Genre of a piece")]
+[Comment("Genre of a composition")]
 
 public class Genre
 {
     public Genre()
     {
-        Stories = new HashSet<Piece>();
+        Compositions = new HashSet<Composition>();
     }
 
     [Required]
@@ -26,5 +26,5 @@ public class Genre
 
     public string Name { get; set; } = null!;
 
-    public IEnumerable<Piece> Stories { get; set; }
+    public IEnumerable<Composition> Compositions { get; set; }
 }

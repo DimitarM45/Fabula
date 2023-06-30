@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Rating of piece")]
+[Comment("Rating of composition")]
 
 public class Rating
 {
@@ -39,11 +39,11 @@ public class Rating
     public ApplicationUser User { get; set; } = null!;
 
     [Required]
-    [Comment("Id of piece")]
+    [Comment("Id of composition")]
 
-    public Guid PieceId { get; set; }
+    public Guid CompositionId { get; set; }
 
     [Required]
 
-    public Piece Piece { get; set; } = null!;
+    public Composition Composition { get; set; } = null!;
 }

@@ -15,7 +15,7 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
     {
     }
 
-    public DbSet<Piece>? Pieces { get; set; }
+    public DbSet<Composition>? Compositions { get; set; }
 
     public DbSet<Rating>? Ratings { get; set; }
 
@@ -27,7 +27,7 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
 
     public DbSet<UserLikedComment>? UsersLikedComments { get; set; }
 
-    public DbSet<UserFavoritePiece>? UsersFavoritePieces { get; set; }
+    public DbSet<UserFavoriteComposition>? UsersFavoritePieces { get; set; }
 
     public DbSet<UserFollowedList>? UsersFollowedLists { get; set; }
 

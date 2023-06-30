@@ -35,13 +35,13 @@ public class Comment
     public ApplicationUser Author { get; set; } = null!;
 
     [Required]
-    [Comment("Id of piece")]
+    [Comment("Id of composition")]
 
-    public Guid PieceId { get; set; }
+    public Guid CompositionId { get; set; }
 
     [Required]
 
-    public Piece Piece { get; set; } = null!;
+    public Composition Composition { get; set; } = null!;
 
     [Required]
     [Comment("Date of publishing")]

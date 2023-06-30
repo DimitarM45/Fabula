@@ -7,49 +7,49 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("User-written pieces")]
+[Comment("User-written compositions")]
 
-public class Piece
+public class Composition
 {
-    public Piece()
+    public Composition()
     {
         Tags = new HashSet<Tag>();
         Genres = new HashSet<Genre>();
         Ratings = new HashSet<Rating>();
         Comments = new HashSet<Comment>();
-        Favorites = new HashSet<UserFavoritePiece>();
+        Favorites = new HashSet<UserFavoriteComposition>();
     }
 
-    [Comment("Id of the piece")]
+    [Comment("Id of the composition")]
 
     public Guid Id { get; set; }
 
     [Required]
     [MaxLength(TitleMaxLength)]
-    [Comment("Title of the piece")]
+    [Comment("Title of the composition")]
 
     public string Title { get; set; } = null!;
 
     [Required]
     [MaxLength(UrlMaxLength)]
-    [Comment("A url which leads to the piece's cover art")]
+    [Comment("A url which leads to the composition's cover art")]
 
     public string CoverUrl { get; set; } = null!;
 
     [Required]
     [MaxLength(ContentMaxLength)]
-    [Comment("The piece itself")]
+    [Comment("The composition itself")]
 
     public string Content { get; set; } = null!;
 
     [Required]
     [MaxLength(SynopsysMaxLength)]
-    [Comment("Synopsys of the piece")]
+    [Comment("Synopsys of the composition")]
 
     public string Synopsys { get; set; } = null!;
 
     [Required]
-    [Comment("Id of piece author")]
+    [Comment("Id of composition author")]
 
     public Guid AuthorId { get; set; }
 
@@ -60,14 +60,14 @@ public class Piece
 
     public DateTime PublishedOn { get; set; }
 
-    [Comment("Date and time of deletion of the piece. " +
+    [Comment("Date and time of deletion of the composition. " +
         "Note: A nullable type is used for the purposes of documenting " +
-        "both whether a piece has been deleted and also when the operation took place.")]
+        "both whether a composition has been deleted and also when the operation took place.")]
 
     public DateTime? DeletedOn { get; set; }
 
     [Required]
-    [Comment("Adult content flag of the piece")]
+    [Comment("Adult content flag of the composition")]
 
     public bool hasAdultContent { get; set; }
 
@@ -79,5 +79,5 @@ public class Piece
 
     public IEnumerable<Comment> Comments { get; set; }
 
-    public IEnumerable<UserFavoritePiece> Favorites { get; set; }
+    public IEnumerable<UserFavoriteComposition> Favorites { get; set; }
 }
