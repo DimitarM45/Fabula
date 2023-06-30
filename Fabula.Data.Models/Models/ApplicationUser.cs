@@ -47,9 +47,10 @@ public class ApplicationUser : IdentityUser<Guid>
 
     public string? Bio { get; set; } = null!;
 
+    [Required]
     [Comment("User date of birth")]
 
-    public DateTime? BirthDate { get; set; }
+    public DateTime BirthDate { get; set; }
 
     public IEnumerable<ApplicationUser> Followers { get; set; }
 

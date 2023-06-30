@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authentication;
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -119,8 +118,8 @@ public class LoginModel : PageModel
 
         if (ModelState.IsValid)
         {
-            var user = await _signInManager.UserManager.FindByEmailAsync(Input.LoginCredential) ??
-                       await _signInManager.UserManager.FindByNameAsync(Input.LoginCredential);
+            ApplicationUser user = await _signInManager.UserManager.FindByEmailAsync(Input.LoginCredential) ??
+                                   await _signInManager.UserManager.FindByNameAsync(Input.LoginCredential);
 
             var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
@@ -130,6 +129,7 @@ public class LoginModel : PageModel
             if (result.Succeeded)
             {
                 _logger.LogInformation("User logged in.");
+
                 return LocalRedirect(returnUrl);
             }
             if (result.RequiresTwoFactor)
@@ -139,11 +139,13 @@ public class LoginModel : PageModel
             if (result.IsLockedOut)
             {
                 _logger.LogWarning("User account locked out.");
+
                 return RedirectToPage("./Lockout");
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
                 return Page();
             }
         }

@@ -4,13 +4,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using Data.Models;
+
 using static Common.ValidationConstants.ApplicationUser;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -23,7 +23,6 @@ using System.Threading.Tasks;
 using System.Text.Encodings.Web;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Fabula.Data.Models;
 
 public class RegisterModel : PageModel
 {
@@ -101,6 +100,14 @@ public class RegisterModel : PageModel
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        [Display(Name = "Date of birth")]
+        [Required(ErrorMessage = "Birthdate is required.")]
+        public string Birthdate { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -130,31 +137,47 @@ public class RegisterModel : PageModel
     public async Task OnGetAsync(string returnUrl = null)
     {
         ReturnUrl = returnUrl;
+
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
     }
 
     public async Task<IActionResult> OnPostAsync(string returnUrl = null)
     {
         returnUrl ??= Url.Content("~/");
+
         ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        if (ModelState.IsValid)
+
+        DateTime userBirthdate;
+
+        bool isBirthdateValid = DateTime.TryParse(Input.Birthdate, out userBirthdate);
+
+        bool isBirthdateCorrect = userBirthdate < DateTime.Now;
+
+        if (ModelState.IsValid && isBirthdateValid && isBirthdateCorrect)
         {
-            var user = CreateUser();
+            ApplicationUser user = CreateUser();
 
             await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
 
+            await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
             user.FirstName = Input.FirstName;
+
             user.LastName = Input.LastName;
 
-            await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-            var result = await _userManager.CreateAsync(user, Input.Password);
+            user.BirthDate = userBirthdate;
+
+            IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
 
             if (result.Succeeded)
             {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                string userId = await _userManager.GetUserIdAsync(user);
+
+                string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                var callbackUrl = Url.Page(
+
+                string callbackUrl = Url.Page(
                     "/Account/ConfirmEmail",
                     pageHandler: null,
                     values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
@@ -170,6 +193,7 @@ public class RegisterModel : PageModel
                 else
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
                     return LocalRedirect(returnUrl);
                 }
             }

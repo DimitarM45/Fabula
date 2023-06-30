@@ -1,0 +1,64 @@
+﻿/* Custom Datepicker Input Styles */
+.datepicker {
+padding: 0.375rem 0.75rem;
+font-size: 1rem;
+line-height: 1.5;
+color: #495057;
+background-color: #fff;
+background-clip: padding-box;
+border: 1px solid #ced4da;
+border-radius: 0.25rem;
+transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.datepicker:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.datepicker::-webkit-inner-spin-button,
+.datepicker::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.datepicker[type="date"]::-webkit-calendar-picker-indicator {
+    color: #495057;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.datepicker::-webkit-calendar-picker-indicator:hover {
+    opacity: 0.8;
+}
+
+.datepicker::-webkit-datetime-edit,
+.datepicker::-webkit-datetime-edit-fields-wrapper,
+.datepicker::-webkit-datetime-edit-text,
+.datepicker::-webkit-datetime-edit-month-field,
+.datepicker::-webkit-datetime-edit-day-field,
+.datepicker::-webkit-datetime-edit-year-field {
+    padding: 0;
+    margin: 0;
+}
+
+    .datepicker::-webkit-datetime-edit-month-field:focus,
+    .datepicker::-webkit-datetime-edit-day-field:focus,
+    .datepicker::-webkit-datetime-edit-year-field:focus {
+        outline: none;
+    }
+
+    .datepicker::-webkit-datetime-edit-month-field:hover,
+    .datepicker::-webkit-datetime-edit-day-field:hover,
+    .datepicker::-webkit-datetime-edit-year-field:hover {
+        background-color: #f8f9fa;
+    }
+
+.datepicker::-webkit-inner-spin-button:hover,
+.datepicker::-webkit-outer-spin-button:hover {
+    background-color: #f8f9fa;
+    opacity: 0.8;
+}
