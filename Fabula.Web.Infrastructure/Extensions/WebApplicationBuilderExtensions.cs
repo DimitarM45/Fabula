@@ -16,7 +16,7 @@ public static class WebApplicationBuilderExtensions
     /// </summary>
     /// <param name="serviceType"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    /// 
+
     public static void AddServices(this IServiceCollection services, Type serviceType)
     {
         Assembly? serviceAssembly = Assembly.GetAssembly(serviceType);
@@ -30,13 +30,12 @@ public static class WebApplicationBuilderExtensions
 
         foreach (Type implementationType in serviceTypes)
         {
-            Type? interfaceType = serviceType.GetInterface($"I{implementationType.Name}");
+            Type? interfaceType = implementationType.GetInterface($"I{implementationType.Name}");
 
             if (interfaceType == null)
                 throw new InvalidOperationException($"No interface exists for {implementationType.Name}!");
 
-            if (interfaceType != null)
-                services.AddScoped(interfaceType, implementationType);
+            services.AddScoped(interfaceType, implementationType);
         }
     }
-} 
+}

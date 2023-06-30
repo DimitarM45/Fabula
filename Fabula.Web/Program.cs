@@ -1,5 +1,7 @@
 using Fabula.Data;
 using Fabula.Data.Models;
+using Fabula.Core.Services;
+using Fabula.Web.Infrastructure.Extensions;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -33,6 +35,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })
 .AddEntityFrameworkStores<FabulaDbContext>();
+
+builder.Services.AddServices(typeof(GenreService));
 
 builder.Services.AddControllersWithViews();
 

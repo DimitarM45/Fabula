@@ -1,0 +1,17 @@
+﻿@model IEnumerable<AllGenreViewModel>
+@{
+    ViewData["Title"] = "Genres";
+}
+
+<h1>Genres</h1>
+
+<ul>
+    @foreach (AllGenreViewModel genre in Model.OrderBy(g => g.Name))
+    {
+        <li>
+            <ul>
+                <li><a asp-controller="">@genre.Name (@genre.CompositionCount)</a></li>
+            </ul>
+        </li>
+    }
+</ul>
