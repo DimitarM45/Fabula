@@ -16,3 +16,7 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.main-gradient {
+    background: linear-gradient(#42c19a, #bd6bc0);
+}
