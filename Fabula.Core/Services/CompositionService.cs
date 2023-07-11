@@ -26,7 +26,6 @@ public class CompositionService : ICompositionService
             {
                 Id = c.Id.ToString(),
                 Title = c.Title,
-                Content = c.Content,
                 Synopsys = c.Synopsys,
                 CoverUrl = c.CoverUrl,
                 Author = c.Author.UserName,

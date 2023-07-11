@@ -8,8 +8,6 @@ public class CompositionAllViewModel
 
     public string? CoverUrl { get; set; } 
 
-    public string? Content { get; set; }
-
     public string? Synopsys { get; set; }
 
     public string? AuthorId { get; set; }

@@ -12,9 +12,14 @@
                     <img class="card-img-top" src="@composition.CoverUrl" alt="~/images/MissingComposition.png">;
                     <div class="card-body">
                         <h5 class="card-title">@composition.Title</h5>
-                        <a asp-controller="User" asp-action="Profile" asp-route-authorid="@composition.AuthorId" style="text-decoration: none"class="card-link">@composition.Author</a>
+                        <a asp-controller="User" asp-action="Profile" asp-route-authorid="@composition.AuthorId" style="text-decoration: none" class="card-link">@composition.Author</a>
                         <p class="card-text">@composition.Synopsys</p>
-                        <h6 class="card-subtitle">@composition.Rating</h6>
+                        <h6 class="card-subtitle">&#11088; @composition.Rating</h6>
+                        <h6 class="card-subtitle">@composition.PublishedOn.ToString("dd MMM yyyy")</h6>
+                        @if (composition.HasAdultContent)
+                        {
+                            <h6 class="text-warning">&#128286; Adult content</h6>
+                        }
                     </div>
                 </div>
             </li>
