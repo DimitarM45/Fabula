@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 using System.Diagnostics;
 
-[Authorize]
-
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     [AllowAnonymous]
 

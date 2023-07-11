@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/Fabula.styles.css" asp-append-version="true" />
 </head>
 <body class="main-gradient">
-    <header style="background: #42c19a">
+    <header class="main-gradient">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fabula</a>
@@ -23,6 +23,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genre" asp-action="All">Genres</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Composition" asp-action="All">Browse works</a>
+                        </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -34,7 +40,7 @@
             @RenderBody()
         </main>
     </div>
-    <footer class="border-top footer text-muted">
+    <footer class="border-top card-footer text-muted main-gradient">
         <div class="container">
             &copy; Fabula - @ReleaseYear -
             @if (DateTime.UtcNow.Year != ReleaseYear)

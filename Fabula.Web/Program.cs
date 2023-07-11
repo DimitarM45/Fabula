@@ -38,6 +38,12 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 
 builder.Services.AddServices(typeof(GenreService));
 
+builder.Services.AddRouting(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
+
 builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();

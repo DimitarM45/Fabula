@@ -3,15 +3,11 @@
     ViewData["Title"] = "Genres";
 }
 
-<h1>Genres</h1>
+<h1 class="text-center">Genres</h1>
 
 <ul>
     @foreach (AllGenreViewModel genre in Model.OrderBy(g => g.Name))
     {
-        <li>
-            <ul>
-                <li><a asp-controller="">@genre.Name (@genre.CompositionCount)</a></li>
-            </ul>
-        </li>
+        <li class="genre-item"><a asp-controller="Composition" asp-action="All" asp-route-genreid="@genre.Id" style="text-decoration: none; color:crimson">@genre.Name (@genre.CompositionCount)</a></li>
     }
 </ul>

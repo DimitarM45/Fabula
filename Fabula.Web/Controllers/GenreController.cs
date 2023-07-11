@@ -6,9 +6,7 @@ using ViewModels.Genre;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-[Authorize]
-
-public class GenreController : Controller
+public class GenreController : BaseController
 {
     private readonly IGenreService genreService;
 
@@ -16,6 +14,8 @@ public class GenreController : Controller
     {
         this.genreService = genreService;
     }
+
+    [AllowAnonymous]
 
     public async Task<IActionResult> All()
     {

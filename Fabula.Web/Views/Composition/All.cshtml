@@ -1,0 +1,23 @@
+﻿@model IEnumerable<CompositionAllViewModel>
+@{
+    ViewData["Title"] = "Works";
+}
+
+<div class="container">
+    <ul class="list-group-horizontal">
+        @foreach (CompositionAllViewModel composition in Model)
+        {
+            <li>
+                <div class="card">
+                    <img class="card-img-top" src="@composition.CoverUrl" alt="~/images/MissingComposition.png">;
+                    <div class="card-body">
+                        <h5 class="card-title">@composition.Title</h5>
+                        <a asp-controller="User" asp-action="Profile" asp-route-authorid="@composition.AuthorId" style="text-decoration: none"class="card-link">@composition.Author</a>
+                        <p class="card-text">@composition.Synopsys</p>
+                        <h6 class="card-subtitle">@composition.Rating</h6>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+</div>

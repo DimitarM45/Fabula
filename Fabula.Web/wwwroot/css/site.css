@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,9 @@ body {
 
 .main-gradient {
     background: linear-gradient(#42c19a, #bd6bc0);
+}
+
+.genre-item {
+    list-style-type: '📖';
+    padding-inline-start: 1ch;
 }
