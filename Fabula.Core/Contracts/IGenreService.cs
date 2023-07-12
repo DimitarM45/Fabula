@@ -5,4 +5,6 @@ using Web.ViewModels.Genre;
 public interface IGenreService
 {
     Task<IEnumerable<AllGenreViewModel>> GetAllAsync();
+
+    Task<IEnumerable<GenreViewModel>> GetAllForSelectAsync();
 }

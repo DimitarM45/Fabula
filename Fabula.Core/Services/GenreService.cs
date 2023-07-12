@@ -32,4 +32,18 @@ public class GenreService : IGenreService
 
         return viewModels;
     }
+
+    public async Task<IEnumerable<GenreViewModel>> GetAllForSelectAsync()
+    {
+        IEnumerable<GenreViewModel> genreViewModels = await dbContext.Genres
+            .AsNoTracking()
+            .Select(g => new GenreViewModel()
+            {
+                Id = g.Id,
+                Name = g.Name
+            })
+            .ToListAsync();
+
+        return genreViewModels;
+    }
 }

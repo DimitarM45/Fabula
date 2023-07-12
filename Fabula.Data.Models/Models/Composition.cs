@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Data.Models;
 
-using static Common.ValidationConstants.Piece;
+using static Common.ValidationConstants.Composition;
 using static Common.ValidationConstants.Shared;
 
 using Microsoft.EntityFrameworkCore;

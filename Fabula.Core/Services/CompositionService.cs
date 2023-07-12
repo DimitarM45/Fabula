@@ -4,9 +4,10 @@ using Data;
 using Contracts;
 using Web.ViewModels.Composition;
 
+using Microsoft.EntityFrameworkCore;
+
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 
 public class CompositionService : ICompositionService
 {
@@ -37,5 +38,10 @@ public class CompositionService : ICompositionService
             .ToListAsync();
 
         return compositionViewModels;
+    }
+
+    public Task AddCompositionAsync()
+    {
+        throw new NotImplementedException();
     }
 }

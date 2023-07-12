@@ -5,4 +5,6 @@ using Web.ViewModels.Composition;
 public interface ICompositionService
 {
     Task<IEnumerable<CompositionAllViewModel>> GetAllAsync();
+
+    Task AddCompositionAsync();
 }

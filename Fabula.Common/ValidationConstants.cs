@@ -8,7 +8,7 @@ public static class ValidationConstants
         public const int UrlMaxLength = 2084;
     }
 
-    public static class Piece
+    public static class Composition
     {
         public const int TitleMinLength = 3;
         public const int TitleMaxLength = 100;
