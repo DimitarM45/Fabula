@@ -1,28 +1,37 @@
-﻿@model IEnumerable<CompositionAllViewModel>
+﻿@using System.Globalization;
+@model IEnumerable<CompositionAllViewModel>
 @{
     ViewData["Title"] = "Works";
 }
 
-<div class="container">
-    <ul class="list-group-horizontal">
-        @foreach (CompositionAllViewModel composition in Model)
-        {
-            <li>
-                <div class="card">
-                    <img class="card-img-top" src="@composition.CoverUrl" alt="~/images/MissingComposition.png">;
-                    <div class="card-body">
-                        <h5 class="card-title">@composition.Title</h5>
-                        <a asp-controller="User" asp-action="Profile" asp-route-authorid="@composition.AuthorId" style="text-decoration: none" class="card-link">@composition.Author</a>
-                        <p class="card-text">@composition.Synopsys</p>
-                        <h6 class="card-subtitle">&#11088; @composition.Rating</h6>
-                        <h6 class="card-subtitle">@composition.PublishedOn.ToString("dd MMM yyyy")</h6>
-                        @if (composition.HasAdultContent)
-                        {
-                            <h6 class="text-warning">&#128286; Adult content</h6>
-                        }
-                    </div>
+<div class="row">
+    @foreach (CompositionAllViewModel composition in Model)
+    {
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+            <div class="card" style="width: 22rem; margin-block: 2rem">
+                <img class="card-img-top" src="@composition.CoverUrl" alt="~/images/MissingComposition.png">
+                <div class="card-body">
+                    <h5 class="card-title">@composition.Title</h5>
+                    <h6><a asp-controller="User" asp-action="Profile" asp-route-authorid="@composition.AuthorId" style="text-decoration: none" class="card-link">@composition.Author</a></h6>
+                    <p class="card-text">@composition.Synopsys</p>
+                    @if (composition.Rating == null)
+                    {
+                        <h6 class="card-subtitle" style="font-size: smaller">This story hasnt been rated yet</h6>
+                    }
+                    else
+                    {
+                        <h6 class="card-subtitle" style="font-size: smaller">&#11088; composition.Rating</h6>
+                    }
                 </div>
-            </li>
-        }
-    </ul>
+                <div class="card-footer">
+                    @if (composition.HasAdultContent)
+                    {
+                        <h6 class="text-danger">&#128286; Adult content</h6>
+                    }
+                    <h6 class="card-subtitle">Posted on: @composition.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
+                </div>
+                <a asp-controller="Composition" asp-action="Detailed" asp-route-compositionid="@composition.Id" class="btn btn-primary">Read</a>
+            </div>
+        </div>
+    }
 </div>

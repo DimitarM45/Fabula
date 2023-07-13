@@ -2,6 +2,9 @@
 
 using Data;
 using Contracts;
+using Data.Models;
+using Web.ViewModels.Tag;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
 
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +25,7 @@ public class CompositionService : ICompositionService
     {
         IEnumerable<CompositionAllViewModel> compositionViewModels = await dbContext.Compositions
             .AsNoTracking()
-            .Where(c => c.DeletedOn != null)
+            .Where(c => c.DeletedOn == null)
             .Select(c => new CompositionAllViewModel()
             {
                 Id = c.Id.ToString(),
@@ -32,7 +35,7 @@ public class CompositionService : ICompositionService
                 Author = c.Author.UserName,
                 AuthorId = c.Author.Id.ToString(),
                 HasAdultContent = c.hasAdultContent,
-                Rating = c.Ratings.Average(r => r.Value),
+                Rating = !c.Ratings.Any() ? null : c.Ratings.Average(r => r.Value),
                 PublishedOn = c.PublishedOn,
             })
             .ToListAsync();
@@ -40,8 +43,39 @@ public class CompositionService : ICompositionService
         return compositionViewModels;
     }
 
-    public Task AddCompositionAsync()
+    public async Task AddAsync(CompositionCreateFormModel formModel, string authorId)
     {
-        throw new NotImplementedException();
+        Composition composition = new Composition()
+        {
+            Title = formModel.Title,
+            Synopsys = formModel.Synopsys,
+            Content = formModel.Content,
+            CoverUrl = formModel.CoverUrl,
+            AuthorId = Guid.Parse(authorId),
+            PublishedOn = DateTime.Now,
+            hasAdultContent = formModel.HasAdultContent,
+        };
+
+        foreach (GenreViewModel genreViewModel in formModel.Genres)
+        {
+            Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreViewModel.Id);
+
+            if (genre != null)
+                composition.Genres.Add(genre);
+        }
+
+        foreach (TagFormModel tagFormModel in formModel.Tags)
+        {
+            Tag? tag = await dbContext.Tags.FirstOrDefaultAsync(t => t.Name == tagFormModel.Name);
+
+            if (tag == null)
+                tag = new Tag() { Name = tagFormModel.Name };
+
+            composition.Tags.Add(tag);
+        }
+
+        await dbContext.Compositions.AddAsync(composition);
+
+        await dbContext.SaveChangesAsync();
     }
 }

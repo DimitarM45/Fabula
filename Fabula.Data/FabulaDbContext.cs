@@ -23,6 +23,8 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
 
     public DbSet<Comment>? Comments { get; set; }
 
+    public DbSet<Tag>? Tags { get; set; }
+
     public DbSet<List>? Lists { get; set; }
 
     public DbSet<UserLikedComment>? UsersLikedComments { get; set; }

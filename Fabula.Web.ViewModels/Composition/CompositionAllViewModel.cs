@@ -18,5 +18,5 @@ public class CompositionAllViewModel
 
     public bool HasAdultContent { get; set; }
 
-    public double Rating { get; set; }
+    public double? Rating { get; set; }
 }

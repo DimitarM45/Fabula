@@ -27,7 +27,7 @@ public class CompositionCreateFormModel
     [MinLength(UrlMinLength)]
     [MaxLength(UrlMaxLength)]
 
-    public byte[] CoverPicture { get; set; } = null!;
+    public string CoverUrl { get; set; } = null!;
 
     [Required]
     [MinLength(ContentMinLength)]
@@ -41,15 +41,9 @@ public class CompositionCreateFormModel
 
     public string Synopsys { get; set; } = null!;
 
-    [Required]
-
     public string AuthorId { get; set; } = null!;
 
-    [Required]
-
     public DateTime PublishedOn { get; set; }
-
-    [Required]
 
     public bool HasAdultContent { get; set; }
 

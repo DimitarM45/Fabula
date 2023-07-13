@@ -44,10 +44,17 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Create(CompositionCreateFormModel formModel)
     {
-        formModel.AuthorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (ModelState.IsValid)
+        {
+            ModelState.AddModelError("", "Incorrect input data when creating composition!");
 
-        IFormFile? picture = Request.Form.Files.GetFile("picture");
+            return View(formModel);
+        }
 
-        return View();
+        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        await compositionService.AddAsync(formModel, userId);
+
+        return RedirectToAction("Details", "Composition");
     }
 }

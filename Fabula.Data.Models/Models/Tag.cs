@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System.ComponentModel.DataAnnotations;
 
-[Comment("Tags for better categorisation of literary works")]
+[Comment("Tags for better categorization of literary works")]
 
 public class Tag
 {
