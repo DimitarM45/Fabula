@@ -56,13 +56,16 @@ public class CompositionService : ICompositionService
             hasAdultContent = formModel.HasAdultContent,
         };
 
-        foreach (GenreViewModel genreViewModel in formModel.Genres)
+        foreach (int genreId in formModel.Genres)
         {
-            Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreViewModel.Id);
+            Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
 
             if (genre != null)
                 composition.Genres.Add(genre);
         }
+
+        if (composition.Genres.Count == 0)
+            throw new InvalidOperationException("No valid genre was provided!");
 
         foreach (TagFormModel tagFormModel in formModel.Tags)
         {

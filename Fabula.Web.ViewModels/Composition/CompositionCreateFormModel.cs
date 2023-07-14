@@ -2,6 +2,7 @@
 
 using Web.ViewModels.Tag;
 using Web.ViewModels.Genre;
+using Core.Infrastructure.Enums;
 using Core.Infrastructure.Attributes;
 using static Common.ValidationConstants.Shared;
 using static Common.ValidationConstants.Composition;
@@ -13,7 +14,7 @@ public class CompositionCreateFormModel
     public CompositionCreateFormModel()
     {
         Tags = new HashSet<TagFormModel>();
-        Genres = new HashSet<GenreViewModel>();
+        Genres = new HashSet<int>();
         GenresToSelect = new HashSet<GenreViewModel>();
     }
 
@@ -41,7 +42,7 @@ public class CompositionCreateFormModel
 
     public string Synopsys { get; set; } = null!;
 
-    public string AuthorId { get; set; } = null!;
+    public string? AuthorId { get; set; } = null!;
 
     public DateTime PublishedOn { get; set; }
 
@@ -49,10 +50,7 @@ public class CompositionCreateFormModel
 
     public ICollection<TagFormModel> Tags { get; set; }
 
-    [ElementCount(1,
-        ErrorMessage = "Your composition should have at least 1 genre!")]
+    public IEnumerable<int> Genres { get; set; }
 
-    public ICollection<GenreViewModel> Genres { get; set; }
-
-    public IEnumerable<GenreViewModel>? GenresToSelect { get; set; }
+    public IEnumerable<GenreViewModel> GenresToSelect { get; set; }
 }

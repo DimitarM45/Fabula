@@ -5,6 +5,7 @@ using Web.ViewModels.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+
 using System.Security.Claims;
 
 public class CompositionController : BaseController
@@ -44,9 +45,18 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Create(CompositionCreateFormModel formModel)
     {
-        if (ModelState.IsValid)
+        IEnumerable<int> genres = Request.Form["Genres"]
+            .ToString()
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(n => int.Parse(n));
+            
+        formModel.Genres = genres;
+
+        if (!ModelState.IsValid || !genres.Any())
         {
-            ModelState.AddModelError("", "Incorrect input data when creating composition!");
+            ModelState.AddModelError("", "Invalid input when creating composition!");
+
+            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
             return View(formModel);
         }
@@ -56,5 +66,12 @@ public class CompositionController : BaseController
         await compositionService.AddAsync(formModel, userId);
 
         return RedirectToAction("Details", "Composition");
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> Details(string compositionId)
+    {
+
     }
 }
