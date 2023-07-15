@@ -2,8 +2,6 @@
 
 using Web.ViewModels.Tag;
 using Web.ViewModels.Genre;
-using Core.Infrastructure.Enums;
-using Core.Infrastructure.Attributes;
 using static Common.ValidationConstants.Shared;
 using static Common.ValidationConstants.Composition;
 
