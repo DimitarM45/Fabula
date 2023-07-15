@@ -72,6 +72,8 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Details(string compositionId)
     {
+        
 
+        return View();
     }
 }

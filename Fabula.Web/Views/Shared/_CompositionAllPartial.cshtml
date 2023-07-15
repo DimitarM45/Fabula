@@ -1,0 +1,27 @@
+﻿@using System.Globalization;
+@model CompositionAllViewModel
+
+<div class="card" style="width: 22rem; margin-block: 2rem">
+    <img class="card-img-top" src="@Model.CoverUrl" alt="~/images/MissingComposition.png">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title</h5>
+        <h6><a asp-controller="User" asp-action="Profile" asp-route-authorid="@Model.AuthorId" style="text-decoration: none" class="card-link">@Model.Author</a></h6>
+        <p class="card-text">@Model.Synopsys</p>
+        @if (Model.Rating == null)
+        {
+            <h6 class="card-subtitle" style="font-size: smaller">This story hasnt been rated yet</h6>
+        }
+        else
+        {
+            <h6 class="card-subtitle" style="font-size: smaller">&#11088; composition.Rating</h6>
+        }
+    </div>
+    <div class="card-footer">
+        @if (Model.HasAdultContent)
+        {
+            <h6 class="text-danger">&#128286; Adult content</h6>
+        }
+        <h6 class="card-subtitle">Posted on: @Model.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
+    </div>
+    <a asp-controller="Composition" asp-action="Details" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
+</div>

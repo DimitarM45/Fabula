@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Views\List\" />
-    <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\bootstrap\" />
     <Folder Include="wwwroot\lib\bootstrap\dist\js\" />
