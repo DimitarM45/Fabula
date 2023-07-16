@@ -1,4 +1,4 @@
-﻿namespace Fabula.Web.Infrastructure.Attributes;
+﻿namespace Fabula.Web.ViewModels.Attributes;
 
 using Enums;
 

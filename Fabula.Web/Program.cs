@@ -4,7 +4,8 @@ using Fabula.Core.Services;
 using Fabula.Web.Infrastructure.Extensions;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Fabula.Web.Infrastructure.ModelBinders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -35,19 +36,19 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequiredLength =
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })  
-.AddEntityFrameworkStores<FabulaDbContext>();
+    .AddEntityFrameworkStores<FabulaDbContext>();
 
 builder.Services.AddServices(typeof(GenreService));
 
 builder.Services.AddAuthentication()
-.AddFacebook(options =>
-{
-    options.AppId = 
-        builder.Configuration.GetValue<string>("Authentication:Facebook:AppId");
+    .AddFacebook(options =>
+    {
+        options.AppId = 
+            builder.Configuration.GetValue<string>("Authentication:Facebook:AppId");
 
-    options.AppSecret =
-        builder.Configuration.GetValue<string>("Authentication:Facebook:AppSecret");
-});
+        options.AppSecret =
+            builder.Configuration.GetValue<string>("Authentication:Facebook:AppSecret");
+    });
 
 builder.Services.AddRouting(options =>
 {
@@ -55,7 +56,20 @@ builder.Services.AddRouting(options =>
     options.LowercaseQueryStrings = true;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddCors(setup =>
+{
+    setup.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(
+            builder.Configuration.GetValue<string>("CorsAllowedHosts"));
+    });
+});
+
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new GenreListModelBinderProvider());
+    });
 
 WebApplication app = builder.Build();
 
@@ -74,6 +88,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

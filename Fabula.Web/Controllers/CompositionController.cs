@@ -2,6 +2,7 @@
 
 using Core.Contracts;
 using Web.ViewModels.Composition;
+using Web.Infrastructure.ModelBinders;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -43,16 +44,10 @@ public class CompositionController : BaseController
 
     [HttpPost]
 
-    public async Task<IActionResult> Create(CompositionCreateFormModel formModel)
+    public async Task<IActionResult> Create([ModelBinder(typeof(GenreListModelBinder))]
+        CompositionCreateFormModel formModel)
     {
-        IEnumerable<int> genres = Request.Form["Genres"]
-            .ToString()
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(n => int.Parse(n));
-            
-        formModel.Genres = genres;
-
-        if (!ModelState.IsValid || !genres.Any())
+        if (!ModelState.IsValid)
         {
             ModelState.AddModelError("", "Invalid input when creating composition!");
 
