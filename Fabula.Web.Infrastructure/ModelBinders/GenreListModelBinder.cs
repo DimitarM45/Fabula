@@ -1,7 +1,7 @@
 ﻿namespace Fabula.Web.Infrastructure.ModelBinders;
 
 using Fabula.Web.ViewModels.Composition;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 using System.Threading.Tasks;
@@ -14,7 +14,7 @@ public class GenreListModelBinder : IModelBinder
             throw new ArgumentNullException(nameof(bindingContext));
 
         ValueProviderResult valueResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
-
+        
         if (valueResult != ValueProviderResult.None && !string.IsNullOrWhiteSpace(valueResult.FirstValue))
         {
             if (bindingContext.ModelType == typeof(CompositionCreateFormModel))

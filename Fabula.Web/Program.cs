@@ -2,10 +2,9 @@ using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
 using Fabula.Web.Infrastructure.Extensions;
+using Fabula.Web.Infrastructure.ModelBinders;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Fabula.Web.Infrastructure.ModelBinders;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
