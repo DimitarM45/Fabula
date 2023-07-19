@@ -58,15 +58,37 @@ public class CompositionController : BaseController
 
         await compositionService.AddAsync(formModel, userId);
 
-        return RedirectToAction("Details", "Composition");
+        return RedirectToAction("Read", "Composition");
     }
 
     [HttpGet]
 
-    public async Task<IActionResult> Details(string compositionId)
+    public async Task<IActionResult> Read(string compositionId)
     {
-        
+        CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
 
-        return View();
+        if (compositionReadViewModel == null)
+        {
+            // TODO: implement proper error pages
+            // TODO: wrap all db requests in a try catch
+
+            return BadRequest();
+        }
+
+        return View(compositionReadViewModel);
+    }
+
+    public async Task<IActionResult> Delete(string compositionId)
+    {
+        try
+        {
+            await compositionService.DeleteById(compositionId);
+
+            return RedirectToAction("MyCompositions", "User");
+        }
+        catch (Exception)
+        {
+            return BadRequest();
+        }
     }
 }

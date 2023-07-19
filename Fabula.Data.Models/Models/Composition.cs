@@ -71,9 +71,9 @@ public class Composition
 
     public bool hasAdultContent { get; set; }
 
-    public IEnumerable<Tag> Tags { get; set; }
+    public ICollection<Tag> Tags { get; set; }
 
-    public IEnumerable<Genre> Genres { get; set; }
+    public ICollection<Genre> Genres { get; set; }
 
     public IEnumerable<Rating> Ratings { get; set; }
 

@@ -5,6 +5,8 @@ using Contracts;
 using Data.Models;
 using Web.ViewModels.Tag;
 using Web.ViewModels.Genre;
+using Web.ViewModels.Rating;
+using Web.ViewModels.Comment;
 using Web.ViewModels.Composition;
 
 using Microsoft.EntityFrameworkCore;
@@ -82,17 +84,68 @@ public class CompositionService : ICompositionService
         await dbContext.SaveChangesAsync();
     }
 
-    public Task<CompositionReadViewModel?> GetByIdAsync(string compositionId)
+    public async Task<CompositionReadViewModel?> GetByIdAsync(string compositionId)
     {
-        CompositionReadViewModel? compositionViewModel = await dbContext.Compositions
+        Composition? composition = await dbContext.Compositions
             .AsNoTracking()
-            .Select(c => new CompositionReadViewModel()
-            {
-                Id = c.Id,
-                Title = c.Id,
-            })
-            .FirstOrDefaultAsync(c => c.Id = compositionId);
+            .Include(c => c.Author)
+            .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
-        return compositionViewModel;
+        if (composition == null)
+            return null;
+
+        CompositionReadViewModel compositionReadViewModel = new CompositionReadViewModel()
+        {
+            Id = composition.Id.ToString(),
+            Title = composition.Title,
+            Synopsys = composition.Synopsys,
+            Content = composition.Content,
+            CoverUrl = composition.CoverUrl,
+            Author = composition.Author.UserName,
+            AuthorId = composition.Author.Id.ToString(),
+            hasAdultContent = composition.hasAdultContent,
+            PublishedOn = composition.PublishedOn,
+            Genres = composition.Genres.Select(g => new GenreViewModel()
+            {
+                Id = g.Id,
+                Name = g.Name
+            })
+            .ToList(),
+            Comments = composition.Comments.Select(c => new CommentViewModel()
+            {
+                Id = c.Id.ToString(),
+                Content = c.Id.ToString(),
+                Author = c.Author.UserName,
+                AuthorId = c.Author.Id.ToString(),
+                CompositionId = c.Composition.Id,
+                PublishedOn = c.PublishedOn,
+                Likes = c.Likes.Count()
+            })
+            .ToList(),
+            Favorites = composition.Favorites.Count(),
+            Ratings = composition.Ratings.Select(r => new RatingViewModel()
+            {
+                Id = r.Id.ToString(),
+                Value = r.Value,
+                User = r.User.UserName,
+                UserId = r.User.Id.ToString(),
+                PublishedOn = r.PublishedOn
+            })
+
+            //TODO: Add tags if necessary
+        };
+
+        return compositionReadViewModel;
+    }
+
+    public async Task DeleteById(string compositionId)
+    {
+        Composition? composition = await dbContext.Compositions
+            .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
+
+        if (composition != null)
+            composition.DeletedOn = DateTime.Now;
+
+        await dbContext.SaveChangesAsync();
     }
 }

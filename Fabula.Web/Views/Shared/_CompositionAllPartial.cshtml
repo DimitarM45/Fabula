@@ -5,7 +5,7 @@
     <img class="card-img-top" src="@Model.CoverUrl" alt="~/images/MissingComposition.png">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        <h6><a asp-controller="User" asp-action="Profile" asp-route-authorid="@Model.AuthorId" style="text-decoration: none" class="card-link">@Model.Author</a></h6>
+        <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none" class="card-link">@Model.Author</a></h6>
         <p class="card-text">@Model.Synopsys</p>
         @if (Model.Rating == null)
         {
@@ -23,5 +23,5 @@
         }
         <h6 class="card-subtitle">Posted on: @Model.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
     </div>
-    <a asp-controller="Composition" asp-action="Details" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
+    <a asp-controller="Composition" asp-action="Read" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
 </div>

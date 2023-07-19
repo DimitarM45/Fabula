@@ -8,5 +8,7 @@ public interface ICompositionService
 
     Task AddAsync(CompositionCreateFormModel formModel, string authorId);
 
-    Task<CompositionDetailsViewModel> GetByIdAsync(string compositionId);
+    Task<CompositionReadViewModel> GetByIdAsync(string compositionId);
+
+    Task DeleteById(string compositionId);
 }
