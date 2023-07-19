@@ -2,7 +2,6 @@ using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
 using Fabula.Web.Infrastructure.Extensions;
-using Fabula.Web.Infrastructure.ModelBinders;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -35,19 +34,19 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequiredLength =
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })  
-    .AddEntityFrameworkStores<FabulaDbContext>();
+.AddEntityFrameworkStores<FabulaDbContext>();
 
 builder.Services.AddServices(typeof(GenreService));
 
 builder.Services.AddAuthentication()
-    .AddFacebook(options =>
-    {
-        options.AppId = 
-            builder.Configuration.GetValue<string>("Authentication:Facebook:AppId");
+.AddFacebook(options =>
+{
+    options.AppId = 
+        builder.Configuration.GetValue<string>("Authentication:Facebook:AppId");
 
-        options.AppSecret =
-            builder.Configuration.GetValue<string>("Authentication:Facebook:AppSecret");
-    });
+    options.AppSecret =
+        builder.Configuration.GetValue<string>("Authentication:Facebook:AppSecret");
+});
 
 builder.Services.AddRouting(options =>
 {
@@ -64,11 +63,7 @@ builder.Services.AddCors(setup =>
     });
 });
 
-builder.Services.AddControllersWithViews()
-    .AddMvcOptions(options =>
-    {
-        options.ModelBinderProviders.Insert(0, new GenreListModelBinderProvider());
-    });
+builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();
 

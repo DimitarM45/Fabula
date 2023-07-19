@@ -1,8 +1,7 @@
 ﻿namespace Fabula.Web.Controllers;
 
 using Core.Contracts;
-using Web.ViewModels.Composition;
-using Web.Infrastructure.ModelBinders;
+using ViewModels.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -44,8 +43,7 @@ public class CompositionController : BaseController
 
     [HttpPost]
 
-    public async Task<IActionResult> Create([ModelBinder(typeof(GenreListModelBinder))]
-        CompositionCreateFormModel formModel)
+    public async Task<IActionResult> Create(CompositionCreateFormModel formModel)
     {
         if (!ModelState.IsValid)
         {

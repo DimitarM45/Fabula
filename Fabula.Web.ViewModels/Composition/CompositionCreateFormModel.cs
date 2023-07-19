@@ -50,10 +50,10 @@ public class CompositionCreateFormModel
 
     public ICollection<TagFormModel> Tags { get; set; }
 
-    [ElementCount(1, CountStrategy.Minimum, 
+    [ElementCount(1, CountStrategy.Minimum,
         ErrorMessage = "A composition must have at least 1 genre!")]
 
     public IEnumerable<int> Genres { get; set; }
 
-    public IEnumerable<GenreViewModel> GenresToSelect { get; set; }
+    public IEnumerable<GenreViewModel>? GenresToSelect { get; set; }
 }

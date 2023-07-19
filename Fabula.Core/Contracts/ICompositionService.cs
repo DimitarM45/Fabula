@@ -7,4 +7,6 @@ public interface ICompositionService
     Task<IEnumerable<CompositionAllViewModel>> GetAllAsync();
 
     Task AddAsync(CompositionCreateFormModel formModel, string authorId);
+
+    Task<CompositionDetailsViewModel> GetByIdAsync(string compositionId);
 }

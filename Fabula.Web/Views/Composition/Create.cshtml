@@ -23,7 +23,7 @@
             </div>
             <div class="form-group" style="padding-top: 20px">
                 <label class="form-label" asp-for="GenresToSelect">Select genres:</label>
-                <select class="form-control" name="Genres" required multiple>
+                <select asp-for="Genres" class="form-control" multiple="multiple">
                     @foreach (var genre in Model.GenresToSelect.OrderBy(g => g.Name))
                     {
                         <option value="@genre.Id">@genre.Name</option>
@@ -46,7 +46,6 @@
     </div>
 </div>
 
-@section Scripts
-{
-    <partial name="_ValidationScriptsPartial"/>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
 }

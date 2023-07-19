@@ -81,4 +81,18 @@ public class CompositionService : ICompositionService
 
         await dbContext.SaveChangesAsync();
     }
+
+    public Task<CompositionReadViewModel?> GetByIdAsync(string compositionId)
+    {
+        CompositionReadViewModel? compositionViewModel = await dbContext.Compositions
+            .AsNoTracking()
+            .Select(c => new CompositionReadViewModel()
+            {
+                Id = c.Id,
+                Title = c.Id,
+            })
+            .FirstOrDefaultAsync(c => c.Id = compositionId);
+
+        return compositionViewModel;
+    }
 }

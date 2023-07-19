@@ -2,16 +2,17 @@
 
 using Enums;
 
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 /// <summary>
-/// A custom validation attribute used for validating whether the count of an ICollection or IEnumerable,
-/// fits under each strategy
+/// A custom validation attribute used for validating whether the count of an IEnumerable or any other collections 
+/// that inherit from it, including generic collection types, fits under the given strategy
 /// </summary>
 
 [AttributeUsage(AttributeTargets.Property)]
 
-public class ElementCountAttribute : ValidationAttribute
+public sealed class ElementCountAttribute : ValidationAttribute
 {
     private readonly int expectedCount;
 
@@ -25,31 +26,19 @@ public class ElementCountAttribute : ValidationAttribute
 
     public override bool IsValid(object? value)
     {
-        Func<int, int, bool> validationStrategy;
-
-        switch (countStrategy)
+        Func<int, int, bool>? validationStrategy = countStrategy switch
         {
-            case CountStrategy.Minimum:
-                validationStrategy = (n, m) => n >= m;
-                break;
+            CountStrategy.Minimum => (n, m) => n >= m,
 
-            case CountStrategy.Maximum:
-                validationStrategy = (n, m) => n <= m;
-                break;
+            CountStrategy.Maximum => (n, m) => n <= m,
 
-            case CountStrategy.Exact:
-                validationStrategy = (n, m) => n == m;
-                break;
+            CountStrategy.Exact => (n, m) => n == m,
 
-            default:
-                return false;
-        }
+            _ => null
+        };
 
-        if (value is ICollection<object> collection)
-            return validationStrategy(collection.Count, expectedCount);
-
-        if (value is IEnumerable<object> enumerable)
-            return validationStrategy(enumerable.Count(), expectedCount);
+        if (validationStrategy != null && value is IEnumerable enumerable)
+            return validationStrategy(enumerable.Cast<object>().Count(), expectedCount);
 
         return false;
     }
