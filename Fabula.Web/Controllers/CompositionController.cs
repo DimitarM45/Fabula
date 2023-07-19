@@ -34,16 +34,16 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Create()
     {
-        CompositionCreateFormModel compositionCreateFormModel = new CompositionCreateFormModel();
+        CompositionFormModel compositionFormModel = new CompositionFormModel();
 
-        compositionCreateFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+        compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
-        return View(compositionCreateFormModel);
+        return View(compositionFormModel);
     }
 
     [HttpPost]
 
-    public async Task<IActionResult> Create(CompositionCreateFormModel formModel)
+    public async Task<IActionResult> Create(CompositionFormModel formModel)
     {
         if (!ModelState.IsValid)
         {
@@ -54,16 +54,15 @@ public class CompositionController : BaseController
             return View(formModel);
         }
 
-        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = GetUserId();
 
         string compositionId = await compositionService.AddAsync(formModel, userId);
 
-        CompositionReadViewModel compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
-
-        return RedirectToAction("Read", "Composition", compositionReadViewModel);
+        return RedirectToAction("Read", "Composition", compositionId);
     }
 
     [HttpGet]
+    [AllowAnonymous]
 
     public async Task<IActionResult> Read(string compositionId)
     {
@@ -80,6 +79,8 @@ public class CompositionController : BaseController
         return View(compositionReadViewModel);
     }
 
+    [HttpPost]
+
     public async Task<IActionResult> Delete(string compositionId)
     {
         try
@@ -90,7 +91,52 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
+            // CUSTOM ERROR PAGE REDIRECTION
+
             return BadRequest();
         }
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> Edit(string compositionId)
+    {
+        string userId = GetUserId();
+
+        CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
+
+        // CUSTOM ERROR PAGE
+
+        if (userId != compositionFormModel?.AuthorId)
+            return BadRequest();
+
+        if (compositionFormModel == null)
+        {
+            // CUSTOM ERROR PAGE REDIRECTION
+
+            return BadRequest();
+        }
+
+        compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+        return View(compositionFormModel);
+    }
+
+    [HttpPost]
+
+    public async Task<IActionResult> Edit(CompositionFormModel formModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            ModelState.AddModelError("", "Invalid input when creating composition!");
+
+            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+            return View(formModel);
+        }
+
+        await compositionService.UpdateAsync(formModel);
+
+        return RedirectToAction("Read", "Composition", formModel.Id);
     }
 }

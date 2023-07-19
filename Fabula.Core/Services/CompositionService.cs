@@ -45,7 +45,7 @@ public class CompositionService : ICompositionService
         return compositionViewModels;
     }
 
-    public async Task<string> AddAsync(CompositionCreateFormModel formModel, string authorId)
+    public async Task<string> AddAsync(CompositionFormModel formModel, string authorId)
     {
         Composition composition = new Composition()
         {
@@ -147,6 +147,62 @@ public class CompositionService : ICompositionService
 
         if (composition != null)
             composition.DeletedOn = DateTime.Now;
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task<CompositionFormModel?> GetForEditAsync(string compositionId)
+    {
+        Composition? composition = await dbContext.Compositions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
+
+        if (composition == null)
+            return null;
+
+        CompositionFormModel compositionFormModel = new CompositionFormModel()
+        {
+            Id = composition.Id.ToString(),
+            Title = composition.Title,
+            Synopsys = composition.Synopsys,
+            Content = composition.Content,
+            CoverUrl = composition.CoverUrl,
+            AuthorId = composition.AuthorId.ToString(),
+            HasAdultContent = composition.hasAdultContent,
+            Genres = composition.Genres.Select(g => g.Id),
+
+            //TODO: Add tags if necessary
+        };
+
+        return compositionFormModel;
+    }
+
+    public async Task UpdateAsync(CompositionFormModel formModel)
+    {
+        Composition? compositionToUpdate = await dbContext.Compositions
+            .FirstOrDefaultAsync(c => c.Id.ToString() == formModel.Id);
+
+        if (compositionToUpdate != null)
+        {
+            ICollection<Genre> genresToUpdate = new List<Genre>();
+
+            foreach (int genreId in formModel.Genres)
+            {
+                Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+
+                if (genre != null)
+                    genresToUpdate.Add(genre);
+            }
+
+            if (genresToUpdate.Count == 0)
+                throw new InvalidOperationException("No valid genre was provided!");
+
+            compositionToUpdate.Title = formModel.Title;
+            compositionToUpdate.Content = formModel.Content;
+            compositionToUpdate.Synopsys = formModel.Synopsys;
+            compositionToUpdate.CoverUrl = formModel.CoverUrl;
+            compositionToUpdate.Genres = genresToUpdate;
+        }
 
         await dbContext.SaveChangesAsync();
     }

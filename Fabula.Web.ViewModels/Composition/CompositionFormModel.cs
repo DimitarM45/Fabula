@@ -9,14 +9,16 @@ using static Common.ValidationConstants.Composition;
 
 using System.ComponentModel.DataAnnotations;
 
-public class CompositionCreateFormModel
+public class CompositionFormModel
 {
-    public CompositionCreateFormModel()
+    public CompositionFormModel()
     {
         Tags = new HashSet<TagFormModel>();
         Genres = new HashSet<int>();
         GenresToSelect = new HashSet<GenreViewModel>();
     }
+
+    public string? Id { get; set; }
 
     [Required]
     [MinLength(TitleMinLength)]
@@ -42,9 +44,7 @@ public class CompositionCreateFormModel
 
     public string Synopsys { get; set; } = null!;
 
-    public string? AuthorId { get; set; } = null!;
-
-    public DateTime PublishedOn { get; set; }
+    public string? AuthorId { get; set; }
 
     public bool HasAdultContent { get; set; }
 

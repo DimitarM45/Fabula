@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager;
+@model CompositionFormModel
+@{
+    ViewData["Title"] = $"Edit - {Model.Title}";
+
+    ApplicationUser? user = await userManager.FindByIdAsync(Model.AuthorId);
+}
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <form method="post">
+            <partial name="_CompositionFormPartial" model="@Model"></partial>
+            <div class="justify-content-center">
+                <input class="btn btn-primary mt-3 btn-primary" type="submit" value="Edit" />
+            </div>
+
+            @if (User?.Identity?.IsAuthenticated ?? false && user?.Id.ToString() == Model.AuthorId)
+            {
+                <h2 class="text-danger text-center">Delete your work</h2>
+                <div style="width: min-content">
+                    <form onsubmit="return confirmAction();" method="post" asp-action="Delete" asp-route-compositionid="@Model.Id">
+                        <input type="submit" value="Delete" class="btn btn-danger form-control" />
+                    </form>
+                </div>
+            }
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function confirmAction() {
+            var confirmed = window.confirm("Are you sure you want to delete your work? Your work can only be recovered within a 30-day time period!");
+            return confirmed;
+        }
+    </script>
+
+    <script>
+        var simplemde = new SimpleMDE({
+            autosave: {
+                enabled: true,
+                uniqueId: "Draft_Edit",
+                delay: 1000,
+            }
+        });
+    </script>
+}
+
