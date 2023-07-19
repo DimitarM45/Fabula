@@ -56,9 +56,11 @@ public class CompositionController : BaseController
 
         string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        await compositionService.AddAsync(formModel, userId);
+        string compositionId = await compositionService.AddAsync(formModel, userId);
 
-        return RedirectToAction("Read", "Composition");
+        CompositionReadViewModel compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
+
+        return RedirectToAction("Read", "Composition", compositionReadViewModel);
     }
 
     [HttpGet]

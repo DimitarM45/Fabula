@@ -9,15 +9,19 @@
 
 <div class="container-fluid">
     <h1 class="text-center">@Model.Title</h1>
-    <small> class="text-center">Written by: <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a></small>
+    <p class="text-center" style="text-decoration: none; font-size: small">
+        Written by:
+        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
+    </p>
     <p>@Model.Content</p>
 </div>
+
 @if (User?.Identity?.IsAuthenticated ?? false && user?.Id.ToString() == Model.AuthorId)
 {
-    <h2 class="text-center text-danger">Delete your work</h2>
-    <div class="container-fluid justify-content-center">
+    <h2 class="text-danger text-center">Delete your work</h2>
+    <div class="container-fluid">
         <form onsubmit="return confirmAction();" method="post" asp-action="Delete" asp-route-compositionid="@Model.Id">
-            <input type="submit" value="Delete" class="btn btn-danger justify-content-center" />
+            <input type="submit" value="Delete" class="btn btn-danger" />
         </form>
     </div>
 }

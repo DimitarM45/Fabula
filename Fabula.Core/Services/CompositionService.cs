@@ -45,7 +45,7 @@ public class CompositionService : ICompositionService
         return compositionViewModels;
     }
 
-    public async Task AddAsync(CompositionCreateFormModel formModel, string authorId)
+    public async Task<string> AddAsync(CompositionCreateFormModel formModel, string authorId)
     {
         Composition composition = new Composition()
         {
@@ -82,6 +82,8 @@ public class CompositionService : ICompositionService
         await dbContext.Compositions.AddAsync(composition);
 
         await dbContext.SaveChangesAsync();
+
+        return composition.Id.ToString();
     }
 
     public async Task<CompositionReadViewModel?> GetByIdAsync(string compositionId)
