@@ -24,9 +24,7 @@
 {
     <div class="row">
         <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6" style="width: min-content">
-            <form asp-controller="Composition" asp-action="Edit" asp-route-compositionid="@Model.Id">
-                <input type="submit" value="Edit" class="btn btn-primary form-control">
-            </form>
+            <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
         </div>
     </div>
 }

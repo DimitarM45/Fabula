@@ -32,7 +32,7 @@ public class CompositionService : ICompositionService
             {
                 Id = c.Id.ToString(),
                 Title = c.Title,
-                Synopsys = c.Synopsys,
+                Synopsis = c.Synopsis,
                 CoverUrl = c.CoverUrl,
                 Author = c.Author.UserName,
                 AuthorId = c.Author.Id.ToString(),
@@ -50,7 +50,7 @@ public class CompositionService : ICompositionService
         Composition composition = new Composition()
         {
             Title = formModel.Title,
-            Synopsys = formModel.Synopsys,
+            Synopsis = formModel.Synopsis,
             Content = formModel.Content,
             CoverUrl = formModel.CoverUrl,
             AuthorId = Guid.Parse(authorId),
@@ -100,7 +100,7 @@ public class CompositionService : ICompositionService
         {
             Id = composition.Id.ToString(),
             Title = composition.Title,
-            Synopsys = composition.Synopsys,
+            Synopsis = composition.Synopsis,
             Content = composition.Content,
             CoverUrl = composition.CoverUrl,
             Author = composition.Author.UserName,
@@ -164,7 +164,7 @@ public class CompositionService : ICompositionService
         {
             Id = composition.Id.ToString(),
             Title = composition.Title,
-            Synopsys = composition.Synopsys,
+            Synopsis = composition.Synopsis,
             Content = composition.Content,
             CoverUrl = composition.CoverUrl,
             AuthorId = composition.AuthorId.ToString(),
@@ -199,7 +199,7 @@ public class CompositionService : ICompositionService
 
             compositionToUpdate.Title = formModel.Title;
             compositionToUpdate.Content = formModel.Content;
-            compositionToUpdate.Synopsys = formModel.Synopsys;
+            compositionToUpdate.Synopsis = formModel.Synopsis;
             compositionToUpdate.CoverUrl = formModel.CoverUrl;
             compositionToUpdate.Genres = genresToUpdate;
         }

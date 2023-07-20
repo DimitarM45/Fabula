@@ -39,10 +39,10 @@ public class CompositionFormModel
     public string Content { get; set; } = null!;
 
     [Required]
-    [MinLength(SynopsysMinLength)]
-    [MaxLength(SynopsysMaxLength)]
+    [MinLength(SynopsisMinLength)]
+    [MaxLength(SynopsisMaxLength)]
 
-    public string Synopsys { get; set; } = null!;
+    public string Synopsis { get; set; } = null!;
 
     public string? AuthorId { get; set; }
 

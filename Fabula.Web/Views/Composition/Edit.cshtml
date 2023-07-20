@@ -2,7 +2,7 @@
 @inject UserManager<ApplicationUser> userManager;
 @model CompositionFormModel
 @{
-    ViewData["Title"] = $"Edit - {Model.Title}";
+    ViewData["Title"] = $"Edit {Model.Title}";
 
     ApplicationUser? user = await userManager.FindByIdAsync(Model.AuthorId);
 }
@@ -10,6 +10,9 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <form method="post">
             <partial name="_CompositionFormPartial" model="@Model"></partial>
+            <div class="form-group">
+                <input type="hidden" asp-for="Id" class="form-control" />
+            </div>
             <div class="justify-content-center">
                 <input class="btn btn-primary mt-3 btn-primary" type="submit" value="Edit" />
             </div>

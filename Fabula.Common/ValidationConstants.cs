@@ -16,8 +16,8 @@ public static class ValidationConstants
         public const int ContentMinLength = 50;
         public const int ContentMaxLength = 100000;
 
-        public const int SynopsysMinLength = 10;
-        public const int SynopsysMaxLength = 2000;
+        public const int SynopsisMinLength = 10;
+        public const int SynopsisMaxLength = 2000;
     }
 
     public static class Genre

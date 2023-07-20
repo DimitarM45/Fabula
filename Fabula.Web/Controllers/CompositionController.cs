@@ -58,7 +58,7 @@ public class CompositionController : BaseController
 
         string compositionId = await compositionService.AddAsync(formModel, userId);
 
-        return RedirectToAction("Read", "Composition", compositionId);
+        return RedirectToAction("Read", new { CompositionId = compositionId });
     }
 
     [HttpGet]
@@ -105,14 +105,14 @@ public class CompositionController : BaseController
 
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
-        // CUSTOM ERROR PAGE
+        // TODO: CUSTOM ERROR PAGE
 
         if (userId != compositionFormModel?.AuthorId)
             return BadRequest();
 
         if (compositionFormModel == null)
         {
-            // CUSTOM ERROR PAGE REDIRECTION
+            // TODO: CUSTOM ERROR PAGE REDIRECTION
 
             return BadRequest();
         }
@@ -137,6 +137,6 @@ public class CompositionController : BaseController
 
         await compositionService.UpdateAsync(formModel);
 
-        return RedirectToAction("Read", "Composition", formModel.Id);
+        return RedirectToAction("Read", new { CompositionId = formModel.Id });
     }
 }

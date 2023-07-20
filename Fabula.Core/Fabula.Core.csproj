@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Providers.Core" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Fabula.Common\Fabula.Common.csproj" />
     <ProjectReference Include="..\Fabula.Data\Fabula.Data.csproj" />
     <ProjectReference Include="..\Fabula.Web.ViewModels\Fabula.Web.ViewModels.csproj" />

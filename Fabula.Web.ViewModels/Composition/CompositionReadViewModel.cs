@@ -22,7 +22,7 @@ public class CompositionReadViewModel
 
     public string? Content { get; set; } 
 
-    public string? Synopsys { get; set; }
+    public string? Synopsis { get; set; }
 
     public string? AuthorId { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿namespace Fabula.Data.Models;
 
-using static Common.ValidationConstants.Composition;
 using static Common.ValidationConstants.Shared;
+using static Common.ValidationConstants.Composition;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -43,10 +43,10 @@ public class Composition
     public string Content { get; set; } = null!;
 
     [Required]
-    [MaxLength(SynopsysMaxLength)]
-    [Comment("Synopsys of the composition")]
+    [MaxLength(SynopsisMaxLength)]
+    [Comment("Synopsis of the composition")]
 
-    public string Synopsys { get; set; } = null!;
+    public string Synopsis { get; set; } = null!;
 
     [Required]
     [Comment("Id of composition author")]
