@@ -27,4 +27,6 @@ public class Genre
     public string Name { get; set; } = null!;
 
     public IEnumerable<Composition> Compositions { get; set; }
+
+    public IEnumerable<ApplicationUser> Favorites { get; set; }
 }

@@ -17,6 +17,7 @@ public class ApplicationUser : IdentityUser<Guid>
         Followers = new HashSet<ApplicationUser>();
         WrittenCompositions = new HashSet<Composition>();
         FavoriteCompositions = new HashSet<UserFavoriteComposition>();
+        FavoriteGenres = new HashSet<Genre>();
         Ratings = new HashSet<Rating>();
         CreatedLists = new HashSet<List>();
         FollowedLists = new HashSet<UserFollowedList>();
@@ -40,12 +41,17 @@ public class ApplicationUser : IdentityUser<Guid>
     [MaxLength(UrlMaxLength)]
     [Comment("A url which leads to the user's profile picture")]
 
-    public string? ProfilePictureUrl { get; set; } = null!;
+    public string? ProfilePictureUrl { get; set; }
 
     [MaxLength(BioMaxLength)]
     [Comment("User bio description")]
 
-    public string? Bio { get; set; } = null!;
+    public string? Bio { get; set; }
+
+    [MaxLength(UrlMaxLength)]
+    [Comment("User website url (social media/personal website)")]
+
+    public string? WebsiteURL { get; set; } 
 
     [Required]
     [Comment("User date of birth")]
@@ -57,6 +63,8 @@ public class ApplicationUser : IdentityUser<Guid>
     public IEnumerable<Composition> WrittenCompositions { get; set; }
 
     public IEnumerable<UserFavoriteComposition> FavoriteCompositions { get; set; }
+
+    public IEnumerable<Genre> FavoriteGenres { get; set; }
 
     public IEnumerable<Rating> Ratings { get; set; }
 
