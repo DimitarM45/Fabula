@@ -6,8 +6,6 @@ using ViewModels.Composition;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-using System.Security.Claims;
-
 public class CompositionController : BaseController
 {
     private readonly IGenreService genreService;

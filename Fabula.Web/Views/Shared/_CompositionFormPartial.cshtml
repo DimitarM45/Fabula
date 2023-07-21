@@ -7,12 +7,12 @@
 </div>
 <div class="form-group" style="padding-top: 20px">
     <label class="form-label" asp-for="Synopsis"></label>
-    <input asp-for="Synopsis" class="form-control text" placeholder="Synopsis of the piece..." />
+    <textarea asp-for="Synopsis" class="form-control" placeholder="Synopsis of the piece..."></textarea>
     <span asp-validation-for="Synopsis" class="small text-danger"></span>
 </div>
 <div class="form-group" style="padding-top: 20px">
     <label class="form-label" asp-for="Content"></label>
-    <textarea asp-for="Content" class="form-control" placeholder="Write your story..." style="block-size: 200px"></textarea>
+    <textarea asp-for="Content" id="content-textarea" class="form-control" placeholder="Write your story..." style="block-size: 200px"></textarea>
     <span asp-validation-for="Content" class="small text-danger"></span>
 </div>
 <div class="form-group" style="padding-top: 20px">
