@@ -20,7 +20,7 @@ public static class WebApplicationBuilderExtensions
     /// <param name="serviceType"></param>
     /// <exception cref="InvalidOperationException"></exception>
 
-    public static void AddServices(this IServiceCollection services, Type serviceType)
+    public static void AddApplicationServices(this IServiceCollection services, Type serviceType)
     {
         Assembly? serviceAssembly = Assembly.GetAssembly(serviceType);
 

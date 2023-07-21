@@ -36,7 +36,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })  
 .AddEntityFrameworkStores<FabulaDbContext>();
 
-builder.Services.AddServices(typeof(GenreService));
+builder.Services.AddApplicationServices(typeof(GenreService));
 
 builder.Services.AddAuthentication()
 .AddFacebook(options =>

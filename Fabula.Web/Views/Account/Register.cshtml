@@ -1,0 +1,87 @@
+﻿@model RegisterFormModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-4 col-xl-3">
+            <h1 class="text-center">@ViewData["Title"]</h1>
+            <form id="registerForm" asp-route-returnUrl="ReturnUrl" method="post">
+                <h2 class="text-center">Create a new account.</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-floating">
+                    <input asp-for="Username" class="form-control" autocomplete="username" aria-required="true" />
+                    <label asp-for="Username"></label>
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="FirstName" class="form-control" autocomplete="off" aria-required="true" />
+                    <label asp-for="FirstName"></label>
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="LastName" class="form-control" autocomplete="off" aria-required="true" />
+                    <label asp-for="LastName"></label>
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Birthdate" type="text" name="Birthdate" title="Date of birth" class="form-control datepicker" />
+                    <label asp-for="@Model.Birthdate"></label>
+                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Email" class="form-control" autocomplete="email" aria-required="true" />
+                    <label asp-for="Email"></label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="Password"></label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                    <label asp-for="ConfirmPassword"></label>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            </form>
+        </div>
+        @*    <div class="col-md-6 col-md-offset-2">
+        <section>
+        <h3>Use another service to register.</h3>
+        <hr />
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.Utilities.ReturnUrl" method="post" class="form-horizontal">
+        <div>
+        <p>
+        @foreach (var provider in Model.Utilities.ExternalLogins!)
+        {
+        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+        }
+        </p>
+        </div>
+        </form>
+        </section>
+        </div>*@
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"></partial>
+
+    <script>
+        $(document).ready(function () {
+            var minAge = 13;
+
+            var endDate = new Date().getFullYear() - minAge;
+
+            $('.datepicker').datepicker({
+                format: 'dd-mm-yyyy',
+                autoclose: true,
+                endDate: new Date(endDate, 11, 31)
+            });
+        });
+    </script>
+}

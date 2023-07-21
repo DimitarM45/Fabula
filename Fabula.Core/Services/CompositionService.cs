@@ -93,6 +93,7 @@ public class CompositionService : ICompositionService
             .AsNoTracking()
             .Include(c => c.Author)
             .Include(c => c.Comments)
+            .Include(c => c.Ratings)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
         if (composition == null)
@@ -121,9 +122,9 @@ public class CompositionService : ICompositionService
                 Content = c.Id.ToString(),
                 Author = new UserViewModel()
                 {
-                    Id = composition.AuthorId.ToString(),
-                    Username = composition.Author.UserName,
-                    ProfilePictureUrl = composition.Author.ProfilePictureUrl
+                    Id = c.AuthorId.ToString(),
+                    Username = c.Author.UserName,
+                    ProfilePictureUrl = c.Author.ProfilePictureUrl
                 },
                 CompositionId = c.Composition.Id.ToString(),
                 PublishedOn = c.PublishedOn,
@@ -135,8 +136,12 @@ public class CompositionService : ICompositionService
             {
                 Id = r.Id.ToString(),
                 Value = r.Value,
-                User = r.User.UserName,
-                UserId = r.User.Id.ToString(),
+                Author = new UserViewModel()
+                {
+                    Id = r.Id.ToString(),
+                    Username = r.User.UserName,
+                    ProfilePictureUrl = r.User.ProfilePictureUrl
+                },
                 PublishedOn = r.PublishedOn
             })
 
