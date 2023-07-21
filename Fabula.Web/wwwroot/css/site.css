@@ -26,7 +26,7 @@ body {
     padding-inline-start: 1ch;
 }
 
-/* Overrides the default SimpleMDE statusbar color to black (for better readability) */
+/* Overrides the default SimpleMDE status bar color to black (for better readability) */
 
 .editor-statusbar {
     padding: 8px 10px;

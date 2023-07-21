@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.User;
 
-public class UserCommentViewModel
+public class UserViewModel
 {
     public string? Id { get; set; }
 

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Fabula.Web.ViewModels.User;
 
 public class CompositionService : ICompositionService
 {
@@ -91,6 +92,7 @@ public class CompositionService : ICompositionService
         Composition? composition = await dbContext.Compositions
             .AsNoTracking()
             .Include(c => c.Author)
+            .Include(c => c.Comments)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
         if (composition == null)
@@ -117,9 +119,13 @@ public class CompositionService : ICompositionService
             {
                 Id = c.Id.ToString(),
                 Content = c.Id.ToString(),
-                Author = c.Author.UserName,
-                AuthorId = c.Author.Id.ToString(),
-                CompositionId = c.Composition.Id,
+                Author = new UserViewModel()
+                {
+                    Id = composition.AuthorId.ToString(),
+                    Username = composition.Author.UserName,
+                    ProfilePictureUrl = composition.Author.ProfilePictureUrl
+                },
+                CompositionId = c.Composition.Id.ToString(),
                 PublishedOn = c.PublishedOn,
                 Likes = c.Likes.Count()
             })

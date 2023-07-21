@@ -7,33 +7,68 @@
     ApplicationUser? user = await userManager.FindByIdAsync(Model.AuthorId);
 }
 
-<div class="container-fluid">
-    <h1 class="text-center">@Model.Title</h1>
-    <p class="text-center" style="text-decoration: none; font-size: small">
-        Written by:
-        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
-    </p>
+<div class="container">
     <div class="row">
-        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-            <textarea disabled>@Model.Content</textarea>
+        <div class="col-sm-2">
+            <h3>Ratings:</h3>
+            @foreach (RatingViewModel rating in Model.Ratings)
+            {
+
+            }
+        </div>
+        <div class="col-lg">
+            <div class="container">
+                <div class="container-fluid">
+                    <img src="@Model.CoverUrl" class="img-fluid rounded img-thumbnail" alt="Image is missing :(" width="1000" />
+                </div>
+                <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
+                <p class="text-center" style="text-decoration: none; font-size: small">
+                    Written by:
+                    <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
+                </p>
+                <textarea disabled>@Model.Content</textarea>
+                @if (User?.Identity?.IsAuthenticated ?? false && user?.Id.ToString() == Model.AuthorId)
+                {
+                    <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary">Edit</a>
+                }
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <h3>Comments:</h3>
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+                        <div class="card-body p-4">
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    @foreach (CommentViewModel comment in Model.Comments)
+                                    {
+                                        <div class="d-flex justify-content-between">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="@comment?.Author?.ProfilePictureUrl" alt="avatar" width="25" height="25" />
+                                                <p class="small mb-0 ms-2">@comment?.Author?.Username</p>
+                                            </div>
+                                            <div class="d-flex flex-row align-items-center">
+                                                <p class="small text-muted mb-0">Like</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-@if (User?.Identity?.IsAuthenticated ?? false && user?.Id.ToString() == Model.AuthorId)
-{
-    <div class="row">
-        <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6" style="width: min-content">
-            <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
-        </div>
-    </div>
-}
 
 @section Scripts{
     <script>
         var simplemde = new SimpleMDE({
             toolbar: false,
             tabSize: 4,
+            status: false
         })
 
         simplemde.togglePreview();
