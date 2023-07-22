@@ -90,10 +90,10 @@ public class AccountController : BaseController
             }
 
             if (result.RequiresTwoFactor)
-                return RedirectToPage("./LoginWith2fa", new { ReturnUrl = formModel.Utilities.ReturnUrl, RememberMe = formModel.RememberMe });
+                return RedirectToAction("LoginWith2fa", new { ReturnUrl = formModel.Utilities.ReturnUrl, RememberMe = formModel.RememberMe });
 
             if (result.IsLockedOut)
-                return RedirectToPage("./Lockout");
+                return RedirectToAction("Lockout");
 
             else
             {
@@ -104,6 +104,20 @@ public class AccountController : BaseController
         }
 
         return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> ManageAccount(string userId)
+    {
+        return View();
+    }
+
+    [HttpPost]
+
+    public async Task<IActionResult> ManageAccount(object model)
+    {
+        return View();
     }
 }
 

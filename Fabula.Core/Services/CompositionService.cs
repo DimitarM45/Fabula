@@ -4,6 +4,7 @@ using Data;
 using Contracts;
 using Data.Models;
 using Web.ViewModels.Tag;
+using Web.ViewModels.User;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Rating;
 using Web.ViewModels.Comment;
@@ -13,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Fabula.Web.ViewModels.User;
 
 public class CompositionService : ICompositionService
 {

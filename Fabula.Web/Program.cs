@@ -33,15 +33,16 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 
     options.Password.RequiredLength =
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
-})  
+})
 .AddEntityFrameworkStores<FabulaDbContext>();
 
-builder.Services.AddApplicationServices(typeof(GenreService));
+builder.Services.AddApplicationServices(typeof(GenreService))
+    .AddThirdPartyServices();
 
 builder.Services.AddAuthentication()
 .AddFacebook(options =>
 {
-    options.AppId = 
+    options.AppId =
         builder.Configuration.GetValue<string>("Authentication:Facebook:AppId");
 
     options.AppSecret =

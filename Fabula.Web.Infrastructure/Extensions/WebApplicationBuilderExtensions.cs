@@ -1,8 +1,10 @@
 ﻿namespace Fabula.Web.Infrastructure.Extensions;
 
-using Fabula.Data.Models;
+using Core.Services;
+using Core.Contracts;
 
-using Microsoft.Extensions.Configuration;
+using Ganss.Xss;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using System.Reflection;
@@ -17,10 +19,10 @@ public static class WebApplicationBuilderExtensions
     /// Registers all services with their interfaces and implementations from a given assembly.
     /// The assembly is located using the random service type provided.
     /// </summary>
-    /// <param name="serviceType"></param>
+    /// <param name="serviceType">Type of the random service given in order to find the necessary assembly</param>
     /// <exception cref="InvalidOperationException"></exception>
 
-    public static void AddApplicationServices(this IServiceCollection services, Type serviceType)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, Type serviceType)
     {
         Assembly? serviceAssembly = Assembly.GetAssembly(serviceType);
 
@@ -40,5 +42,18 @@ public static class WebApplicationBuilderExtensions
 
             services.AddScoped(interfaceType, implementationType);
         }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers all third party services. 
+    /// </summary>
+
+    public static IServiceCollection AddThirdPartyServices(this IServiceCollection services)
+    {
+        services.AddScoped<IHtmlSanitizer, HtmlSanitizer>();
+
+        return services;
     }
 }

@@ -12,11 +12,15 @@ public class CompositionController : BaseController
 
     private readonly ICompositionService compositionService;
 
+    private readonly IHtmlReflectionSanitizerService sanitizer;
+
     public CompositionController(IGenreService genreService,
-        ICompositionService compositionService)
+        ICompositionService compositionService,
+        IHtmlReflectionSanitizerService sanitizer)
     {
         this.genreService = genreService;
         this.compositionService = compositionService;
+        this.sanitizer = sanitizer;
     }
 
     [AllowAnonymous]
@@ -51,6 +55,8 @@ public class CompositionController : BaseController
 
             return View(formModel);
         }
+
+        sanitizer.SanitizeModel(formModel);
 
         string userId = GetUserId();
 
@@ -132,6 +138,8 @@ public class CompositionController : BaseController
 
             return View(formModel);
         }
+
+        sanitizer.SanitizeModel(formModel);
 
         await compositionService.UpdateAsync(formModel);
 

@@ -20,27 +20,27 @@ public class CompositionFormModel
 
     public string? Id { get; set; }
 
-    [Required]
     [MinLength(TitleMinLength)]
     [MaxLength(TitleMaxLength)]
+    [Required(AllowEmptyStrings = false)]
 
     public string Title { get; set; } = null!;
 
-    [Required]
     [MinLength(UrlMinLength)]
     [MaxLength(UrlMaxLength)]
+    [Required(AllowEmptyStrings = false)]
 
     public string CoverUrl { get; set; } = null!;
 
-    [Required]
     [MinLength(ContentMinLength)]
     [MaxLength(ContentMaxLength)]
+    [Required(AllowEmptyStrings = false)]
 
     public string Content { get; set; } = null!;
 
-    [Required]
     [MinLength(SynopsisMinLength)]
     [MaxLength(SynopsisMaxLength)]
+    [Required(AllowEmptyStrings = false)]
 
     public string Synopsis { get; set; } = null!;
 
