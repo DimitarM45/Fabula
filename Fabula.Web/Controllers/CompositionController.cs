@@ -56,8 +56,6 @@ public class CompositionController : BaseController
             return View(formModel);
         }
 
-        sanitizer.SanitizeModel(formModel);
-
         string userId = GetUserId();
 
         string compositionId = await compositionService.AddAsync(formModel, userId);
@@ -138,8 +136,6 @@ public class CompositionController : BaseController
 
             return View(formModel);
         }
-
-        sanitizer.SanitizeModel(formModel);
 
         await compositionService.UpdateAsync(formModel);
 

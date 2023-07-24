@@ -1,6 +1,7 @@
 using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
+using Fabula.Web.Infrastructure.Filters;
 using Fabula.Web.Infrastructure.Extensions;
 
 using Microsoft.EntityFrameworkCore;
@@ -64,7 +65,10 @@ builder.Services.AddCors(setup =>
     });
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<HtmlSanitizerFilter>();
+});
 
 WebApplication app = builder.Build();
 

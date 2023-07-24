@@ -4,7 +4,7 @@ using static Common.ValidationConstants.ApplicationUser;
 
 using System.ComponentModel.DataAnnotations;
 
-public class LoginFormModel
+public class LoginFormModel 
 {
     public LoginFormModel()
     {

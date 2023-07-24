@@ -97,11 +97,13 @@ public class AccountController : BaseController
 
             else
             {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError("Login", "Wrong password or username/email!");
 
                 return RedirectToAction("Login");
             }
         }
+
+        ModelState.AddModelError("Login", "Invalid login attempt!");
 
         return RedirectToAction("Login");
     }

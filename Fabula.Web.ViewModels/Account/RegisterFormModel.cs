@@ -48,5 +48,5 @@ public class RegisterFormModel
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; } = null!;
 
-    public AuthUtilitiesViewModel Utilities { get; set; } 
+    public AuthUtilitiesViewModel Utilities { get; set; }
 }

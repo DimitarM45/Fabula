@@ -17,7 +17,7 @@
 </div>
 <div class="form-group" style="padding-top: 20px">
     <label class="form-label" asp-for="GenresToSelect">Select genres:</label>
-    <select asp-for="Genres" class="form-control" multiple="multiple">
+    <select asp-for="Genres" class="select" data-mdb-filter="true">
         @foreach (var genre in Model.GenresToSelect.OrderBy(g => g.Name))
         {
             <option value="@genre.Id">@genre.Name</option>

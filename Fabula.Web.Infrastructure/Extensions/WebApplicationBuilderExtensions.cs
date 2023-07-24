@@ -1,8 +1,5 @@
 ﻿namespace Fabula.Web.Infrastructure.Extensions;
 
-using Core.Services;
-using Core.Contracts;
-
 using Ganss.Xss;
 
 using Microsoft.Extensions.DependencyInjection;
