@@ -1,35 +1,45 @@
 ﻿@model CompositionFormModel
 
-<div class="form-group" style="padding-top: 20px">
-    <label class="form-label" asp-for="Title"></label>
-    <input asp-for="Title" class="form-control" placeholder="Title of the piece..." />
-    <span asp-validation-for="Title" class="small text-danger"></span>
+<div class="form-outline">
+    <input type="text" asp-for="Title" id="title" class="form-control" placeholder="Title of the piece..." data-mdb-showcounter="true" maxlength="@TitleMaxLength" />
+    <label class="form-label" for="title" asp-for="Title" for="title"></label>
+    <div class="form-helper"></div>
 </div>
-<div class="form-group" style="padding-top: 20px">
-    <label class="form-label" asp-for="Synopsis"></label>
-    <textarea asp-for="Synopsis" class="form-control" placeholder="Synopsis of the piece..."></textarea>
-    <span asp-validation-for="Synopsis" class="small text-danger"></span>
+<span asp-validation-for="Title" class="small text-danger"></span>
+<div class="form-outline" style="margin-top: 2rem;">
+    <textarea asp-for="Synopsis" id="synopsis" class="form-control" placeholder="Synopsis of the piece..." data-mdb-showcounter="true" maxlength="@SynopsisMaxLength"></textarea>
+    <label for="synopsis" class="form-label" asp-for="Synopsis"></label>
+    <div class="form-helper"></div>
 </div>
-<div class="form-group" style="padding-top: 20px">
+<span asp-validation-for="Synopsis" class="small text-danger"></span>
+<div class="form-group" style="margin-top: 2rem">
     <label class="form-label" asp-for="Content"></label>
-    <textarea asp-for="Content" id="content-textarea" class="form-control" placeholder="Write your story..." style="block-size: 200px"></textarea>
-    <span asp-validation-for="Content" class="small text-danger"></span>
+    <textarea asp-for="Content" id="content-textarea" class="form-control" placeholder="Write your story..."></textarea>
 </div>
-<div class="form-group" style="padding-top: 20px">
+<span asp-validation-for="Content" class="small text-danger"></span>
+<div class="form-group" style="margin-top: 2rem">
     <label class="form-label" asp-for="GenresToSelect">Select genres:</label>
-    <select asp-for="Genres" class="select" data-mdb-filter="true">
-        @foreach (var genre in Model.GenresToSelect.OrderBy(g => g.Name))
+    <select asp-for="Genres" class="form-select" multiple required>
+        @foreach (GenreViewModel genre in Model.GenresToSelect.OrderBy(g => g.Name))
         {
-            <option value="@genre.Id">@genre.Name</option>
+            @if (Model.Genres.Contains(genre.Id))
+            {
+                <option value="@genre.Id" selected>@genre.Name</option>
+            }
+            else
+            {
+                <option value="@genre.Id">@genre.Name</option>
+            }
         }
     </select>
 </div>
-<div class="form-group" style="padding-top: 20px">
-    <label class="form-label" asp-for="CoverUrl"></label>
-    <input asp-for="CoverUrl" class="form-control" placeholder="Url of the piece's cover art'" />
-    <span asp-validation-for="CoverUrl" class="small text-danger"></span>
+<span asp-validation-for="Genres" class="small text-danger"></span>
+<div class="form-outline" style="margin-top: 2rem">
+    <input asp-for="CoverUrl" id="cover" class="form-control" placeholder="Url of your work's cover art" />
+    <label for="cover" class="form-label" asp-for="CoverUrl"></label>
 </div>
+<span asp-validation-for="CoverUrl" class="small text-danger"></span>
 <div class="form-group" style="padding-top: 20px">
     @Html.CheckBoxFor(c => c.HasAdultContent)
-    <label class="form-check-label text-danger text-decoration-underline" asp-for="HasAdultContent">NSFW content</label>
+    <label class="form-check-label text-warning" asp-for="HasAdultContent">NSFW content</label>
 </div>
