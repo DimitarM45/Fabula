@@ -72,16 +72,17 @@ builder.Services.AddControllersWithViews(options =>
 
 WebApplication app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-    app.UseDeveloperExceptionPage();
-}
-else
-{
-    app.UseExceptionHandler("/Home/Error");
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseMigrationsEndPoint();
+//    app.UseDeveloperExceptionPage();
+//}
+//else
+//{
+    app.UseExceptionHandler("/Home/Error/500");
+    app.UseStatusCodePagesWithReExecute("/Home/Error/Index?statusCode={0}");
     app.UseHsts();
-}
+//}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

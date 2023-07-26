@@ -1,11 +1,7 @@
 ﻿namespace Fabula.Web.Controllers;
 
-using ViewModels.Home;
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-
-using System.Diagnostics;
 
 public class HomeController : BaseController
 {
@@ -23,9 +19,20 @@ public class HomeController : BaseController
         return View();
     }
 
+    [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+
+    public IActionResult Error(int statusCode)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        switch (statusCode)
+        {
+            case 404:
+                return View("Error404");
+
+            case 401:
+                return View("Error401");
+        }
+
+        return View();
     }
 }

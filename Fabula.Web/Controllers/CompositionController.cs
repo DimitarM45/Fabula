@@ -72,10 +72,9 @@ public class CompositionController : BaseController
 
         if (compositionReadViewModel == null)
         {
-            // TODO: implement proper error pages
             // TODO: wrap all db requests in a try catch
 
-            return BadRequest();
+            return RedirectToAction("Home", "Error");
         }
 
         return View(compositionReadViewModel);
@@ -93,9 +92,7 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
-            // CUSTOM ERROR PAGE REDIRECTION
-
-            return BadRequest();
+            return RedirectToAction("Error", "Home"); 
         }
     }
 
@@ -107,17 +104,11 @@ public class CompositionController : BaseController
 
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
-        // TODO: CUSTOM ERROR PAGE
-
         if (userId != compositionFormModel?.AuthorId)
-            return BadRequest();
+            return RedirectToAction("Error", "Home", new { statusCode = 401 });
 
         if (compositionFormModel == null)
-        {
-            // TODO: CUSTOM ERROR PAGE REDIRECTION
-
-            return BadRequest();
-        }
+            return RedirectToAction("Error", "Home");
 
         compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 

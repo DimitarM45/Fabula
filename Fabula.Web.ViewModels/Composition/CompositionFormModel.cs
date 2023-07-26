@@ -4,6 +4,8 @@ using Tag;
 using Genre;
 using Attributes;
 using Attributes.Enums;
+using static Common.ErrorMessages.Shared;
+using static Common.ErrorMessages.Composition;
 using static Common.ValidationConstants.Shared;
 using static Common.ValidationConstants.Composition;
 
@@ -20,27 +22,28 @@ public class CompositionFormModel
 
     public string? Id { get; set; }
 
-    [MinLength(TitleMinLength)]
-    [MaxLength(TitleMaxLength)]
     [Required(AllowEmptyStrings = false)]
+    [StringLength(TitleMaxLength, MinimumLength = TitleMinLength,
+        ErrorMessage = StringLengthErrorMessage)]
 
     public string Title { get; set; } = null!;
 
-    [MinLength(UrlMinLength)]
-    [MaxLength(UrlMaxLength)]
+    
     [Required(AllowEmptyStrings = false)]
+    [StringLength(UrlMaxLength, MinimumLength = UrlMinLength,
+        ErrorMessage = StringLengthErrorMessage)]
 
     public string CoverUrl { get; set; } = null!;
 
-    [MinLength(ContentMinLength)]
-    [MaxLength(ContentMaxLength)]
     [Required(AllowEmptyStrings = false)]
+    [StringLength(ContentMaxLength, MinimumLength = ContentMinLength,
+        ErrorMessage = StringLengthErrorMessage)]
 
     public string Content { get; set; } = null!;
 
-    [MinLength(SynopsisMinLength)]
-    [MaxLength(SynopsisMaxLength)]
     [Required(AllowEmptyStrings = false)]
+    [StringLength(SynopsisMaxLength, MinimumLength = SynopsisMinLength,
+        ErrorMessage = StringLengthErrorMessage)]
 
     public string Synopsis { get; set; } = null!;
 
@@ -51,7 +54,7 @@ public class CompositionFormModel
     public ICollection<TagFormModel> Tags { get; set; }
 
     [ElementCount(1, CountStrategy.Minimum,
-        ErrorMessage = "A composition must have at least 1 genre!")]
+        ErrorMessage = GenreCountErrorMessage)]
 
     public IEnumerable<int> Genres { get; set; }
 

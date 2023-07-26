@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 /// <summary>
 /// A custom validation attribute used for validating whether the count of an IEnumerable or any other collections 
-/// that inherit from it, including generic collection types, fits under the given strategy
+/// that inherit from it, including generic collection types, fits under the given strategy.
 /// </summary>
 
 [AttributeUsage(AttributeTargets.Property)]

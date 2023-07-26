@@ -1,12 +1,24 @@
 ﻿namespace Fabula.Common;
 
+/// <summary>
+/// Validation constants used for data annotation attribute parameters when validating form models or entities.
+/// </summary>
+
 public static class ValidationConstants
 {
+    /// <summary>
+    /// Validation constants shared by multiple form models.
+    /// </summary>
+
     public static class Shared
     {
         public const int UrlMinLength = 15;
         public const int UrlMaxLength = 2084;
     }
+
+    /// <summary>
+    /// Validation constants used for the composition entity or its form models.
+    /// </summary>
 
     public static class Composition
     {
@@ -20,11 +32,19 @@ public static class ValidationConstants
         public const int SynopsisMaxLength = 2000;
     }
 
+    /// <summary>
+    /// Validation constants used for the genre entity or its form models.
+    /// </summary>
+
     public static class Genre
     {
         public const int NameMinLength = 3;
         public const int NameMaxLength = 75;
     }
+
+    /// <summary>
+    /// Validation constants used for the tag entity or its form models.
+    /// </summary>
 
     public static class Tag
     {
@@ -32,11 +52,19 @@ public static class ValidationConstants
         public const int NameMaxLength = 75;
     }
 
+    /// <summary>
+    /// Validation constants used for the comment entity or its form models.
+    /// </summary>
+
     public static class Comment
     {
         public const int ContentMinLength = 1;
         public const int ContentMaxLength = 200;
     }
+
+    /// <summary>
+    /// Validation constants used for the list entity or its form models.
+    /// </summary>
 
     public static class List
     {
@@ -47,11 +75,19 @@ public static class ValidationConstants
         public const int DescriptionMaxLength = 2000;
     }
 
+    /// <summary>
+    /// Validation constants used for the rating entity or its form models.
+    /// </summary>
+
     public static class Rating
     {
         public const int MinValue = 1;
         public const int MaxValue = 5;
     }
+
+    /// <summary>
+    /// Validation constants used for the applicationUser entity or its form models.
+    /// </summary>
 
     public static class ApplicationUser
     {

@@ -1,7 +1,7 @@
 ﻿namespace Fabula.Web.ViewModels.Attributes.Enums;
 
 /// <summary>
-/// Enum for selecting validation strategy when using the ElementCount validation attribute
+/// Enum for selecting validation strategy when using the ElementCount validation attribute.
 /// </summary>
 
 public enum CountStrategy
