@@ -213,8 +213,8 @@ public class CompositionService : ICompositionService
             compositionToUpdate.Synopsis = formModel.Synopsis;
             compositionToUpdate.CoverUrl = formModel.CoverUrl;
             compositionToUpdate.Genres = genresToUpdate;
-        }
 
-        await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
+        }
     }
 }
