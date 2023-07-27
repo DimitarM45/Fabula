@@ -1,7 +1,6 @@
 using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
-using Fabula.Web.Infrastructure.Filters;
 using Fabula.Web.Infrastructure.Extensions;
 
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +37,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 .AddEntityFrameworkStores<FabulaDbContext>();
 
 builder.Services.AddApplicationServices(typeof(GenreService))
+    .AddOtherServices()
     .AddThirdPartyServices();
 
 builder.Services.AddAuthentication()
@@ -65,10 +65,7 @@ builder.Services.AddCors(setup =>
     });
 });
 
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add<HtmlSanitizerFilter>();
-});
+builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();
 
@@ -79,8 +76,8 @@ WebApplication app = builder.Build();
 //}
 //else
 //{
-    app.UseExceptionHandler("/Home/Error/500");
-    app.UseStatusCodePagesWithReExecute("/Home/Error/Index?statusCode={0}");
+    app.UseExceptionHandler("/error?statusCode={0}");
+    app.UseStatusCodePagesWithRedirects("/error?statusCode={0}");
     app.UseHsts();
 //}
 

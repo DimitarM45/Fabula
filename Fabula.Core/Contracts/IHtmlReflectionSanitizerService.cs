@@ -1,8 +1,8 @@
 ﻿namespace Fabula.Core.Contracts;
 
-using Web.ViewModels.Contracts;
+using System.Reflection;
 
 public interface IHtmlReflectionSanitizerService
 {
-    public void SanitizeModel(IHtmlSanitizable model);
+    void SanitizeModel(Type modelType, object model);
 }

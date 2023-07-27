@@ -24,7 +24,7 @@
         {
             @if (Model.Genres.Contains(genre.Id))
             {
-                <option value="@genre.Id" selected>@genre.Name</option>
+                <option value="@genre.Id" selected="true">@genre.Name</option>
             }
             else
             {

@@ -2,6 +2,7 @@
 
 using Core.Contracts;
 using ViewModels.Composition;
+using Infrastructure.Filters;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -12,15 +13,11 @@ public class CompositionController : BaseController
 
     private readonly ICompositionService compositionService;
 
-    private readonly IHtmlReflectionSanitizerService sanitizer;
-
     public CompositionController(IGenreService genreService,
-        ICompositionService compositionService,
-        IHtmlReflectionSanitizerService sanitizer)
+        ICompositionService compositionService)
     {
         this.genreService = genreService;
         this.compositionService = compositionService;
-        this.sanitizer = sanitizer;
     }
 
     [AllowAnonymous]
@@ -44,6 +41,7 @@ public class CompositionController : BaseController
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Create(CompositionFormModel formModel)
     {
@@ -74,7 +72,7 @@ public class CompositionController : BaseController
         {
             // TODO: wrap all db requests in a try catch
 
-            return RedirectToAction("Home", "Error");
+            return RedirectToAction("Error", "Error");
         }
 
         return View(compositionReadViewModel);
@@ -92,7 +90,7 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
-            return RedirectToAction("Error", "Home"); 
+            return RedirectToAction("Error", "Error"); 
         }
     }
 
@@ -105,10 +103,10 @@ public class CompositionController : BaseController
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
         if (userId != compositionFormModel?.AuthorId)
-            return RedirectToAction("Error", "Home", new { statusCode = 401 });
+            return RedirectToAction("Error", "Error", new { statusCode = 401 });
 
         if (compositionFormModel == null)
-            return RedirectToAction("Error", "Home");
+            return RedirectToAction("Error", "Error");
 
         compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
@@ -116,6 +114,7 @@ public class CompositionController : BaseController
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Edit(CompositionFormModel formModel)
     {

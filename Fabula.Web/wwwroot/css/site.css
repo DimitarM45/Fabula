@@ -17,8 +17,16 @@ body {
   margin-bottom: 60px;
 }
 
-.main-gradient {
-    background: linear-gradient(#42c19a, #bd6bc0);
+.navbar-gradient {
+    background: linear-gradient(#42c19a, #88BBE4);
+}
+
+.main-layout {
+    background: #88BBE4;
+}
+
+.footer-gradient {
+    background: linear-gradient(#88BBE4, #42c19a);
 }
 
 .genre-item {

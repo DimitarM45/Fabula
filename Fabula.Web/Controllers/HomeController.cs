@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 public class HomeController : BaseController
 {
+    [HttpGet]
     [AllowAnonymous]
 
     public IActionResult Index()
@@ -13,26 +14,10 @@ public class HomeController : BaseController
     }
 
     [AllowAnonymous]
+    [HttpGet("/privacy")]
 
     public IActionResult Privacy()
     {
-        return View();
-    }
-
-    [AllowAnonymous]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-
-    public IActionResult Error(int statusCode)
-    {
-        switch (statusCode)
-        {
-            case 404:
-                return View("Error404");
-
-            case 401:
-                return View("Error401");
-        }
-
         return View();
     }
 }

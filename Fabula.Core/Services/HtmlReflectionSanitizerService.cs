@@ -1,7 +1,6 @@
 ﻿namespace Fabula.Core.Services;
 
 using Contracts;
-using Web.ViewModels.Contracts;
 
 using Ganss.Xss;
 
@@ -22,27 +21,33 @@ public class HtmlReflectionSanitizerService : IHtmlReflectionSanitizerService
     }
 
     /// <summary>
-    /// Sanitizes the string properties of the given model. Used to protect against possible XSS attacks through form inputs.
+    /// Sanitizes the given string properties. Used to protect against possible XSS attacks through form inputs.
     /// </summary>
     /// <param name="sanitizable">The model to sanitize</param>
     /// <returns></returns>
 
-    public void SanitizeModel(IHtmlSanitizable sanitizable)
+    public void SanitizeModel(Type modelType, object model)
     {
-        foreach (PropertyInfo propInfo in sanitizable.GetSanitizableProperties())
+        if (model == null)
+            throw new ArgumentNullException(nameof(model));
+
+        IEnumerable<PropertyInfo> properties = modelType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+
+        foreach (PropertyInfo propInfo in properties)
         {
-            bool isStringOrNullableString = propInfo.PropertyType == typeof(string) || (propInfo.PropertyType == typeof(string)
-                                                                  && (Nullable.GetUnderlyingType(propInfo.PropertyType) != null));
+            bool isStringOrNullableString = 
+                    propInfo.PropertyType == typeof(string) ||
+                   (propInfo.PropertyType == typeof(string) && (Nullable.GetUnderlyingType(propInfo.PropertyType) != null));
 
             if (isStringOrNullableString)
             {
-                string? value = (string?)propInfo.GetValue(sanitizable);
+                string? value = (string?)propInfo.GetValue(model);
 
                 if (value != null)
                 {
                     string sanitizedValue = sanitizer.Sanitize(value);
 
-                    propInfo.SetValue(sanitizable, sanitizedValue);
+                    propInfo.SetValue(model, sanitizedValue);
                 }
             }
         }

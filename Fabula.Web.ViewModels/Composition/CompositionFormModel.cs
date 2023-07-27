@@ -11,7 +11,7 @@ using static Common.ValidationConstants.Composition;
 
 using System.ComponentModel.DataAnnotations;
 
-public class CompositionFormModel 
+public class CompositionFormModel
 {
     public CompositionFormModel()
     {

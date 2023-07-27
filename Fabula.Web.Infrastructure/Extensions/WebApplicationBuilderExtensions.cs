@@ -1,5 +1,6 @@
 ﻿namespace Fabula.Web.Infrastructure.Extensions;
 
+using Fabula.Web.Infrastructure.Filters;
 using Ganss.Xss;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -7,13 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 /// <summary>
-/// Extension methods used in conjunction with the WebApplicationBuilder object in Program.cs
+/// Extension methods used in conjunction with the WebApplicationBuilder object in the main method of the web application.
 /// </summary>
 
 public static class WebApplicationBuilderExtensions
 {
     /// <summary>
-    /// Registers all services with their interfaces and implementations from a given assembly.
+    /// Registers all services with their interfaces and implementations (that follow the naming convention I{serviceName}Service and {serviceName}Service respectively) from a given assembly.
     /// The assembly is located using the random service type provided.
     /// </summary>
     /// <param name="serviceType">Type of the random service given in order to find the necessary assembly</param>
@@ -39,6 +40,17 @@ public static class WebApplicationBuilderExtensions
 
             services.AddScoped(interfaceType, implementationType);
         }
+
+        return services;
+    }
+
+    /// <summary>
+    /// Registers other services such as helper services and filters (registered as services).
+    /// </summary>
+
+    public static IServiceCollection AddOtherServices(this IServiceCollection services)
+    {
+        services.AddScoped<HtmlSanitizerFilter>();
 
         return services;
     }
