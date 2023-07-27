@@ -15,4 +15,6 @@ public interface ICompositionService
     Task<CompositionFormModel?> GetForEditAsync(string compositionId);
 
     Task UpdateAsync(CompositionFormModel formModel);
+
+    Task<string> GetRandomIdAsync();
 }

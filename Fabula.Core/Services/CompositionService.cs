@@ -10,8 +10,11 @@ using Web.ViewModels.Rating;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Composition;
 
+using Z.EntityFramework.Plus;
+
 using Microsoft.EntityFrameworkCore;
 
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -93,7 +96,9 @@ public class CompositionService : ICompositionService
             .AsNoTracking()
             .Include(c => c.Author)
             .Include(c => c.Comments)
+            .ThenInclude(c => c.Author)
             .Include(c => c.Ratings)
+            .ThenInclude(r => r.User)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
         if (composition == null)
@@ -116,7 +121,8 @@ public class CompositionService : ICompositionService
                 Name = g.Name
             })
             .ToList(),
-            Comments = composition.Comments.Select(c => new CommentViewModel()
+            Comments = composition.Comments.
+            Select(c => new CommentViewModel()
             {
                 Id = c.Id.ToString(),
                 Content = c.Id.ToString(),
@@ -154,10 +160,20 @@ public class CompositionService : ICompositionService
     public async Task DeleteById(string compositionId)
     {
         Composition? composition = await dbContext.Compositions
+            .Include(c => c.Comments)
+            .Include(c => c.Ratings)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
         if (composition != null)
+        {
+            dbContext?.Comments?.Where(c => c.CompositionId == composition.Id)
+                .Update(c => new Comment() { DeletedOn = DateTime.Now });
+
+            dbContext?.Ratings.Where(r => r.CompositionId == composition.Id)
+                .Update(c => new Rating() { DeletedOn = DateTime.Now });
+
             composition.DeletedOn = DateTime.Now;
+        }
 
         await dbContext.SaveChangesAsync();
     }
@@ -216,5 +232,24 @@ public class CompositionService : ICompositionService
 
             await dbContext.SaveChangesAsync();
         }
+    }
+
+    public async Task<string?> GetRandomIdAsync()
+    {
+        Random rng = new Random();
+
+        int compositionCount = await dbContext.Compositions.CountAsync();
+
+        int randomIndex = rng.Next(1, compositionCount);
+
+        string? compositionId = await dbContext.Compositions
+            .AsNoTracking()
+            .OrderBy(c => Guid.NewGuid())
+            .Skip(randomIndex)
+            .Take(1)
+            .Select(c => c.Id.ToString())
+            .FirstOrDefaultAsync();
+
+        return compositionId;
     }
 }

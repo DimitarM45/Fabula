@@ -72,7 +72,7 @@ public class CompositionController : BaseController
         {
             // TODO: wrap all db requests in a try catch
 
-            return RedirectToAction("Error", "Error");
+            return RedirectToAction("HandleErrors", "Error");
         }
 
         return View(compositionReadViewModel);
@@ -90,7 +90,7 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
-            return RedirectToAction("Error", "Error"); 
+            return RedirectToAction("HandleErrors", "Error");
         }
     }
 
@@ -103,10 +103,10 @@ public class CompositionController : BaseController
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
         if (userId != compositionFormModel?.AuthorId)
-            return RedirectToAction("Error", "Error", new { statusCode = 401 });
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
 
         if (compositionFormModel == null)
-            return RedirectToAction("Error", "Error");
+            return RedirectToAction("HandleErrors", "Error");
 
         compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
@@ -130,5 +130,21 @@ public class CompositionController : BaseController
         await compositionService.UpdateAsync(formModel);
 
         return RedirectToAction("Read", new { CompositionId = formModel.Id });
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> Random()
+    {
+        try
+        {
+            string randomId = await compositionService.GetRandomIdAsync();
+
+            return RedirectToAction("Read", new { CompositionId = randomId });
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors");
+        }
     }
 }

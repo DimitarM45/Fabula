@@ -76,7 +76,7 @@ WebApplication app = builder.Build();
 //}
 //else
 //{
-    app.UseExceptionHandler("/error?statusCode={0}");
+    app.UseExceptionHandler("/error?statusCode=500");
     app.UseStatusCodePagesWithRedirects("/error?statusCode={0}");
     app.UseHsts();
 //}

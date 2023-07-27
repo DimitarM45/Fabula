@@ -29,7 +29,7 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
 
     public DbSet<UserLikedComment>? UsersLikedComments { get; set; }
 
-    public DbSet<UserFavoriteComposition>? UsersFavoritePieces { get; set; }
+    public DbSet<UserFavoriteComposition>? UsersFavoriteCompositions { get; set; }
 
     public DbSet<UserFollowedList>? UsersFollowedLists { get; set; }
 
