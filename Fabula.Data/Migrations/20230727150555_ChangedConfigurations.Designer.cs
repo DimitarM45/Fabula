@@ -4,6 +4,7 @@ using Fabula.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fabula.Data.Migrations
 {
     [DbContext(typeof(FabulaDbContext))]
-    partial class FabulaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230727150555_ChangedConfigurations")]
+    partial class ChangedConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1146,7 +1148,7 @@ namespace Fabula.Data.Migrations
                     b.HasOne("Fabula.Data.Models.Composition", "Composition")
                         .WithMany("Comments")
                         .HasForeignKey("CompositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Author");
@@ -1185,7 +1187,7 @@ namespace Fabula.Data.Migrations
                     b.HasOne("Fabula.Data.Models.Composition", "Composition")
                         .WithMany("Ratings")
                         .HasForeignKey("CompositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.HasOne("Fabula.Data.Models.ApplicationUser", "User")

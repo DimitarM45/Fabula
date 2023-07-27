@@ -17,6 +17,6 @@ public class CompositionConfiguration : IEntityTypeConfiguration<Composition>
         builder.HasMany(p => p.Comments)
             .WithOne(c => c.Composition)
             .HasForeignKey(c => c.CompositionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

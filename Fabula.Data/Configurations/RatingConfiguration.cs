@@ -17,6 +17,6 @@ public class RatingConfiguration : IEntityTypeConfiguration<Rating>
         builder.HasOne(r => r.Composition)
             .WithMany(p => p.Ratings)
             .HasForeignKey(r => r.CompositionId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
