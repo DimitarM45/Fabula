@@ -3,6 +3,7 @@
 using Core.Contracts;
 using ViewModels.Composition;
 using Infrastructure.Filters;
+using static Common.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -136,15 +137,48 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Random()
     {
+        string? randomId = null;
+
         try
         {
-            string randomId = await compositionService.GetRandomIdAsync();
-
-            return RedirectToAction("Read", new { CompositionId = randomId });
+            randomId = await compositionService.GetRandomIdAsync();
         }
         catch (Exception)
         {
-            return RedirectToAction("HandleErrors");
+            return RedirectToAction("HandleErrors", "Error");
         }
+
+        if (randomId == null)
+            return RedirectToAction("HandleErrors", "Error");
+
+        return RedirectToAction("Read", new { CompositionId = randomId });
+    }
+
+    [HttpGet]
+
+    public async Task<IActionResult> Restore(string compositionId)
+    {
+        bool isRestored = false;
+
+        try
+        {
+            isRestored = await compositionService.RestoreByIdAsync(compositionId);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error");
+        }
+
+        if (isRestored)
+            return RedirectToAction("Read");
+
+        TempData["FailedRestore"] = FailedRestoreErrorMessage;
+
+        return View("Mine");
+    }
+
+    public async Task<IActionResult> Mine()
+    {
+        return View();
     }
 }

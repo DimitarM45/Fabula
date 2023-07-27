@@ -16,5 +16,7 @@ public interface ICompositionService
 
     Task UpdateAsync(CompositionFormModel formModel);
 
-    Task<string> GetRandomIdAsync();
+    Task<string?> GetRandomIdAsync();
+
+    Task<bool> RestoreByIdAsync(string compositionId);
 }

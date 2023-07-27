@@ -7,7 +7,7 @@
 public static class ErrorMessages
 {
     /// <summary>
-    /// Error messages shared by multiple form models.
+    /// Error messages shared by multiple form models or actions.
     /// </summary>
 
     public static class Shared
@@ -18,11 +18,13 @@ public static class ErrorMessages
     }
 
     /// <summary>
-    /// Error messages used for the composition form models./>
+    /// Error messages used for the composition form models or related actions./>
     /// </summary>
 
     public static class Composition
     {
         public const string GenreCountErrorMessage = "A composition must have at least {1} genre!";
+
+        public const string FailedRestoreErrorMessage = "Your work couldn't be restored!.";
     }
 }

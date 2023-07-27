@@ -1,9 +1,14 @@
 ﻿namespace Fabula.Web.ViewModels.Comment;
 
-using Fabula.Web.ViewModels.User;
+using User;
 
 public class CommentViewModel
 {
+    public CommentViewModel()
+    {
+        Replies = new HashSet<CommentViewModel>();    
+    }
+
     public string? Id { get; set; }
 
     public string? Content { get; set; }
@@ -15,4 +20,6 @@ public class CommentViewModel
     public string? CompositionId { get; set; }
 
     public DateTime PublishedOn { get; set; }
+
+    public IEnumerable<CommentViewModel> Replies { get; set; }
 }

@@ -9,6 +9,7 @@ using Web.ViewModels.Genre;
 using Web.ViewModels.Rating;
 using Web.ViewModels.Comment;
 using Web.ViewModels.Composition;
+using static Common.GlobalConstants;
 
 using Z.EntityFramework.Plus;
 
@@ -121,8 +122,7 @@ public class CompositionService : ICompositionService
                 Name = g.Name
             })
             .ToList(),
-            Comments = composition.Comments.
-            Select(c => new CommentViewModel()
+            Comments = composition.Comments.Select(c => new CommentViewModel()
             {
                 Id = c.Id.ToString(),
                 Content = c.Id.ToString(),
@@ -251,5 +251,25 @@ public class CompositionService : ICompositionService
             .FirstOrDefaultAsync();
 
         return compositionId;
+    }
+
+    public async Task<bool> RestoreByIdAsync(string compositionId)
+    {
+        Composition? composition = await dbContext.Compositions
+            .Where(c => c.DeletedOn != null)
+            .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId);
+
+        bool isRestoredSuccessfully = false;
+
+        if (composition != null && composition.DeletedOn >= DateTime.Now.AddDays(-CompositionRecoveryDayLimit))
+        {
+            composition.DeletedOn = null;
+
+            isRestoredSuccessfully = true;
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        return isRestoredSuccessfully;
     }
 }

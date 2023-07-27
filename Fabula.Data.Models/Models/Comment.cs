@@ -55,4 +55,6 @@ public class Comment
     public DateTime? DeletedOn { get; set; }
 
     public IEnumerable<UserLikedComment> Likes { get; set; }
+
+    public IEnumerable<Comment> Replies { get; set; }
 }
