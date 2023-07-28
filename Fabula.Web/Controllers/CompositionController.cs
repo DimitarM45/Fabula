@@ -3,7 +3,7 @@
 using Core.Contracts;
 using ViewModels.Composition;
 using Infrastructure.Filters;
-using static Common.ErrorMessages.Composition;
+using static Fabula.Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -14,18 +14,31 @@ public class CompositionController : BaseController
 
     private readonly ICompositionService compositionService;
 
+    private readonly ICommentService commentService;
+
+    private readonly IRatingService ratingService;
+
+    private readonly IUserService userService;
+
     public CompositionController(IGenreService genreService,
-        ICompositionService compositionService)
+        ICompositionService compositionService,
+        ICommentService commentService,
+        IRatingService ratingService,
+        IUserService userService)
     {
         this.genreService = genreService;
         this.compositionService = compositionService;
+        this.commentService = commentService;
+        this.ratingService = ratingService;
+        this.userService = userService;
     }
 
+    [HttpGet]
     [AllowAnonymous]
 
     public async Task<IActionResult> All()
     {
-        IEnumerable<CompositionAllViewModel> compositionViewModels = await compositionService.GetAllAsync();
+        IEnumerable<CompositionViewModel> compositionViewModels = await compositionService.GetAllAsync();
 
         return View(compositionViewModels);
     }
@@ -55,7 +68,16 @@ public class CompositionController : BaseController
             return View(formModel);
         }
 
-        string userId = GetUserId();
+        string? userId = userService.GetUserId();
+
+        if (userId == null)
+        {
+            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+            TempData["Error"] = FailedCreatingCompositionErrorMessage;
+
+            return View(formModel);
+        }
 
         string compositionId = await compositionService.AddAsync(formModel, userId);
 
@@ -67,16 +89,29 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Read(string compositionId)
     {
-        CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
-
-        if (compositionReadViewModel == null)
+        try
         {
-            // TODO: wrap all db requests in a try catch
+            CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
 
-            return RedirectToAction("HandleErrors", "Error");
+            compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
+            compositionReadViewModel.Comments = await commentService.GetForPreviewByIdAsync(compositionId);
+            compositionReadViewModel.Ratings = await ratingService.GetRatingsByIdAsync(compositionId);
+
+            //TODO: Add tags if necessary
+
+            if (compositionReadViewModel == null)
+            {
+                // TODO: wrap all db requests in a try catch
+
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+            }
+
+            return View(compositionReadViewModel);
         }
-
-        return View(compositionReadViewModel);
+        catch
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 
     [HttpPost]
@@ -85,13 +120,13 @@ public class CompositionController : BaseController
     {
         try
         {
-            await compositionService.DeleteById(compositionId);
+            await compositionService.DeleteByIdAsync(compositionId);
 
-            return RedirectToAction("MyCompositions", "User");
+            return RedirectToAction("MyWorks");
         }
         catch (Exception)
         {
-            return RedirectToAction("HandleErrors", "Error");
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 
@@ -99,7 +134,14 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Edit(string compositionId)
     {
-        string userId = GetUserId();
+        string? userId = userService.GetUserId();
+
+        if (userId == null)
+        {
+            TempData["NoUser"] = FailedEditingCompositionErrorMessage;
+
+            return View();
+        }
 
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
@@ -107,7 +149,7 @@ public class CompositionController : BaseController
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
 
         if (compositionFormModel == null)
-            return RedirectToAction("HandleErrors", "Error");
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
         compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
@@ -145,11 +187,11 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
-            return RedirectToAction("HandleErrors", "Error");
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
         if (randomId == null)
-            return RedirectToAction("HandleErrors", "Error");
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
         return RedirectToAction("Read", new { CompositionId = randomId });
     }
@@ -166,7 +208,7 @@ public class CompositionController : BaseController
         }
         catch (Exception)
         {
-            return RedirectToAction("HandleErrors", "Error");
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
         if (isRestored)
@@ -174,11 +216,6 @@ public class CompositionController : BaseController
 
         TempData["FailedRestore"] = FailedRestoreErrorMessage;
 
-        return View("Mine");
-    }
-
-    public async Task<IActionResult> Mine()
-    {
-        return View();
+        return View("MyWorks", "User");
     }
 }

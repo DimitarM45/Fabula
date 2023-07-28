@@ -4,10 +4,6 @@ using Data;
 using Contracts;
 using Data.Models;
 using Web.ViewModels.Tag;
-using Web.ViewModels.User;
-using Web.ViewModels.Genre;
-using Web.ViewModels.Rating;
-using Web.ViewModels.Comment;
 using Web.ViewModels.Composition;
 using static Common.GlobalConstants;
 
@@ -28,12 +24,12 @@ public class CompositionService : ICompositionService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<CompositionAllViewModel>> GetAllAsync()
+    public async Task<IEnumerable<CompositionViewModel>> GetAllAsync()
     {
-        IEnumerable<CompositionAllViewModel> compositionViewModels = await dbContext.Compositions
+        IEnumerable<CompositionViewModel> compositionViewModels = await dbContext.Compositions
             .AsNoTracking()
             .Where(c => c.DeletedOn == null)
-            .Select(c => new CompositionAllViewModel()
+            .Select(c => new CompositionViewModel()
             {
                 Id = c.Id.ToString(),
                 Title = c.Title,
@@ -116,66 +112,29 @@ public class CompositionService : ICompositionService
             AuthorId = composition.Author.Id.ToString(),
             hasAdultContent = composition.hasAdultContent,
             PublishedOn = composition.PublishedOn,
-            Genres = composition.Genres.Select(g => new GenreViewModel()
-            {
-                Id = g.Id,
-                Name = g.Name
-            })
-            .ToList(),
-            Comments = composition.Comments.Select(c => new CommentViewModel()
-            {
-                Id = c.Id.ToString(),
-                Content = c.Id.ToString(),
-                Author = new UserViewModel()
-                {
-                    Id = c.AuthorId.ToString(),
-                    Username = c.Author.UserName,
-                    ProfilePictureUrl = c.Author.ProfilePictureUrl
-                },
-                CompositionId = c.Composition.Id.ToString(),
-                PublishedOn = c.PublishedOn,
-                Likes = c.Likes.Count()
-            })
-            .ToList(),
-            Favorites = composition.Favorites.Count(),
-            Ratings = composition.Ratings.Select(r => new RatingViewModel()
-            {
-                Id = r.Id.ToString(),
-                Value = r.Value,
-                Author = new UserViewModel()
-                {
-                    Id = r.Id.ToString(),
-                    Username = r.User.UserName,
-                    ProfilePictureUrl = r.User.ProfilePictureUrl
-                },
-                PublishedOn = r.PublishedOn
-            })
-
-            //TODO: Add tags if necessary
+            Favorites = composition.Favorites.Count()
         };
 
         return compositionReadViewModel;
     }
 
-    public async Task DeleteById(string compositionId)
+    public async Task<bool> DeleteByIdAsync(string compositionId)
     {
         Composition? composition = await dbContext.Compositions
-            .Include(c => c.Comments)
-            .Include(c => c.Ratings)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
+
+        bool isSuccessful = false;
 
         if (composition != null)
         {
-            dbContext?.Comments?.Where(c => c.CompositionId == composition.Id)
-                .Update(c => new Comment() { DeletedOn = DateTime.Now });
-
-            dbContext?.Ratings.Where(r => r.CompositionId == composition.Id)
-                .Update(c => new Rating() { DeletedOn = DateTime.Now });
-
             composition.DeletedOn = DateTime.Now;
+
+            await dbContext.SaveChangesAsync();
+
+            isSuccessful = true;
         }
 
-        await dbContext.SaveChangesAsync();
+        return isSuccessful;
     }
 
     public async Task<CompositionFormModel?> GetForEditAsync(string compositionId)
@@ -195,10 +154,7 @@ public class CompositionService : ICompositionService
             Content = composition.Content,
             CoverUrl = composition.CoverUrl,
             AuthorId = composition.AuthorId.ToString(),
-            HasAdultContent = composition.hasAdultContent,
-            Genres = composition.Genres.Select(g => g.Id),
-
-            //TODO: Add tags if necessary
+            HasAdultContent = composition.hasAdultContent
         };
 
         return compositionFormModel;
@@ -219,6 +175,8 @@ public class CompositionService : ICompositionService
 
                 if (genre != null)
                     genresToUpdate.Add(genre);
+
+                // TODO: Figure out a way to decouple genres and tags (if added at all) from the composition service
             }
 
             if (genresToUpdate.Count == 0)
@@ -271,5 +229,10 @@ public class CompositionService : ICompositionService
         }
 
         return isRestoredSuccessfully;
+    }
+
+    public async Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId)
+    {
+        throw new NotImplementedException(); 
     }
 }

@@ -11,7 +11,7 @@ public class CompositionReadViewModel
         Tags = new HashSet<string>();
         Genres = new HashSet<GenreViewModel>();
         Ratings = new HashSet<RatingViewModel>();
-        Comments = new HashSet<CommentViewModel>();
+        Comments = new HashSet<CommentCompositionViewModel>();
     }
 
     public string? Id { get; set; }
@@ -36,9 +36,9 @@ public class CompositionReadViewModel
 
     public ICollection<string> Tags { get; set; }
 
-    public ICollection<GenreViewModel> Genres { get; set; }
+    public IEnumerable<GenreViewModel> Genres { get; set; }
 
     public IEnumerable<RatingViewModel> Ratings { get; set; }
 
-    public IEnumerable<CommentViewModel> Comments { get; set; }
+    public IEnumerable<CommentCompositionViewModel> Comments { get; set; }
 }

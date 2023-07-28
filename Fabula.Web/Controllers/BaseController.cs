@@ -10,10 +10,5 @@ using System.Security.Claims;
 
 public class BaseController : Controller
 {
-    protected string GetUserId()
-    {
-        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        return userId;
-    }
 }

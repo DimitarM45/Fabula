@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
-public class CompositionAllViewModel
+public class CompositionViewModel
 {
     public string? Id { get; set; }
 

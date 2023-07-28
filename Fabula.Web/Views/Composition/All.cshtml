@@ -1,11 +1,11 @@
 ﻿@using System.Globalization;
-@model IEnumerable<CompositionAllViewModel>
+@model IEnumerable<CompositionViewModel>
 @{
     ViewData["Title"] = "Works";
 }
 
 <div class="container-fluid">
-    @foreach (CompositionAllViewModel composition in Model)
+    @foreach (CompositionViewModel composition in Model)
     {
         <partial name="_CompositionAllPartial" model="@composition"></partial>
     }

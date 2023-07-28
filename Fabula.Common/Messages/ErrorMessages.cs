@@ -1,4 +1,4 @@
-﻿namespace Fabula.Common;
+﻿namespace Fabula.Common.Messages;
 
 /// <summary>
 /// Custom validation error messages when validating incoming data.
@@ -26,5 +26,9 @@ public static class ErrorMessages
         public const string GenreCountErrorMessage = "A composition must have at least {1} genre!";
 
         public const string FailedRestoreErrorMessage = "Your work couldn't be restored!.";
+
+        public const string FailedCreatingCompositionErrorMessage = "An error occurred trying to create your story!";
+
+        public const string FailedEditingCompositionErrorMessage = "An error occurred trying to edit your story!";
     }
 }

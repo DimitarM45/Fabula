@@ -13,6 +13,7 @@ public class Comment
     public Comment()
     {
         Likes = new HashSet<UserLikedComment>();
+        Replies = new HashSet<Comment>();
     }
 
     [Comment("Id of the comment")]

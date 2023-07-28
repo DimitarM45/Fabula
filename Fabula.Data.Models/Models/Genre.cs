@@ -13,6 +13,7 @@ public class Genre
     public Genre()
     {
         Compositions = new HashSet<Composition>();
+        Favorites = new HashSet<ApplicationUser>();
     }
 
     [Required]

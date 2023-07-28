@@ -4,8 +4,8 @@ using Tag;
 using Genre;
 using Attributes;
 using Attributes.Enums;
-using static Common.ErrorMessages.Shared;
-using static Common.ErrorMessages.Composition;
+using static Fabula.Common.Messages.ErrorMessages.Shared;
+using static Fabula.Common.Messages.ErrorMessages.Composition;
 using static Common.ValidationConstants.Shared;
 using static Common.ValidationConstants.Composition;
 

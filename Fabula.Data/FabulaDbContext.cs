@@ -15,25 +15,25 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
     {
     }
 
-    public DbSet<Composition>? Compositions { get; set; }
+    public DbSet<Composition> Compositions { get; set; } = null!;
 
-    public DbSet<Rating>? Ratings { get; set; }
+    public DbSet<Rating> Ratings { get; set; } = null!;
 
-    public DbSet<Genre>? Genres { get; set; }
+    public DbSet<Genre> Genres { get; set; } = null!;
 
-    public DbSet<Comment>? Comments { get; set; }
+    public DbSet<Comment> Comments { get; set; } = null!;
 
-    public DbSet<Tag>? Tags { get; set; }
+    public DbSet<Tag> Tags { get; set; } = null!;
 
-    public DbSet<List>? Lists { get; set; }
+    public DbSet<List> Lists { get; set; } = null!;
 
-    public DbSet<UserLikedComment>? UsersLikedComments { get; set; }
+    public DbSet<UserLikedComment> UsersLikedComments { get; set; } = null!;
 
-    public DbSet<UserFavoriteComposition>? UsersFavoriteCompositions { get; set; }
+    public DbSet<UserFavoriteComposition> UsersFavoriteCompositions { get; set; } = null!;
 
-    public DbSet<UserFollowedList>? UsersFollowedLists { get; set; }
+    public DbSet<UserFollowedList> UsersFollowedLists { get; set; } = null!;
 
-    public DbSet<UserLikedList>? UsersLikedLists { get; set; }
+    public DbSet<UserLikedList> UsersLikedLists { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

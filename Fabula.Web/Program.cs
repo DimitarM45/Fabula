@@ -69,17 +69,19 @@ builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseMigrationsEndPoint();
-//    app.UseDeveloperExceptionPage();
-//}
-//else
-//{
+// To view the custom error pages - switch to Production or remove the conditions and only leave the second code block.
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
+}
+else
+{
     app.UseExceptionHandler("/error?statusCode=500");
     app.UseStatusCodePagesWithRedirects("/error?statusCode={0}");
     app.UseHsts();
-//}
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

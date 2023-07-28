@@ -2,7 +2,7 @@
 
 using Data;
 using Contracts;
-using Web.ViewModels.User;
+using Data.Models;
 using Web.ViewModels.Comment;
 
 using Microsoft.EntityFrameworkCore;
@@ -30,12 +30,6 @@ public class CommentService : ICommentService
                 PublishedOn = c.PublishedOn,
                 CompositionId = c.CompositionId.ToString(),
                 Likes = c.Likes.Count(),
-                Author = new UserViewModel()
-                {
-                    Id = c.AuthorId.ToString(),
-                    Username = c.Author.UserName,
-                    ProfilePictureUrl = c.Author.ProfilePictureUrl
-                },
                 Replies = c.Replies.Where(r => r.DeletedOn == null)
                     .Select(r => new CommentViewModel()
                     {
@@ -43,18 +37,50 @@ public class CommentService : ICommentService
                         Content = r.Content,
                         PublishedOn = r.PublishedOn,
                         CompositionId = r.CompositionId.ToString(),
-                        Likes = c.Likes.Count(),
-                        Author = new UserViewModel()
-                        {
-                            Id = c.AuthorId.ToString(),
-                            Username = c.Author.UserName,
-                            ProfilePictureUrl = c.Author.ProfilePictureUrl
-                        }
+                        Likes = c.Likes.Count()
                     })
                     .ToList()
             })
             .ToListAsync();
 
         return commentViewModels;
+    }
+
+    public async Task<IEnumerable<CommentCompositionViewModel>> GetForPreviewByIdAsync(string compositionId)
+    {
+        IEnumerable<CommentCompositionViewModel> commentViewModels = await dbContext.Comments
+            .AsNoTracking()
+            .Where(c => c.DeletedOn == null)
+            .Select(c => new CommentCompositionViewModel()
+            {
+                Id = c.Id.ToString(),
+                Content = c.Content,
+                CompositionId = c.CompositionId.ToString(),
+                Likes = c.Likes.Count(),
+                PublishedOn = c.PublishedOn,
+                Replies = c.Replies.Count()
+            })
+            .ToListAsync();
+
+        return commentViewModels;
+    }
+
+    public async Task<bool> DeleteByIdAsync(string commentId)
+    {
+        Comment? comment = await dbContext.Comments
+            .FirstOrDefaultAsync(c => c.Id.ToString() == commentId && c.DeletedOn == null);
+
+        bool isSuccessful = false;
+
+        if (comment != null)
+        {
+            comment.DeletedOn = DateTime.Now;
+
+            await dbContext.SaveChangesAsync();
+
+            isSuccessful = true;
+        }
+
+        return isSuccessful;
     }
 }
