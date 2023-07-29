@@ -1,5 +1,5 @@
 ﻿namespace Fabula.Core.Contracts;
 
-public class IListService
+public interface IListService
 {
 }

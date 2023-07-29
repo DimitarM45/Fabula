@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Data.Seeding.Seeders;
 
-using Fabula.Data.Models;
+using Models;
 
 public static class GenreSeeder
 {

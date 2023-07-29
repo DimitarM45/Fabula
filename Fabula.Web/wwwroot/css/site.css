@@ -29,6 +29,18 @@ body {
     background: linear-gradient(#88BBE4, #42c19a);
 }
 
+.admin-navbar-gradient {
+    background: linear-gradient(#93C8BE, #A7C0CF);
+}
+
+.admin-layout {
+    background: #93C8BE
+}
+
+.admin-footer-gradient {
+    background: linear-gradient(#A7C0CF, #93C8BE);
+}
+
 .genre-item {
     list-style-type: '📖';
     padding-inline-start: 1ch;

@@ -1,9 +1,9 @@
 using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
-using Fabula.Web.Infrastructure.Extensions;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +34,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequiredLength =
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })
+.AddRoles<IdentityRole<Guid>>()
 .AddEntityFrameworkStores<FabulaDbContext>();
 
 builder.Services.AddApplicationServices(typeof(GenreService))
@@ -78,7 +79,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/error?statusCode=500");
+    app.UseExceptionHandler("/error");
     app.UseStatusCodePagesWithRedirects("/error?statusCode={0}");
     app.UseHsts();
 }
@@ -94,6 +95,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
+app.MapAreaControllerRoute(
+    name: "admin",
+    areaName: "Admin",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

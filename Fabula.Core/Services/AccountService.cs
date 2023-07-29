@@ -74,6 +74,13 @@ public class AccountService : IAccountService
         return (result, user.Id.ToString());
     }
 
+    public async Task AddRoleToAccountAsync(string userId)
+    {
+        ApplicationUser user = await userManager.FindByIdAsync(userId);
+
+        await userManager.AddToRoleAsync(user, "User");
+    }
+
     public async Task SignInAccountAsync(string userId)
     {
         ApplicationUser user = await userManager.FindByIdAsync(userId);
@@ -94,14 +101,16 @@ public class AccountService : IAccountService
         return loginFormModel;
     }
 
-    public async Task<SignInResult> LoginAccountAsync(LoginFormModel formModel)
+    public async Task<(SignInResult Result, string UserId)> LoginAccountAsync(LoginFormModel formModel)
     {
         ApplicationUser user = await signInManager.UserManager.FindByEmailAsync(formModel.LoginCredential) ??
                                await signInManager.UserManager.FindByNameAsync(formModel.LoginCredential);
 
         SignInResult result = await signInManager.PasswordSignInAsync(user, formModel.Password, formModel.RememberMe, lockoutOnFailure: true);
 
-        return result;
+        (SignInResult Result, string UserId) userResult = (result, user.Id.ToString());
+
+        return userResult;
     }
 
     private ApplicationUser CreateUser()
@@ -126,5 +135,17 @@ public class AccountService : IAccountService
         }
 
         return (IUserEmailStore<ApplicationUser>)userStore;
+    }
+
+    public async Task<bool> IsInRoleAsync(string userId, string roleName)
+    {
+        ApplicationUser user = await userManager.FindByIdAsync(userId);
+
+        bool isInRole = false;
+
+        if (user != null)
+            isInRole = await userManager.IsInRoleAsync(user, roleName);
+
+        return isInRole;
     }
 }

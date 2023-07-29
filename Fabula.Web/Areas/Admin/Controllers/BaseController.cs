@@ -1,9 +1,10 @@
-﻿namespace Fabula.Web.Controllers;
+﻿namespace Fabula.Web.Areas.Admin.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
-[Authorize]
+[Area("Admin")]
+[Authorize(Roles = "Admin")]
 [AutoValidateAntiforgeryToken]
 
 public class BaseController : Controller

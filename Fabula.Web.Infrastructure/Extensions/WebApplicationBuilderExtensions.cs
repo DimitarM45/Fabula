@@ -1,10 +1,11 @@
-﻿namespace Fabula.Web.Infrastructure.Extensions;
+﻿namespace Microsoft.Extensions.DependencyInjection;
 
+using AngleSharp;
+using Fabula.Data.Models;
 using Fabula.Web.Infrastructure.Filters;
+
 using Ganss.Xss;
-
-using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
 /// <summary>
@@ -19,6 +20,7 @@ public static class WebApplicationBuilderExtensions
     /// </summary>
     /// <param name="serviceType">Type of the random service given in order to find the necessary assembly</param>
     /// <exception cref="InvalidOperationException"></exception>
+    /// <returns><see cref="IServiceCollection"/></returns>
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, Type serviceType)
     {
@@ -47,6 +49,7 @@ public static class WebApplicationBuilderExtensions
     /// <summary>
     /// Registers other services such as helper services and filters (registered as services).
     /// </summary>
+    /// <returns><see cref="IServiceCollection"/></returns>
 
     public static IServiceCollection AddOtherServices(this IServiceCollection services)
     {
@@ -58,6 +61,7 @@ public static class WebApplicationBuilderExtensions
     /// <summary>
     /// Registers all third party services. 
     /// </summary>
+    /// <returns><see cref="IServiceCollection"/></returns>
 
     public static IServiceCollection AddThirdPartyServices(this IServiceCollection services)
     {

@@ -24,8 +24,13 @@ public class UserController : BaseController
 
         IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
 
-        return View();
+        return View(compositionViewModels);
     }
 
-    public async
+    public async Task<IActionResult> Profile(string userId)
+    {
+
+
+        return View();
+    }
 }

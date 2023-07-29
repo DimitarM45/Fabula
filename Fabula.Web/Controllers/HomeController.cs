@@ -20,4 +20,12 @@ public class HomeController : BaseController
     {
         return View();
     }
+
+    [HttpGet("/area/select")]
+    [Authorize(Roles = "Admin")]
+
+    public IActionResult SelectArea()
+    {
+        return View();
+    }
 }

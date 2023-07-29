@@ -47,6 +47,8 @@ public class AccountController : BaseController
 
             if (userResult.Result.Succeeded)
             {
+                await accountService.AddRoleToAccountAsync(userResult.UserId);
+
                 await accountService.SignInAccountAsync(userResult.UserId);
 
                 if (formModel.Utilities.ReturnUrl == null)
@@ -83,20 +85,23 @@ public class AccountController : BaseController
     {
         if (ModelState.IsValid)
         {
-            var result = await accountService.LoginAccountAsync(formModel);
+            var userResult = await accountService.LoginAccountAsync(formModel);
 
-            if (result.Succeeded)
+            if (userResult.Result.Succeeded)
             {
+                if (await accountService.IsInRoleAsync(userResult.UserId, "Admin"))
+                    return RedirectToAction("SelectArea", "Home");
+
                 if (formModel.Utilities.ReturnUrl == null)
                     return RedirectToAction("Index", "Home");
 
                 return LocalRedirect(formModel.Utilities.ReturnUrl);
             }
 
-            if (result.RequiresTwoFactor)
+            if (userResult.Result.RequiresTwoFactor)
                 return RedirectToAction("LoginWith2fa", new { ReturnUrl = formModel.Utilities.ReturnUrl, RememberMe = formModel.RememberMe });
 
-            if (result.IsLockedOut)
+            if (userResult.Result.IsLockedOut)
                 return RedirectToAction("Lockout");
 
             else

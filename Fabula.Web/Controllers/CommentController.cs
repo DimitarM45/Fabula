@@ -1,7 +1,7 @@
 ﻿namespace Fabula.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
-public class CommentController : Controller
+public class CommentController : BaseController
 {
     public async Task<IActionResult> All(string compositionId)
     {
