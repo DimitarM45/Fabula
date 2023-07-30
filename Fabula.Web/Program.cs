@@ -94,11 +94,10 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}");
 app.MapDefaultControllerRoute();
-app.MapAreaControllerRoute(
-    name: "admin",
-    areaName: "Admin",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

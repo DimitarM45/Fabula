@@ -44,7 +44,7 @@
                         @if ((User?.Identity?.IsAuthenticated ?? false) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-warning" asp-area="Admin" asp-controller="Home" asp-action="Dashboard">Admin area</a>
+                                <a class="nav-link text-success" asp-area="Admin" asp-controller="Home" asp-action="Dashboard">Admin area</a>
                             </li>
                         }
                     </ul>

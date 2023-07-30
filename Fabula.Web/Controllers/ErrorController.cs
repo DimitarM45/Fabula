@@ -20,7 +20,7 @@ public class ErrorController : BaseController
                 return View("Error401");
 
             default:
-                return View();
+                return View("Error");
         }
     }
 }

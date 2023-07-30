@@ -3,7 +3,7 @@
 using Core.Contracts;
 using ViewModels.Composition;
 using Infrastructure.Filters;
-using static Fabula.Common.Messages.ErrorMessages.Composition;
+using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
