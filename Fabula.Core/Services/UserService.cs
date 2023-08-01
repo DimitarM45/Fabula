@@ -2,14 +2,14 @@
 
 using Data;
 using Contracts;
+using Data.Models;
 using Web.ViewModels.User;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Fabula.Data.Models;
 
 public class UserService : IUserService
 {

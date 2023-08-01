@@ -4,6 +4,7 @@ using Fabula.Core.Services;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Fabula.Web.Infrastructure.Middlewares;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         builder.Configuration.GetValue<int>("Identity:Password:RequiredLength");
 })
 .AddRoles<IdentityRole<Guid>>()
-.AddEntityFrameworkStores<FabulaDbContext>();
+.AddEntityFrameworkStores<FabulaDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddApplicationServices(typeof(GenreService))
     .AddOtherServices()
@@ -90,6 +92,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors();
+
+app.UseMiddleware(typeof(HtmlSanitizerMiddleware));
 
 app.UseAuthentication();
 app.UseAuthorization();

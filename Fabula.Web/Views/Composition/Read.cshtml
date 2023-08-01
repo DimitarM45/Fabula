@@ -1,7 +1,17 @@
 ﻿@using System.Security.Claims;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
 @model CompositionReadViewModel
 @{
     ViewData["Title"] = Model.Title;
+
+    string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    ApplicationUser? user = await userManager.FindByIdAsync(userId);
+
+    bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
+    bool isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId;
+    bool isAdmin = await userManager.IsInRoleAsync(user, "Admin");
 }
 
 <div class="container">
@@ -24,7 +34,7 @@
                     <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
                 </p>
                 <textarea disabled>@Model.Content</textarea>
-                @if ((User?.Identity?.IsAuthenticated ?? false) && User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId)
+                @if (isAuthenticated && isAuthor || isAdmin)
                 {
                     <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary">Edit</a>
                 }

@@ -2,7 +2,6 @@
 
 using Core.Contracts;
 using ViewModels.Composition;
-using Infrastructure.Filters;
 using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +19,21 @@ public class CompositionController : BaseController
 
     private readonly IUserService userService;
 
+    private readonly IAccountService accountService;
+
     public CompositionController(IGenreService genreService,
         ICompositionService compositionService,
         ICommentService commentService,
         IRatingService ratingService,
-        IUserService userService)
+        IUserService userService,
+        IAccountService accountService)
     {
         this.genreService = genreService;
         this.compositionService = compositionService;
         this.commentService = commentService;
         this.ratingService = ratingService;
         this.userService = userService;
+        this.accountService = accountService;
     }
 
     [HttpGet]
@@ -55,7 +58,6 @@ public class CompositionController : BaseController
     }
 
     [HttpPost]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Create(CompositionFormModel formModel)
     {
@@ -93,18 +95,19 @@ public class CompositionController : BaseController
         {
             CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
 
-            compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
-            compositionReadViewModel.Comments = await commentService.GetForPreviewByIdAsync(compositionId);
-            compositionReadViewModel.Ratings = await ratingService.GetRatingsByIdAsync(compositionId);
-
-            //TODO: Add tags if necessary
-
             if (compositionReadViewModel == null)
             {
                 // TODO: wrap all db requests in a try catch
 
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
             }
+
+            compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
+            compositionReadViewModel.Comments = await commentService.GetForPreviewByIdAsync(compositionId);
+            compositionReadViewModel.Ratings = await ratingService.GetRatingsByIdAsync(compositionId);
+
+            //TODO: Add tags if necessary
+
 
             return View(compositionReadViewModel);
         }
@@ -122,7 +125,7 @@ public class CompositionController : BaseController
         {
             await compositionService.DeleteByIdAsync(compositionId);
 
-            return RedirectToAction("MyWorks");
+            return RedirectToAction("MyWorks", "User");
         }
         catch (Exception)
         {
@@ -145,7 +148,7 @@ public class CompositionController : BaseController
 
         CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
-        if (userId != compositionFormModel?.AuthorId)
+        if (userId != compositionFormModel?.AuthorId && !await accountService.IsInRoleAsync(userId, "Admin"))
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
 
         if (compositionFormModel == null)
@@ -157,7 +160,6 @@ public class CompositionController : BaseController
     }
 
     [HttpPost]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Edit(CompositionFormModel formModel)
     {
@@ -176,6 +178,7 @@ public class CompositionController : BaseController
     }
 
     [HttpGet]
+    [AllowAnonymous]
 
     public async Task<IActionResult> Random()
     {

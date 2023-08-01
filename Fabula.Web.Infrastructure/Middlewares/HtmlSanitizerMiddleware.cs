@@ -17,7 +17,7 @@ public class HtmlSanitizerMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
-        if (context.Request.HasFormContentType && context.Request.Method == HttpMethod.Post.Method)
+        if (context.Request.Method == HttpMethod.Post.Method && context.Request.HasFormContentType)
         {
             IHtmlSanitizer? sanitizer =
                     (IHtmlSanitizer?)context.RequestServices.GetService(typeof(IHtmlSanitizer));

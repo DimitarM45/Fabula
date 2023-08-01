@@ -2,8 +2,7 @@
 
 using AngleSharp;
 using Fabula.Data.Models;
-using Fabula.Web.Infrastructure.Filters;
-
+using Fabula.Web.Infrastructure.Middlewares;
 using Ganss.Xss;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -47,13 +46,13 @@ public static class WebApplicationBuilderExtensions
     }
 
     /// <summary>
-    /// Registers other services such as helper services and filters (registered as services).
+    /// Registers other services such as helper services and other service-like components (e.g. middlewares, filters).
     /// </summary>
     /// <returns><see cref="IServiceCollection"/></returns>
 
     public static IServiceCollection AddOtherServices(this IServiceCollection services)
     {
-        services.AddScoped<HtmlSanitizerFilter>();
+        services.AddScoped(typeof(HtmlSanitizerMiddleware));
 
         return services;
     }

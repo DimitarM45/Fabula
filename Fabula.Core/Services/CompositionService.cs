@@ -194,16 +194,15 @@ public class CompositionService : ICompositionService
 
     public async Task<string?> GetRandomIdAsync()
     {
-        Random rng = new Random();
-
         int compositionCount = await dbContext.Compositions.CountAsync();
 
-        int randomIndex = rng.Next(1, compositionCount);
+        if (compositionCount == 0)
+            return null;
 
         string? compositionId = await dbContext.Compositions
             .AsNoTracking()
+            .Where(c => c.DeletedOn == null)
             .OrderBy(c => Guid.NewGuid())
-            .Skip(randomIndex)
             .Take(1)
             .Select(c => c.Id.ToString())
             .FirstOrDefaultAsync();
@@ -233,6 +232,6 @@ public class CompositionService : ICompositionService
 
     public async Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId)
     {
-        throw new NotImplementedException(); 
+        throw new NotImplementedException();
     }
 }

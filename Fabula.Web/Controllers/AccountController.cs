@@ -2,7 +2,8 @@
 
 using Core.Contracts;
 using ViewModels.Account;
-using Infrastructure.Filters; 
+
+using static Common.Messages.ErrorMessages.Authentication;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -29,7 +30,6 @@ public class AccountController : BaseController
 
     [HttpPost]
     [AllowAnonymous]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Register(RegisterFormModel formModel)
     {
@@ -68,7 +68,6 @@ public class AccountController : BaseController
 
     [HttpGet]
     [AllowAnonymous]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Login(string? returnUrl)
     {
@@ -79,7 +78,6 @@ public class AccountController : BaseController
 
     [HttpPost]
     [AllowAnonymous]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
 
     public async Task<IActionResult> Login(LoginFormModel formModel)
     {
@@ -106,30 +104,15 @@ public class AccountController : BaseController
 
             else
             {
-                ModelState.AddModelError("Login", "Wrong password or username/email!");
+                ModelState.AddModelError("Login", IncorrectLoginCredentialErrorMessage);
 
                 return RedirectToAction("Login");
             }
         }
 
-        ModelState.AddModelError("Login", "Invalid login attempt!");
+        ModelState.AddModelError("Login", FailedLoginErrorMessage);
 
         return RedirectToAction("Login");
-    }
-
-    [HttpGet]
-
-    public async Task<IActionResult> ManageAccount(string userId)
-    {
-        return View();
-    }
-
-    [HttpPost]
-    [ServiceFilter(typeof(HtmlSanitizerFilter))]
-
-    public async Task<IActionResult> ManageAccount(object model)
-    {
-        return View();
     }
 }
 

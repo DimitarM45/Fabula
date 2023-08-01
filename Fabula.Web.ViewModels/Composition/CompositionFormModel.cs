@@ -4,10 +4,11 @@ using Tag;
 using Genre;
 using Attributes;
 using Attributes.Enums;
-using static Fabula.Common.Messages.ErrorMessages.Shared;
-using static Fabula.Common.Messages.ErrorMessages.Composition;
+
 using static Common.ValidationConstants.Shared;
+using static Common.Messages.ErrorMessages.Shared;
 using static Common.ValidationConstants.Composition;
+using static Common.Messages.ErrorMessages.Composition;
 
 using System.ComponentModel.DataAnnotations;
 
@@ -22,26 +23,32 @@ public class CompositionFormModel
 
     public string? Id { get; set; }
 
-    [Required(AllowEmptyStrings = false)]
+    [Required(AllowEmptyStrings = false, 
+        ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(TitleMaxLength, MinimumLength = TitleMinLength,
         ErrorMessage = StringLengthErrorMessage)]
 
     public string Title { get; set; } = null!;
 
     
-    [Required(AllowEmptyStrings = false)]
+    [Required(AllowEmptyStrings = false, 
+        ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(UrlMaxLength, MinimumLength = UrlMinLength,
         ErrorMessage = StringLengthErrorMessage)]
+    [RegularExpression(UrlRegex, 
+        ErrorMessage = InvalidStringErrorMessage)]
 
     public string CoverUrl { get; set; } = null!;
 
-    [Required(AllowEmptyStrings = false)]
+    [Required(AllowEmptyStrings = false, 
+        ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(ContentMaxLength, MinimumLength = ContentMinLength,
         ErrorMessage = StringLengthErrorMessage)]
 
     public string Content { get; set; } = null!;
 
-    [Required(AllowEmptyStrings = false)]
+    [Required(AllowEmptyStrings = false, 
+        ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(SynopsisMaxLength, MinimumLength = SynopsisMinLength,
         ErrorMessage = StringLengthErrorMessage)]
 
