@@ -2,10 +2,12 @@
 
 using Core.Contracts;
 using ViewModels.Composition;
+
 using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Fabula.Core.ServiceModels;
 
 public class CompositionController : BaseController
 {
@@ -39,7 +41,7 @@ public class CompositionController : BaseController
     [HttpGet]
     [AllowAnonymous]
 
-    public async Task<IActionResult> All()
+    public async Task<IActionResult> All([FromQuery] CompositionQueryModel query)
     {
         IEnumerable<CompositionViewModel> compositionViewModels = await compositionService.GetAllAsync();
 

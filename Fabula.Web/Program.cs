@@ -1,10 +1,10 @@
 using Fabula.Data;
 using Fabula.Data.Models;
 using Fabula.Core.Services;
+using Fabula.Web.Infrastructure.Middlewares;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Fabula.Web.Infrastructure.Middlewares;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

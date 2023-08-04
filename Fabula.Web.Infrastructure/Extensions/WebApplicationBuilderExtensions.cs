@@ -1,10 +1,9 @@
 ﻿namespace Microsoft.Extensions.DependencyInjection;
 
-using AngleSharp;
-using Fabula.Data.Models;
 using Fabula.Web.Infrastructure.Middlewares;
+
 using Ganss.Xss;
-using Microsoft.AspNetCore.Identity;
+
 using System.Reflection;
 
 /// <summary>

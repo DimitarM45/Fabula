@@ -26,17 +26,31 @@
         <div class="col-lg">
             <div class="container">
                 <div class="container-fluid">
-                    <img src="@Model.CoverUrl" class="img-fluid rounded img-thumbnail" alt="Image is missing :(" width="1000" />
+                    <img src="@Model.CoverUrl" class="img-fluid rounded img-thumbnail" alt="Image not found :(" width="1000" />
                 </div>
                 <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
                 <p class="text-center" style="text-decoration: none; font-size: small">
                     Written by:
                     <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
                 </p>
+                <br />
+                <p class="text-center" style="font-size: small">
+                    Genres:
+                </p>
+                <p class="text-center" style="text-decoration: none; font-size: small">
+                    @for (int i = 0; i < Model.Genres.Count(); i++)
+                    {
+                        <a asp-controller="Composition" asp-action="All" asp-route-genreid="@Model.Genres.ToArray()[i].Id">
+                            @Model.Genres.ToArray()[i].Name
+                        </a>
+                    }
+                </p>
                 <textarea disabled>@Model.Content</textarea>
                 @if (isAuthenticated && isAuthor || isAdmin)
                 {
-                    <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary">Edit</a>
+                    <div class="text-center" style="margin-top: 2rem">
+                        <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary mt-3">Edit</a>
+                    </div>
                 }
             </div>
         </div>

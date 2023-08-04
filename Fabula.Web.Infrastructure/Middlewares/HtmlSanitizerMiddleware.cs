@@ -27,12 +27,15 @@ public class HtmlSanitizerMiddleware : IMiddleware
 
             IFormCollection formFields = await context.Request.ReadFormAsync();
 
-            Dictionary<string, StringValues> modifiedFormFields = new Dictionary<string, StringValues>();
+            //Dictionary<string, StringValues> modifiedFormFields = new Dictionary<string, StringValues>();
 
-            foreach ((string key, StringValues value) in formFields)
-                modifiedFormFields[key] = sanitizer.Sanitize(value.ToString());
+            //foreach ((string key, StringValues value) in formFields)
+            //{
 
-            context.Request.Form = new FormCollection(modifiedFormFields);
+            //    modifiedFormFields[key] = sanitizer.Sanitize(value.ToString());
+            //}
+
+            //context.Request.Form = new FormCollection(modifiedFormFields);
         }
 
         await next(context);

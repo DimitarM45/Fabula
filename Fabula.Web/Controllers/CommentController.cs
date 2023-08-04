@@ -1,4 +1,5 @@
 ﻿namespace Fabula.Web.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 
 public class CommentController : BaseController

@@ -4,7 +4,9 @@ using Data;
 using Contracts;
 using Data.Models;
 using Web.ViewModels.Tag;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
+
 using static Common.GlobalConstants;
 
 using Z.EntityFramework.Plus;
@@ -14,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Fabula.Core.ServiceModels;
 
 public class CompositionService : ICompositionService
 {
@@ -40,6 +43,12 @@ public class CompositionService : ICompositionService
                 HasAdultContent = c.hasAdultContent,
                 Rating = !c.Ratings.Any() ? null : c.Ratings.Average(r => r.Value),
                 PublishedOn = c.PublishedOn,
+                Genres = c.Genres.Select(g => new GenreViewModel()
+                {
+                    Id = g.Id,
+                    Name = g.Name
+                })
+                .ToList()
             })
             .ToListAsync();
 
@@ -231,6 +240,11 @@ public class CompositionService : ICompositionService
     }
 
     public async Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CompositionQueryModel> All(string category = null, string searchTerm = null)
     {
         throw new NotImplementedException();
     }

@@ -1,10 +1,14 @@
 ﻿namespace Fabula.Core.Contracts;
 
+using ServiceModels;
 using Web.ViewModels.Composition;
 
 public interface ICompositionService
 {
     Task<IEnumerable<CompositionViewModel>> GetAllAsync();
+
+    Task<CompositionQueryModel> All(string category = null,
+        string searchTerm = null);
 
     Task<string> AddAsync(CompositionFormModel formModel, string authorId);
 

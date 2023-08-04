@@ -15,7 +15,7 @@ public static class ValidationConstants
         public const int UrlMinLength = 15;
         public const int UrlMaxLength = 2084;
 
-        public const string UrlRegex = @"^((http|https)(://))?(www\.)?\w+\.[a-z]{1,5}(?<route>/[\w?=%&#]+)*$";
+        public const string UrlRegex = @"^((http|https)(://))?(www\.)?[\w-]+\.[a-z]{1,5}(?<route>/[-\w?=%&#.]+)*$";
     }
 
     /// <summary>

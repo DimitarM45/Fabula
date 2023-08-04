@@ -14,10 +14,8 @@ public class ErrorController : BaseController
         switch(statusCode)
         {
             case 404:
-                return View("Error404");
-
             case 401:
-                return View("Error401");
+                return View($"Error{statusCode}");
 
             default:
                 return View("Error");

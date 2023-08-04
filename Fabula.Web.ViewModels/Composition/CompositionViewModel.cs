@@ -1,7 +1,14 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
+using Genre;
+
 public class CompositionViewModel
 {
+    public CompositionViewModel()
+    {
+        Genres = new HashSet<GenreViewModel>();    
+    }
+
     public string? Id { get; set; }
 
     public string? Title { get; set; } 
@@ -19,4 +26,6 @@ public class CompositionViewModel
     public bool HasAdultContent { get; set; }
 
     public double? Rating { get; set; }
+
+    public IEnumerable<GenreViewModel> Genres { get; set; }
 }

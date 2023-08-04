@@ -49,29 +49,21 @@ public class GenreService : IGenreService
 
     public async Task<IEnumerable<GenreViewModel>> GetByIdAsync(string compositionId)
     {
-        IEnumerable<GenreViewModel> genreViewModels = await dbContext.Genres
+        IEnumerable<GenreViewModel> genreViewModels = await dbContext.Compositions
             .AsNoTracking()
-            .Select(g => new GenreViewModel()
-            {
-                Id = g.Id,
-                Name = g.Name,
-            })
+            .Where(c => c.Id.ToString() == compositionId && c.DeletedOn == null)
+            .SelectMany(c => c.Genres
+                .Select(g => new GenreViewModel()
+                {
+                    Id = g.Id,
+                    Name = g.Name,
+                }))
             .ToListAsync();
 
         return genreViewModels;
     }
 
-    public async Task<IEnumerable<int>> GetIdsAsync(string compositionId)
-    {
-        IEnumerable<int> ids = await dbContext.Compositions
-            .AsNoTracking()
-            .Select(c => c.Genres.Count)
-            .ToListAsync();
-
-        return ids;
-    }
-
-    public Task UpdateGenresAsync(string compositionId, IEnumerable<int> genreIds)
+    public Task<IEnumerable<string>> GetAllNamesAsync()
     {
         throw new NotImplementedException();
     }
