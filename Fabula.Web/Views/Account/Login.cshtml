@@ -11,12 +11,12 @@
                 <h2 class="text-center">Use a local account to log in.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-floating">
+                <div class="form-floating" style="margin-top: 1rem">
                     <input asp-for="LoginCredential" class="form-control" autocomplete="username" aria-required="true" />
                     <label asp-for="LoginCredential" class="form-label"></label>
                     <span asp-validation-for="LoginCredential" class="text-danger"></span>
                 </div>
-                <div class="form-floating">
+                <div class="form-floating" style="margin-top: 1rem">
                     <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" />
                     <label asp-for="Password" class="form-label"></label>
                     <span asp-validation-for="Password" class="text-danger"></span>

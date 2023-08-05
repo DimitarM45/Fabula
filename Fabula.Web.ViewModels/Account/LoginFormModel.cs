@@ -21,14 +21,17 @@ public class LoginFormModel
     [StringLength(EmailMaxLength, MinimumLength = EmailMinLength)]
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
+
     public string LoginCredential { get; set; } = null!;
 
     [DataType(DataType.Password)]
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
+
     public string Password { get; set; } = null!;
 
     [Display(Name = "Remember me?")]
+
     public bool RememberMe { get; set; }
 
     public AuthUtilitiesViewModel Utilities { get; set; }

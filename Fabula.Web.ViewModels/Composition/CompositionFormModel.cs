@@ -30,7 +30,6 @@ public class CompositionFormModel
 
     public string Title { get; set; } = null!;
 
-    
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(UrlMaxLength, MinimumLength = UrlMinLength,

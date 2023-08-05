@@ -21,7 +21,7 @@ public class CompositionQueryModel
 
     public string? SearchTerm { get; set; }
 
-    public ResultSorting Sorting { get; set; }
+    public DateSorting Sorting { get; set; }
 
     public int CurrentPage { get; set; } = 1;
 

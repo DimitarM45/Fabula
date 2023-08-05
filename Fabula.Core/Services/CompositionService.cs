@@ -1,8 +1,10 @@
 ﻿namespace Fabula.Core.Services;
 
 using Data;
+using Enums;
 using Contracts;
 using Data.Models;
+using ServiceModels;
 using Web.ViewModels.Tag;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
@@ -16,7 +18,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Fabula.Core.ServiceModels;
 
 public class CompositionService : ICompositionService
 {
@@ -184,8 +185,6 @@ public class CompositionService : ICompositionService
 
                 if (genre != null)
                     genresToUpdate.Add(genre);
-
-                // TODO: Figure out a way to decouple genres and tags (if added at all) from the composition service
             }
 
             if (genresToUpdate.Count == 0)
@@ -244,8 +243,14 @@ public class CompositionService : ICompositionService
         throw new NotImplementedException();
     }
 
-    public Task<CompositionQueryModel> All(string category = null, string searchTerm = null)
+    public Task<CompositionQueryModel> All(IEnumerable<string>? genres = null, string? searchTerm = null, DateSorting dateSorting = DateSorting.Newest, RatingSorting ratingSorting = RatingSorting.BestRated)
     {
-        throw new NotImplementedException();
+        IQueryable<Composition> compositions = dbContext.Compositions.AsQueryable();
+
+        if (genres != null && genres.Any())
+        {
+            compositions = dbContext.Compositions
+                .Where(c => c.Genres.Any(g => g.Name))
+        }
     }
 }

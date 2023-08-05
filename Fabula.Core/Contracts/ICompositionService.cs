@@ -1,5 +1,6 @@
 ﻿namespace Fabula.Core.Contracts;
 
+using Enums;
 using ServiceModels;
 using Web.ViewModels.Composition;
 
@@ -7,8 +8,10 @@ public interface ICompositionService
 {
     Task<IEnumerable<CompositionViewModel>> GetAllAsync();
 
-    Task<CompositionQueryModel> All(string category = null,
-        string searchTerm = null);
+    Task<CompositionQueryModel> All(string? genre = null,
+        string? searchTerm = null,
+        DateSorting dateSorting = DateSorting.Newest,
+        RatingSorting ratingSorting = RatingSorting.BestRated);
 
     Task<string> AddAsync(CompositionFormModel formModel, string authorId);
 

@@ -1,13 +1,13 @@
 ﻿namespace Fabula.Web.Controllers;
 
 using Core.Contracts;
+using Core.ServiceModels;
 using ViewModels.Composition;
 
 using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Fabula.Core.ServiceModels;
 
 public class CompositionController : BaseController
 {
@@ -23,7 +23,8 @@ public class CompositionController : BaseController
 
     private readonly IAccountService accountService;
 
-    public CompositionController(IGenreService genreService,
+    public CompositionController(
+        IGenreService genreService,
         ICompositionService compositionService,
         ICommentService commentService,
         IRatingService ratingService,

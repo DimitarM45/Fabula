@@ -18,6 +18,7 @@ public class RegisterFormModel
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(NameMaxLength, MinimumLength = NameMinLength, 
         ErrorMessage = StringLengthErrorMessage)]
+
     public string FirstName { get; set; } = null!;
 
     [Display(Name = "Last name")]
@@ -25,17 +26,20 @@ public class RegisterFormModel
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(NameMaxLength, MinimumLength = NameMinLength, 
         ErrorMessage = StringLengthErrorMessage)]
+
     public string LastName { get; set; } = null!;
 
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(UsernameMaxLength, MinimumLength = UsernameMinLength, 
         ErrorMessage = StringLengthErrorMessage)]
+
     public string Username { get; set; } = null!;
 
     [Display(Name = "Date of birth")]
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
+
     public string Birthdate { get; set; } = null!;
 
     public DateTime? ParsedBirthdate { get; set; }
@@ -46,6 +50,7 @@ public class RegisterFormModel
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(EmailMaxLength, MinimumLength = EmailMinLength, 
         ErrorMessage = StringLengthErrorMessage)]
+
     public string Email { get; set; } = null!;
 
     [Display(Name = "Password")]
@@ -54,6 +59,7 @@ public class RegisterFormModel
         ErrorMessage = StringLengthErrorMessage)]
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
+
     public string Password { get; set; } = null!;
 
     [DataType(DataType.Password)]
@@ -62,6 +68,7 @@ public class RegisterFormModel
         ErrorMessage = PasswordDoesNotMatchErrorMessage)]
     [Required(AllowEmptyStrings = false,
         ErrorMessage = StringRequiredErrorMessage)]
+
     public string ConfirmPassword { get; set; } = null!;
 
     public AuthUtilitiesViewModel Utilities { get; set; }
