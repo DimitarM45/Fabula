@@ -249,8 +249,7 @@ public class CompositionService : ICompositionService
 
         if (genres != null && genres.Any())
         {
-            compositions = dbContext.Compositions
-                .Where(c => c.Genres.Any(g => g.Name))
+
         }
     }
 }
