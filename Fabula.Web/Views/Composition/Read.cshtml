@@ -15,8 +15,10 @@
 }
 
 <div class="container">
-    <div class="row">
-        <partial name="_RatingPreviewPartial"></partial>
+        @foreach (RatingViewModel rating in Model.Ratings)
+        {
+            <partial name="_RatingPreviewPartial" model="rating"></partial>
+        }
         <div class="col-lg">
             <div class="container">
                 <div class="container-fluid">
@@ -48,7 +50,10 @@
                 }
             </div>
         </div>
-        <partial name="_CommentPreviewPartial"></partial>
+        @foreach (CommentCompositionViewModel comment in Model.Comments)
+        {
+            <partial name="_CommentPreviewPartial" model="comment"></partial>
+        }
     </div>
 </div>
 

@@ -2,7 +2,7 @@
 @model CompositionViewModel
 
 <div class="card" style="width: 22rem; margin-block: 2rem">
-    <img class="card-img-top" src="@Model.CoverUrl" alt="~/images/MissingComposition.png">
+    <img class="card-img-top" src="@Model.CoverUrl" alt="Image not found :(">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
         <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none" class="card-link">@Model.Author</a></h6>

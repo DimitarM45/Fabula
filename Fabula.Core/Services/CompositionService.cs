@@ -28,11 +28,68 @@ public class CompositionService : ICompositionService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<CompositionViewModel>> GetAllAsync()
+    public async Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
+        string? searchTerm = null,
+        int currentPage = 1,
+        int compositionsPerPage = 6,
+        DateSorting dateSorting = DateSorting.Newest,
+        RatingSorting ratingSorting = RatingSorting.BestRated)
     {
-        IEnumerable<CompositionViewModel> compositionViewModels = await dbContext.Compositions
+        IQueryable<Composition>? compositionsQuery = dbContext.Compositions
             .AsNoTracking()
             .Where(c => c.DeletedOn == null)
+            .AsQueryable();
+
+        if (selectedGenres != null && selectedGenres.Any())
+        {
+            compositionsQuery = dbContext.Compositions
+                .AsNoTracking()
+                .Where(c => c.Genres.Any(g => selectedGenres.Contains(g.Id)));
+        }
+
+        if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm != string.Empty)
+        {
+            compositionsQuery = compositionsQuery
+                .Where(c =>
+                    c.Title.ToLower().Contains(searchTerm.ToLower()) ||
+                    c.Synopsis.ToLower().Contains(searchTerm.ToLower()) ||
+                    c.Content.ToLower().Contains(searchTerm.ToLower()));
+        }
+
+        if (dateSorting == DateSorting.Oldest)
+        {
+            if (ratingSorting == RatingSorting.WorstRated)
+            {
+                compositionsQuery = compositionsQuery
+                    .OrderBy(c => c.PublishedOn)
+                    .ThenBy(c => c.Ratings.Average(r => r.Value));
+            }
+            else if (ratingSorting == RatingSorting.BestRated)
+            {
+                compositionsQuery = compositionsQuery
+                    .OrderBy(c => c.PublishedOn)
+                    .ThenByDescending(c => c.Ratings.Average(r => r.Value));
+            }
+        }
+        else if (dateSorting == DateSorting.Newest)
+        {
+            if (ratingSorting == RatingSorting.WorstRated)
+            {
+                compositionsQuery = compositionsQuery
+                    .OrderByDescending(c => c.PublishedOn)
+                    .ThenBy(c => c.Ratings.Average(r => r.Value));
+            }
+            else if (ratingSorting == RatingSorting.BestRated)
+            {
+                compositionsQuery = compositionsQuery
+                    .OrderByDescending(c => c.PublishedOn)
+                    .ThenByDescending(c => c.Ratings.Average(r => r.Value));
+            }
+        }
+
+        IEnumerable<CompositionViewModel> compositionViewModels = await compositionsQuery
+            .Skip((currentPage - 1) * compositionsPerPage)
+            .Take(compositionsPerPage)
             .Select(c => new CompositionViewModel()
             {
                 Id = c.Id.ToString(),
@@ -53,7 +110,13 @@ public class CompositionService : ICompositionService
             })
             .ToListAsync();
 
-        return compositionViewModels;
+        CompositionQueryModel compositionsQueryModel = new CompositionQueryModel()
+        {
+            Compositions = compositionViewModels,
+            CompositionsCount = compositionViewModels.Count()
+        };
+
+        return compositionsQueryModel;
     }
 
     public async Task<string> AddAsync(CompositionFormModel formModel, string authorId)
@@ -241,15 +304,5 @@ public class CompositionService : ICompositionService
     public async Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId)
     {
         throw new NotImplementedException();
-    }
-
-    public Task<CompositionQueryModel> All(IEnumerable<string>? genres = null, string? searchTerm = null, DateSorting dateSorting = DateSorting.Newest, RatingSorting ratingSorting = RatingSorting.BestRated)
-    {
-        IQueryable<Composition> compositions = dbContext.Compositions.AsQueryable();
-
-        if (genres != null && genres.Any())
-        {
-
-        }
     }
 }

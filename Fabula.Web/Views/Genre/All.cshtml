@@ -4,10 +4,46 @@
 }
 
 <h1 class="text-center">Genres</h1>
+<hr />
+<div class="container">
+    @{
+        int counter = 0;
 
-<ul>
-    @foreach (AllGenreViewModel genre in Model.OrderBy(g => g.Name))
-    {
-        <li class="genre-item"><a asp-controller="Composition" asp-action="All" asp-route-genreid="@genre.Id" style="text-decoration: none; color:crimson">@genre.Name (@genre.CompositionCount)</a></li>
+        <div class="row">
+            @foreach (var group in Model.GroupBy(g => g.Name?[0]).OrderBy(g => g.Key))
+            {
+                if (counter % 4 == 0 || counter == 0)
+                {
+                    @:<div class="row" style="margin-top: 2rem; text-align: center"> 
+                }
+
+                <div class="col">
+                    <h2>@group.Key</h2>
+                            
+                    <ul style="display: inline-block; text-align: left;">
+                        @foreach (AllGenreViewModel genre in group.OrderBy(g => g.Name))
+                        {
+                            <li class="genre-item">
+                               <a asp-controller="Composition" 
+                                  asp-action="All" 
+                                  asp-route-genres="@genre.Id" style="text-decoration: none; color:teal"
+                                  asp-route-currentPage=""
+                                  asp-route-genres=""
+                                  asp-route-searchTerm=""
+                                  asp-route-datesorting=""
+                                  asp-route-ratingsorting="">@genre.Name (@genre.CompositionCount)</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                if (counter % 3 == 0 || counter == 0)
+                {
+                    @:</div>
+                }
+
+                counter++;
+            }
+        </div>
     }
-</ul>
+</div>

@@ -1,33 +1,33 @@
 ﻿namespace Fabula.Core.ServiceModels;
 
 using Enums;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
-
-using System.ComponentModel.DataAnnotations;
 
 public class CompositionQueryModel
 {
     public CompositionQueryModel()
     {
-        Genres = new HashSet<string>();
+        Genres = new HashSet<GenreViewModel>();
         Compositions = new HashSet<CompositionViewModel>();
+        SelectedGenres = new HashSet<int>();
     }
 
-    public int CompositionsPerPage = 3;
-
-    public string? Genre { get; set; }
-
-    [Display(Name = "Search by term")]
+    public int CompositionsPerPage { get; set; } = 3;
 
     public string? SearchTerm { get; set; }
 
-    public DateSorting Sorting { get; set; }
+    public DateSorting DateSorting { get; set; }
+
+    public RatingSorting RatingSorting { get; set; }
 
     public int CurrentPage { get; set; } = 1;
 
-    public IEnumerable<string> Genres { get; set; }
+    public int CompositionsCount { get; set; } 
 
-    public int CompositionsCount { get; set; }
+    public IEnumerable<GenreViewModel> Genres { get; set; }
+
+    public IEnumerable<int> SelectedGenres { get; set; }
 
     public IEnumerable<CompositionViewModel> Compositions { get; set; }
 }

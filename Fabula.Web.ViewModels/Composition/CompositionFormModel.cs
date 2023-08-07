@@ -64,5 +64,5 @@ public class CompositionFormModel
 
     public IEnumerable<int> Genres { get; set; }
 
-    public IEnumerable<GenreViewModel>? GenresToSelect { get; set; }
+    public IEnumerable<GenreViewModel> GenresToSelect { get; set; }
 }

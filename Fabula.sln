@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Data.Models", "Fabul
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{305476DC-A300-4E77-B6E0-CD683D6ED5B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Core.Tests", "Fabula.Core.Tests\Fabula.Core.Tests.csproj", "{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Core.Tests", "Fabula.Core.Tests\Fabula.Core.Tests.csproj", "{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Sandbox", "Fabula.Sandbox\Fabula.Sandbox.csproj", "{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

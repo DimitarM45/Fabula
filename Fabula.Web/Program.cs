@@ -93,8 +93,6 @@ app.UseRouting();
 
 app.UseCors();
 
-app.UseMiddleware(typeof(HtmlSanitizerMiddleware));
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -103,5 +101,7 @@ app.MapControllerRoute(
     pattern: "{area:exists}/{controller=Home}/{action=Dashboard}/{id?}");
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
+
+app.UseMiddleware(typeof(HtmlSanitizerMiddleware));
 
 app.Run();

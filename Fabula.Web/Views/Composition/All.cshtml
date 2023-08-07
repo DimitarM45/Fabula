@@ -1,12 +1,98 @@
 ﻿@using System.Globalization;
-@model IEnumerable<CompositionViewModel>
+@model CompositionQueryModel
 @{
     ViewData["Title"] = "Works";
+
+    IEnumerable<int> genreIds = Model.Genres.Select(g => g.Id);
 }
 
-<div class="container-fluid">
-    @foreach (CompositionViewModel composition in Model)
-    {
-        <partial name="_CompositionAllPartial" model="@composition"></partial>
+<h1 class="text-center">@ViewData["Title"]</h1>
+<hr />
+<form method="get">
+    <div class="row">
+        <div class="form-select">
+            <label asp-for="SelectedGenres">Genres:</label>
+            <select asp-for="SelectedGenres" class="form-control" multiple="true">
+                <option value="">All</option>
+                @foreach (GenreViewModel genre in Model.Genres.OrderBy(g => g.Name))
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="SearchTerm">Search term:</label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Search term...">
+        </div>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="DateSorting">Sort by date:</label>
+                <select asp-for="DateSorting" class="form-control">
+                    <option value="1">Newest first</option>
+                    <option value="0">Oldest first</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <div class="form-group">
+                <label asp-for="RatingSorting">Sort by rating:</label>
+                <select asp-for="RatingSorting" class="form-control">
+                    <option value="1">Top rated first</option>
+                    <option value="0">Worst rated first</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mt-4 p-2">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+</form>
+@{
+    int previousPage = Model.CurrentPage - 1;
+
+    if (previousPage < 1)
+        previousPage = 1;
+
+    var maxPage = Math.Ceiling((double)Model.CompositionsCount /
+    Model.CompositionsPerPage);
+}
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="Composition"
+           asp-action="All"
+           asp-route-currentpage="@previousPage"
+           asp-route-selectedgenres="@string.Join('|', Model.SelectedGenres)"
+           asp-route-searchterm="@Model.SearchTerm"
+           asp-route-datesorting="@((int)Model.DateSorting)"
+           asp-route-ratingsorting="@((int)Model.RatingSorting)">@Html.Raw("<")</a>
+    </div>
+    @{
+        var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Compositions.Any();
     }
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="Composition"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-selectedgenres="@string.Join('|', Model.SelectedGenres)"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-datesorting="@((int)Model.DateSorting)"
+           asp-route-ratingsorting="@((int)Model.RatingSorting)">@Html.Raw(">")</a>
+    </div>
 </div>
+@if (!Model.Compositions.Any())
+{
+    <h2 class="text-center">No compositions found with the given criteria!</h2>
+}
+else
+{
+    <div class="row">
+        @foreach (CompositionViewModel composition in Model.Compositions)
+        {
+                <partial name="_CompositionAllPartial" model="@composition"></partial>
+        }
+    </div>
+}

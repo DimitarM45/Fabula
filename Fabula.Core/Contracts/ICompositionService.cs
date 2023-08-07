@@ -2,14 +2,15 @@
 
 using Enums;
 using ServiceModels;
+using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
 
 public interface ICompositionService
 {
-    Task<IEnumerable<CompositionViewModel>> GetAllAsync();
-
-    Task<CompositionQueryModel> All(string? genre = null,
+    Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
         string? searchTerm = null,
+        int currentPage = 1,
+        int compositionsPerPage = 6,
         DateSorting dateSorting = DateSorting.Newest,
         RatingSorting ratingSorting = RatingSorting.BestRated);
 

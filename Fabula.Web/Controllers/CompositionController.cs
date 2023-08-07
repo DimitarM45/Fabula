@@ -44,9 +44,17 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> All([FromQuery] CompositionQueryModel query)
     {
-        IEnumerable<CompositionViewModel> compositionViewModels = await compositionService.GetAllAsync();
+        CompositionQueryModel compositionQueryModel = await compositionService.GetAllAsync(
+                query.SelectedGenres,
+                query.SearchTerm, 
+                query.CurrentPage, 
+                query.CompositionsPerPage, 
+                query.DateSorting, 
+                query.RatingSorting);
 
-        return View(compositionViewModels);
+        compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
+
+        return View(compositionQueryModel);
     }
 
     [HttpGet]
