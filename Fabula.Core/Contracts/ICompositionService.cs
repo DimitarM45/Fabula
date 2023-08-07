@@ -2,7 +2,6 @@
 
 using Enums;
 using ServiceModels;
-using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
 
 public interface ICompositionService
@@ -10,13 +9,13 @@ public interface ICompositionService
     Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
         string? searchTerm = null,
         int currentPage = 1,
-        int compositionsPerPage = 6,
+        int compositionsPerPage = 1,
         DateSorting dateSorting = DateSorting.Newest,
         RatingSorting ratingSorting = RatingSorting.BestRated);
 
     Task<string> AddAsync(CompositionFormModel formModel, string authorId);
 
-    Task<CompositionReadViewModel> GetByIdAsync(string compositionId);
+    Task<CompositionReadViewModel?> GetByIdAsync(string compositionId);
 
     Task<bool> DeleteByIdAsync(string compositionId);
 

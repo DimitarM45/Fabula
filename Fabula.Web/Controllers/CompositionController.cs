@@ -48,11 +48,13 @@ public class CompositionController : BaseController
                 query.SelectedGenres,
                 query.SearchTerm, 
                 query.CurrentPage, 
-                query.CompositionsPerPage, 
+                query.CompositionsPerPage,
                 query.DateSorting, 
                 query.RatingSorting);
 
         compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
+
+        compositionQueryModel.CurrentPage = query.CurrentPage;
 
         return View(compositionQueryModel);
     }

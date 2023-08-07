@@ -31,7 +31,7 @@ public class CompositionService : ICompositionService
     public async Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
         string? searchTerm = null,
         int currentPage = 1,
-        int compositionsPerPage = 6,
+        int compositionsPerPage = 1,
         DateSorting dateSorting = DateSorting.Newest,
         RatingSorting ratingSorting = RatingSorting.BestRated)
     {
@@ -113,7 +113,7 @@ public class CompositionService : ICompositionService
         CompositionQueryModel compositionsQueryModel = new CompositionQueryModel()
         {
             Compositions = compositionViewModels,
-            CompositionsCount = compositionViewModels.Count()
+            CompositionsCount = compositionsQuery.Count()
         };
 
         return compositionsQueryModel;

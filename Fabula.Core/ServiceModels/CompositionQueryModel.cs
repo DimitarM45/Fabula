@@ -4,6 +4,8 @@ using Enums;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
 
+using static Common.GlobalConstants;
+
 public class CompositionQueryModel
 {
     public CompositionQueryModel()
@@ -13,7 +15,7 @@ public class CompositionQueryModel
         SelectedGenres = new HashSet<int>();
     }
 
-    public int CompositionsPerPage { get; set; } = 3;
+    public int CompositionsPerPage { get; set; } = 10;
 
     public string? SearchTerm { get; set; }
 

@@ -26,12 +26,11 @@
                             <li class="genre-item">
                                <a asp-controller="Composition" 
                                   asp-action="All" 
-                                  asp-route-genres="@genre.Id" style="text-decoration: none; color:teal"
+                                  asp-route-selectedGenres="@genre.Id" style="text-decoration: none; color:teal"
                                   asp-route-currentPage=""
-                                  asp-route-genres=""
                                   asp-route-searchTerm=""
-                                  asp-route-datesorting=""
-                                  asp-route-ratingsorting="">@genre.Name (@genre.CompositionCount)</a>
+                                  asp-route-dateSorting=""
+                                  asp-route-ratingSorting="">@genre.Name (@genre.CompositionCount)</a>
                             </li>
                         }
                     </ul>
