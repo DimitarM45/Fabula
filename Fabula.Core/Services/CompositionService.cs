@@ -305,4 +305,11 @@ public class CompositionService : ICompositionService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<int> GetCountAsync()
+    {
+        int count = await dbContext.Compositions.CountAsync(c => c.DeletedOn == null);
+
+        return count;
+    }
 }

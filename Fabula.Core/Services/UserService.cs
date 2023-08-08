@@ -50,15 +50,21 @@ public class UserService : IUserService
             Bio = user.Bio,
             ProfilePictureUrl = user.ProfilePictureUrl,
             WebsiteUrl = user.WebsiteURL,
-            Followers = user.Followers.Select(f => new UserViewModel()
-            {
-                Id = f.Id.ToString(),
-                Username = user.UserName,
-                ProfilePictureUrl = user.ProfilePictureUrl
-            })
-            .ToList()
+            Followers = user.Followers.Count(),
+            FavoriteCompositions = user.FavoriteCompositions.Count(),
+            CreatedLists = user.CreatedLists.Count(),
+            FollowedLists = user.FollowedLists.Count(),
+            Ratings = user.Ratings.Count(),
+            WrittenCompositions = user.Ratings.Count()
         };
 
         return userProfile;
+    }
+
+    public async Task<int> GetCountAsync()
+    {
+        int count = await dbContext.Users.CountAsync();
+
+        return count;
     }
 }

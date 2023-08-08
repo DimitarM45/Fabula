@@ -2,6 +2,7 @@
 
 using Data;
 using Contracts;
+using Data.Models;
 using Web.ViewModels.Genre;
 
 using Microsoft.EntityFrameworkCore;
@@ -66,5 +67,20 @@ public class GenreService : IGenreService
     public Task<IEnumerable<string>> GetAllNamesAsync()
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<GenreViewModel>> GetForUserAsync(string userId)
+    {
+        IEnumerable<GenreViewModel> genreViewModels = await dbContext.Genres
+            .AsNoTracking()
+            .Where(g => g.Favorites.Any(f => f.Id.ToString() == userId))
+            .Select(g => new GenreViewModel()
+            {
+                Id = g.Id,
+                Name = g.Name
+            })
+            .ToListAsync();
+
+        return genreViewModels;
     }
 }

@@ -15,15 +15,14 @@
 }
 
 <div class="container">
-        @foreach (RatingViewModel rating in Model.Ratings)
-        {
-            <partial name="_RatingPreviewPartial" model="rating"></partial>
-        }
+    @foreach (RatingViewModel rating in Model.Ratings)
+    {
+        <partial name="_RatingPreviewPartial" model="rating"></partial>
+    }
+    <div class="card text-bg-info">
         <div class="col-lg">
-            <div class="container">
-                <div class="container-fluid">
-                    <img src="@Model.CoverUrl" class="img-fluid rounded img-thumbnail" alt="Image not found :(" width="1000" />
-                </div>
+            <div class="card-body">
+                    <img src="@Model.CoverUrl" class="card-img-top" alt="Image not found :(" />
                 <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
                 <p class="text-center" style="text-decoration: none; font-size: small">
                     Written by:
@@ -36,7 +35,13 @@
                 <p class="text-center" style="text-decoration: none; font-size: small">
                     @for (int i = 0; i < Model.Genres.Count(); i++)
                     {
-                        <a asp-controller="Composition" asp-action="All" asp-route-genreid="@Model.Genres.ToArray()[i].Id">
+                        <a asp-controller="Composition"
+                           asp-action="All"
+                           asp-route-currentPage=""
+                           asp-route-selectedGenres="@Model.Genres.ToArray()[i].Id"
+                           asp-route-searchTerm=""
+                           asp-route-dateSorting=""
+                           asp-route-ratingSorting="">
                             @Model.Genres.ToArray()[i].Name
                         </a>
                     }

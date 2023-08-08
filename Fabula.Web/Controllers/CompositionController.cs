@@ -8,6 +8,7 @@ using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 public class CompositionController : BaseController
 {
@@ -156,7 +157,7 @@ public class CompositionController : BaseController
         {
             await compositionService.DeleteByIdAsync(compositionId);
 
-            return RedirectToAction("MyWorks", "User");
+            return RedirectToAction("Works", "User", new {UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)});
         }
         catch (Exception)
         {

@@ -31,6 +31,8 @@ public class IndexModel : PageModel
     
     public string ProfilePictureUrl { get; set; }
 
+    public string WebsiteUrl { get; set; }
+
     public string Bio { get; set; }
 
     [TempData]
@@ -43,15 +45,23 @@ public class IndexModel : PageModel
     {
         [Display(Name = "Phone number")]
         [Phone(ErrorMessage = InvalidStringErrorMessage)]
+
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Profile picture url")]
         [Url(ErrorMessage = InvalidStringErrorMessage)]
+
         public string ProfilePictureUrl { get; set; }
 
         [StringLength(BioMaxLength, MinimumLength = BioMinLength,
             ErrorMessage = StringLengthErrorMessage)]
+
         public string Bio { get; set; }
+
+        [Display(Name = "Website url")]
+        [Url(ErrorMessage = InvalidStringErrorMessage)]
+
+        public string WebsiteUrl { get; set; }
     }
 
     private async Task LoadAsync(ApplicationUser user)
@@ -66,7 +76,8 @@ public class IndexModel : PageModel
         {
             PhoneNumber = phoneNumber,
             ProfilePictureUrl = user.ProfilePictureUrl,
-            Bio = user.Bio
+            Bio = user.Bio,
+            WebsiteUrl = user.WebsiteURL
         };
     }
 
@@ -100,7 +111,8 @@ public class IndexModel : PageModel
 
         if (Input.PhoneNumber != phoneNumber ||
             Input.ProfilePictureUrl != user.ProfilePictureUrl ||
-            Input.Bio != user.Bio)
+            Input.Bio != user.Bio ||
+            Input.WebsiteUrl != user.WebsiteURL)
         {
             IdentityResult setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
 
@@ -129,6 +141,17 @@ public class IndexModel : PageModel
             if (!setProfilePictureUrlResult.Succeeded)
             {
                 StatusMessage = "Unexpected error when trying to set profile picture url.";
+
+                return RedirectToPage();
+            }
+
+            user.WebsiteURL = Input.WebsiteUrl;
+
+            IdentityResult setWebsiteUrlResult = await _userManager.UpdateAsync(user);
+
+            if (!setProfilePictureUrlResult.Succeeded)
+            {
+                StatusMessage = "Unexpected error when trying to set website url.";
 
                 return RedirectToPage();
             }

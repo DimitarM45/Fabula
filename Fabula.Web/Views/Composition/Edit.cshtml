@@ -14,7 +14,10 @@
     bool isAdmin = await userManager.IsInRoleAsync(user, "Admin");
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
+<h1 class="text-center">Edit</h1>
+<div class="text-center">
+    <h2>@Model.Title</h2>
+</div>
 <hr />
 <div class="row">
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
@@ -30,6 +33,7 @@
 
         @if (isAuthenticated && isAuthor || isAdmin)
         {
+            <hr />
             <h2 class="text-danger text-center" style="margin-top: 2rem">Delete your work</h2>
             <form onsubmit="return confirmAction();" method="post" asp-action="Delete" asp-route-compositionid="@Model.Id">
                 <div class="text-center">

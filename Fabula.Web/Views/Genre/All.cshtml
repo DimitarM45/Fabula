@@ -5,44 +5,30 @@
 
 <h1 class="text-center">Genres</h1>
 <hr />
-<div class="container">
+<div class="row row-cols-1 row-cols-md-6 g-4">
     @{
-        int counter = 0;
-
-        <div class="row">
-            @foreach (var group in Model.GroupBy(g => g.Name?[0]).OrderBy(g => g.Key))
-            {
-                if (counter % 4 == 0 || counter == 0)
-                {
-                    @:<div class="row" style="margin-top: 2rem; text-align: center"> 
-                }
-
-                <div class="col">
-                    <h2>@group.Key</h2>
-                            
+        @foreach (var group in Model.GroupBy(g => g.Name?[0]).OrderBy(g => g.Key))
+        {
+            <div class="col">
+                <div class="card text-bg-info h-100">
+                    <h2 class="text-center">@group.Key</h2>
                     <ul style="display: inline-block; text-align: left;">
                         @foreach (AllGenreViewModel genre in group.OrderBy(g => g.Name))
                         {
                             <li class="genre-item">
-                               <a asp-controller="Composition" 
-                                  asp-action="All" 
-                                  asp-route-selectedGenres="@genre.Id" style="text-decoration: none; color:teal"
-                                  asp-route-currentPage=""
-                                  asp-route-searchTerm=""
-                                  asp-route-dateSorting=""
-                                  asp-route-ratingSorting="">@genre.Name (@genre.CompositionCount)</a>
+                                <a style="text-decoration: none; color: midnightblue"
+                                   asp-controller="Composition"
+                                   asp-action="All"
+                                   asp-route-selectedGenres="@genre.Id"
+                                   asp-route-currentPage=""
+                                   asp-route-searchTerm=""
+                                   asp-route-dateSorting=""
+                                   asp-route-ratingSorting="">@genre.Name (@genre.CompositionCount)</a>
                             </li>
                         }
                     </ul>
                 </div>
-
-                if (counter % 3 == 0 || counter == 0)
-                {
-                    @:</div>
-                }
-
-                counter++;
-            }
-        </div>
+            </div>
+        }
     }
 </div>

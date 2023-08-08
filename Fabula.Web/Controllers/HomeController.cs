@@ -1,16 +1,41 @@
 ﻿namespace Fabula.Web.Controllers;
 
+using Core.Contracts;
+using ViewModels.Home;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 public class HomeController : BaseController
 {
+    private readonly IUserService userService;
+
+    private readonly ICompositionService compositionService;
+
+    public HomeController(IUserService userService, ICompositionService compositionService)
+    {
+        this.userService = userService;
+        this.compositionService = compositionService;
+    }
+
     [HttpGet]
     [AllowAnonymous]
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        HomeViewModel homeViewModel = new HomeViewModel();
+
+        try
+        {
+            homeViewModel.CompositionsCount = await compositionService.GetCountAsync();
+            homeViewModel.UsersCount = await userService.GetCountAsync();
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
+
+        return View(homeViewModel);
     }
 
     [AllowAnonymous]

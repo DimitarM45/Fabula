@@ -1,7 +1,21 @@
-﻿@{
+﻿@model HomeViewModel
+@{
     ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <img src="~/images/FabulaLogo.png" height="750" width="1200" />
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8">
+            <div class="text-center">
+                <img src="~/images/FabulaLogo.png" class="img-fluid" />
+                <hr />
+                <h1>Join @Model.UsersCount users and enjoy @Model.CompositionsCount works of literature!</h1>
+                <blockquote class="blockquote mb-0 text-center">
+                    <p>“A reader lives a thousand lives before he dies... The man who never reads lives only one.”</p>
+                    <footer class="blockquote-footer"><cite>George R.R. Martin</cite></footer>
+                </blockquote>
+            </div>
+        </div>
+    </div>
 </div>
+

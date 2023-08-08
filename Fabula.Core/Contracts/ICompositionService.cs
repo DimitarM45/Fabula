@@ -28,4 +28,6 @@ public interface ICompositionService
     Task<bool> RestoreByIdAsync(string compositionId);
 
     Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId);
+
+    Task<int> GetCountAsync();
 }

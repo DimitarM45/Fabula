@@ -9,13 +9,7 @@ public class UserProfileViewModel
 {
     public UserProfileViewModel()
     {
-        Followers = new HashSet<UserViewModel>();
-        WrittenCompositions = new HashSet<CompositionViewModel>();
-        FavoriteCompositions = new HashSet<CompositionViewModel>();
         FavoriteGenres = new HashSet<GenreViewModel>();
-        Ratings = new HashSet<RatingProfileViewModel>();
-        CreatedLists = new HashSet<ListProfileViewModel>();
-        FollowedLists = new HashSet<ListProfileViewModel>();
     }
 
     public string? Id { get; set; }
@@ -32,17 +26,17 @@ public class UserProfileViewModel
 
     public string? WebsiteUrl { get; set; }
 
-    public IEnumerable<UserViewModel> Followers { get; set; }
+    public int Followers { get; set; }
 
-    public IEnumerable<CompositionViewModel> WrittenCompositions { get; set; }
+    public int WrittenCompositions { get; set; }
 
-    public IEnumerable<CompositionViewModel> FavoriteCompositions { get; set; }
+    public int FavoriteCompositions { get; set; }
+
+    public int Ratings { get; set; }
+
+    public int CreatedLists { get; set; }
+
+    public int FollowedLists { get; set; }
 
     public IEnumerable<GenreViewModel> FavoriteGenres { get; set; }
-
-    public IEnumerable<RatingProfileViewModel> Ratings { get; set; }
-
-    public IEnumerable<ListProfileViewModel> CreatedLists { get; set; }
-
-    public IEnumerable<ListProfileViewModel> FollowedLists { get; set; }
 }

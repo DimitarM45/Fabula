@@ -1,10 +1,10 @@
 ﻿namespace Fabula.Web.Controllers;
 
 using Core.Contracts;
+using ViewModels.User;
 using ViewModels.Composition;
 
 using Microsoft.AspNetCore.Mvc;
-using Fabula.Web.ViewModels.User;
 
 public class UserController : BaseController
 {
@@ -12,27 +12,15 @@ public class UserController : BaseController
 
     private readonly ICompositionService compositionService;
 
+    private readonly IGenreService genreService;
+
     public UserController(IUserService userService,
-        ICompositionService compositionService)
+        ICompositionService compositionService,
+        IGenreService genreService)
     {
         this.userService = userService;
         this.compositionService = compositionService;
-    }
-
-    public async Task<IActionResult> MyWorks()
-    {
-        try
-        {
-            string? userId = userService.GetUserId();
-
-            IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
-
-            return View(compositionViewModels);
-        }
-        catch (Exception)
-        {
-            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-        }
+        this.genreService = genreService;
     }
 
     public async Task<IActionResult> Profile(string userId)
@@ -44,11 +32,35 @@ public class UserController : BaseController
             if (profileViewModel == null)
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
+            profileViewModel.FavoriteGenres = await genreService.GetForUserAsync(userId);
+
+            if (profileViewModel == null)
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+
             return View(profileViewModel);
         }
         catch (Exception)
         {
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
+    }
+
+    public async Task<IActionResult> Works(string userId)
+    {
+        try
+        {
+            IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
+
+            return View("All", new { compositionViewModels });
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
+    }
+
+    public async Task<IActionResult> DeletedWorks()
+    {
+        return View();
     }
 }

@@ -8,10 +8,13 @@
         ApplicationUser? user = await UserManager.FindByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
         <li class="nav-item">
-                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Profile" asp-route-userId="@User.FindFirstValue(ClaimTypes.NameIdentifier)" title="Manage">
+                @if (!string.IsNullOrWhiteSpace(user.ProfilePictureUrl) && user.ProfilePictureUrl != string.Empty)
+                {
                     <img class="rounded-circle me-1" src="@user.ProfilePictureUrl" height="25" width="25">
-                    Hello, @User.Identity?.Name!
-                </a>
+                }
+                Hello, @User.Identity?.Name!
+            </a>
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

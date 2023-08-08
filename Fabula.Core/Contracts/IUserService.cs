@@ -7,4 +7,6 @@ public interface IUserService
     string? GetUserId();
 
     Task<UserProfileViewModel?> GetProfileAsync(string userId);
+
+    Task<int> GetCountAsync();
 }

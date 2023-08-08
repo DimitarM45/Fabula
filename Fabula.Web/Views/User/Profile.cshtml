@@ -1,28 +1,53 @@
-﻿@model UserProfileViewModel
+﻿@using System.Security.Claims
+@model UserProfileViewModel
 @{
     ViewData["Title"] = $"{Model.Username} - Profile";
 }
 
 <div class="container">
-    <h2>User Profile</h2>
     <div class="row">
-        <div class="col-md-4">
-            <img src="@Url.Content(Model.ProfilePictureUrl)" alt="Image not found :(" class="img-responsive" />
-        </div>
-        <div class="col-md-8">
-            <dl class="dl-horizontal">
-                <dd>@($"@{@Model.Username}")</dd>
-                <dd>@($"{Model.FirstName} {Model.LastName}")</dd>
-            </dl>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            @if (!string.IsNullOrWhiteSpace(Model.WebsiteUrl) && Model.WebsiteUrl != string.Empty)
-            {
-                <a>@Model.WebsiteUrl</a>
-            }
-            <p>@Model.Bio</p>
+        <div class="col-sm">
+            <div class="card text-bg-primary">
+                <div class="card-body">
+                    <div class="col">
+                        <img class="rounded-circle me-1" src="@Model.ProfilePictureUrl" alt="Image not found :(" height="100" width="100" />
+                    </div>
+                    <div class="col">
+                        @foreach (GenreViewModel genre in Model.FavoriteGenres)
+                        {
+                            <div class="row">
+                                <a style="text-decoration: none; color: midnightblue"
+                                   asp-controller="Composition"
+                                   asp-action="All"
+                                   asp-route-selectedGenres="@genre.Id"
+                                   asp-route-currentPage=""
+                                   asp-route-searchTerm=""
+                                   asp-route-dateSorting=""
+                                   asp-route-ratingSorting="">@genre.Name</a>
+                            </div>
+                        }
+                    </div>
+                    <h5 class="card-title">@($"@{Model.Username}")</h5>
+                    <h4 class="card-title">@($"{Model.FirstName} {Model.LastName}")</h4>
+                    @if ((User?.Identity?.IsAuthenticated ?? false) && User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Id)
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="card-link btn btn-info">Manage Account</a>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text text-black">
+                                @Model.Bio
+                                <a class="card-link">@Model.WebsiteUrl</a>
+                            </p>
+                            <a class="card-link" asp-controller="User" asp-action="Followers">Followers: @Model.Followers</a>
+                            <a class="card-link" asp-controller="User" asp-action="Works" asp-route-userId="@Model.Id">Works: @Model.WrittenCompositions</a>
+                            <a class="card-link" asp-controller="User" asp-action="Favorites">Favorite works: @Model.FavoriteCompositions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

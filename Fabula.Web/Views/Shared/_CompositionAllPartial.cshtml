@@ -1,17 +1,25 @@
 ﻿@using System.Globalization;
 @model CompositionViewModel
 
-<div class="card" style="width: 22rem; margin-block: 2rem">
+<div class="card text-bg-primary h-100">
     <img class="card-img-top" src="@Model.CoverUrl" alt="Image not found :(">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none" class="card-link">@Model.Author</a></h6>
+        <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none" class="card-link text-info">@Model.Author</a></h6>
         <p class="card-text">@Model.Synopsis</p>
         @for (int i = 0; i < Model.Genres.Count(); i++)
         {
             if (i < 2)
             {
-                <a asp-controller="Composition" asp-action="All" asp-route-genreid="@Model.Genres.ToArray()[i].Id" style="font-size: small">@Model.Genres.ToArray()[i].Name</a>
+                <a asp-controller="Composition"
+                   asp-action="All"
+                   asp-route-currentPage="1"
+                   asp-route-selectedGenres="@Model.Genres.ToArray()[i].Id"
+                   asp-route-searchTerm=""
+                   asp-route-dateSorting=""
+                   asp-route-ratingSorting="" class="text-info">
+                    @Model.Genres.ToArray()[i].Name
+                </a>
             }
         }
         @if (Model.Rating == null)
@@ -30,5 +38,5 @@
         }
         <h6 class="card-subtitle">Posted on: @Model.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
     </div>
-    <a asp-action="Read" asp-route-compositionid="@Model.Id" class="btn btn-primary">Read</a>
+    <a asp-action="Read" asp-route-compositionid="@Model.Id" class="btn btn-info">Read</a>
 </div>
