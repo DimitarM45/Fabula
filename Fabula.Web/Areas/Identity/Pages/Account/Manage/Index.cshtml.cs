@@ -1,10 +1,11 @@
 ﻿namespace Fabula.Web.Areas.Identity.Pages.Account.Manage;
 
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
 using Data.Models;
+
+using static Common.Messages.ErrorMessages.Shared;
+using static Common.ValidationConstants.ApplicationUser;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -26,39 +27,31 @@ public class IndexModel : PageModel
         _signInManager = signInManager;
     }
 
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
     public string Username { get; set; }
+    
+    public string ProfilePictureUrl { get; set; }
 
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
+    public string Bio { get; set; }
+
     [TempData]
     public string StatusMessage { get; set; }
 
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
     [BindProperty]
     public InputModel Input { get; set; }
 
-    /// <summary>
-    ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-    ///     directly from your code. This API may change or be removed in future releases.
-    /// </summary>
     public class InputModel
     {
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
-        [Phone]
         [Display(Name = "Phone number")]
+        [Phone(ErrorMessage = InvalidStringErrorMessage)]
         public string PhoneNumber { get; set; }
+
+        [Display(Name = "Profile picture url")]
+        [Url(ErrorMessage = InvalidStringErrorMessage)]
+        public string ProfilePictureUrl { get; set; }
+
+        [StringLength(BioMaxLength, MinimumLength = BioMinLength,
+            ErrorMessage = StringLengthErrorMessage)]
+        public string Bio { get; set; }
     }
 
     private async Task LoadAsync(ApplicationUser user)
@@ -71,7 +64,9 @@ public class IndexModel : PageModel
 
         Input = new InputModel
         {
-            PhoneNumber = phoneNumber
+            PhoneNumber = phoneNumber,
+            ProfilePictureUrl = user.ProfilePictureUrl,
+            Bio = user.Bio
         };
     }
 
@@ -80,9 +75,7 @@ public class IndexModel : PageModel
         ApplicationUser user = await _userManager.GetUserAsync(User);
 
         if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
         await LoadAsync(user);
 
@@ -94,25 +87,49 @@ public class IndexModel : PageModel
         ApplicationUser user = await _userManager.GetUserAsync(User);
 
         if (user == null)
-        {
-            return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-        }
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
         if (!ModelState.IsValid)
         {
             await LoadAsync(user);
+
             return Page();
         }
 
         string phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-        if (Input.PhoneNumber != phoneNumber)
+        if (Input.PhoneNumber != phoneNumber ||
+            Input.ProfilePictureUrl != user.ProfilePictureUrl ||
+            Input.Bio != user.Bio)
         {
             IdentityResult setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
 
             if (!setPhoneResult.Succeeded)
             {
                 StatusMessage = "Unexpected error when trying to set phone number.";
+
+                return RedirectToPage();
+            }
+
+            user.Bio = Input.Bio;
+
+            IdentityResult setBioResult = await _userManager.UpdateAsync(user);
+
+            if (!setBioResult.Succeeded)
+            {
+                StatusMessage = "Unexpected error when trying to set bio.";
+
+                return RedirectToPage();
+            }
+
+            user.ProfilePictureUrl = Input.ProfilePictureUrl;
+
+            IdentityResult setProfilePictureUrlResult = await _userManager.UpdateAsync(user);
+
+            if (!setProfilePictureUrlResult.Succeeded)
+            {
+                StatusMessage = "Unexpected error when trying to set profile picture url.";
+
                 return RedirectToPage();
             }
         }

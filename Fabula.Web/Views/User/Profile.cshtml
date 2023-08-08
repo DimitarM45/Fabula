@@ -1,5 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model UserProfileViewModel
 @{
+    ViewData["Title"] = $"{Model.Username} - Profile";
 }
+
+<div class="container">
+    <h2>User Profile</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.ProfilePictureUrl)" alt="Image not found :(" class="img-responsive" />
+        </div>
+        <div class="col-md-8">
+            <dl class="dl-horizontal">
+                <dd>@($"@{@Model.Username}")</dd>
+                <dd>@($"{Model.FirstName} {Model.LastName}")</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @if (!string.IsNullOrWhiteSpace(Model.WebsiteUrl) && Model.WebsiteUrl != string.Empty)
+            {
+                <a>@Model.WebsiteUrl</a>
+            }
+            <p>@Model.Bio</p>
+        </div>
+    </div>
+</div>

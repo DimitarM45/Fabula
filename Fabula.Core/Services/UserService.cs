@@ -49,14 +49,14 @@ public class UserService : IUserService
             LastName = user.LastName,
             Bio = user.Bio,
             ProfilePictureUrl = user.ProfilePictureUrl,
-            WebsiteURL = user.WebsiteURL,
+            WebsiteUrl = user.WebsiteURL,
             Followers = user.Followers.Select(f => new UserViewModel()
-                {
-                    Id = f.Id.ToString(),
-                    Username = user.UserName,
-                    ProfilePictureUrl = user.ProfilePictureUrl
-                })
-                .ToList()
+            {
+                Id = f.Id.ToString(),
+                Username = user.UserName,
+                ProfilePictureUrl = user.ProfilePictureUrl
+            })
+            .ToList()
         };
 
         return userProfile;

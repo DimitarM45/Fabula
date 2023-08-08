@@ -19,8 +19,15 @@ public class GenreController : BaseController
 
     public async Task<IActionResult> All()
     {
-        IEnumerable<AllGenreViewModel> genreViewModels = await genreService.GetAllAsync();
+        try
+        {
+            IEnumerable<AllGenreViewModel> genreViewModels = await genreService.GetAllAsync();
 
-        return View(genreViewModels);
+            return View(genreViewModels);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 }

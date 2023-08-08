@@ -44,15 +44,24 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> All([FromQuery] CompositionQueryModel query)
     {
-        CompositionQueryModel compositionQueryModel = await compositionService.GetAllAsync(
-                query.SelectedGenres,
-                query.SearchTerm, 
-                query.CurrentPage, 
-                query.CompositionsPerPage,
-                query.DateSorting, 
-                query.RatingSorting);
+        CompositionQueryModel? compositionQueryModel = null;
 
-        compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
+        try
+        {
+            compositionQueryModel = await compositionService.GetAllAsync(
+                    query.SelectedGenres,
+                    query.SearchTerm,
+                    query.CurrentPage,
+                    query.CompositionsPerPage,
+                    query.DateSorting,
+                    query.RatingSorting);
+
+            compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
 
         compositionQueryModel.CurrentPage = query.CurrentPage;
 
@@ -65,7 +74,14 @@ public class CompositionController : BaseController
     {
         CompositionFormModel compositionFormModel = new CompositionFormModel();
 
-        compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+        try
+        {
+            compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
 
         return View(compositionFormModel);
     }
@@ -74,29 +90,36 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Create(CompositionFormModel formModel)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            ModelState.AddModelError("", "Invalid input when creating composition!");
+            if (!ModelState.IsValid)
+            {
+                formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
-            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+                ModelState.AddModelError("", "Invalid input when creating composition!");
 
-            return View(formModel);
+                return View(formModel);
+            }
+
+            string? userId = userService.GetUserId();
+
+            if (userId == null)
+            {
+                formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+                TempData["Error"] = FailedCreatingCompositionErrorMessage;
+
+                return View(formModel);
+            }
+
+            string compositionId = await compositionService.AddAsync(formModel, userId);
+
+            return RedirectToAction("Read", new { CompositionId = compositionId });
         }
-
-        string? userId = userService.GetUserId();
-
-        if (userId == null)
+        catch (Exception)
         {
-            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
-
-            TempData["Error"] = FailedCreatingCompositionErrorMessage;
-
-            return View(formModel);
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
-
-        string compositionId = await compositionService.AddAsync(formModel, userId);
-
-        return RedirectToAction("Read", new { CompositionId = compositionId });
     }
 
     [HttpGet]
@@ -109,18 +132,13 @@ public class CompositionController : BaseController
             CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
 
             if (compositionReadViewModel == null)
-            {
-                // TODO: wrap all db requests in a try catch
-
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-            }
 
             compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
             compositionReadViewModel.Comments = await commentService.GetForPreviewByIdAsync(compositionId);
             compositionReadViewModel.Ratings = await ratingService.GetRatingsByIdAsync(compositionId);
 
             //TODO: Add tags if necessary
-
 
             return View(compositionReadViewModel);
         }
@@ -159,35 +177,49 @@ public class CompositionController : BaseController
             return View();
         }
 
-        CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
+        try
+        {
+            CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
-        if (userId != compositionFormModel?.AuthorId && !await accountService.IsInRoleAsync(userId, "Admin"))
-            return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
+            if (compositionFormModel == null)
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
-        if (compositionFormModel == null)
+            if (userId != compositionFormModel.AuthorId && !await accountService.IsInRoleAsync(userId, "Admin"))
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
+
+            compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+            return View(compositionFormModel);
+        }
+        catch (Exception)
+        {
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-
-        compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
-
-        return View(compositionFormModel);
+        }
     }
 
     [HttpPost]
 
     public async Task<IActionResult> Edit(CompositionFormModel formModel)
     {
-        if (!ModelState.IsValid)
+        try
         {
-            ModelState.AddModelError("", "Invalid input when creating composition!");
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Invalid input when creating composition!");
 
-            formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+                formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
-            return View(formModel);
+                return View(formModel);
+            }
+
+            await compositionService.UpdateAsync(formModel);
+
+            return RedirectToAction("Read", new { CompositionId = formModel.Id });
         }
-
-        await compositionService.UpdateAsync(formModel);
-
-        return RedirectToAction("Read", new { CompositionId = formModel.Id });
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 
     [HttpGet]
@@ -228,7 +260,7 @@ public class CompositionController : BaseController
         }
 
         if (isRestored)
-            return RedirectToAction("Read");
+            return RedirectToAction("Read", new { CompositionId = compositionId});
 
         TempData["FailedRestore"] = FailedRestoreErrorMessage;
 

@@ -15,13 +15,26 @@
                 <input asp-for="Username" class="form-control" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating" style="margin-top: 2rem">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <div class="form-floating" style="margin-top: 2rem">
+                <input asp-for="Input.ProfilePictureUrl" class="form-control" />
+                <label asp-for="Input.ProfilePictureUrl" class="form-label"></label>
+                <span asp-validation-for="Input.ProfilePictureUrl" class="text-danger"></span>
+            </div>
+            <div class="form-floating" style="margin-top: 2rem">
+                <textarea asp-for="Input.Bio" class="form-control"></textarea>
+                <label asp-for="Input.Bio" class="form-label"></label>
+                <span asp-validation-for="Input.Bio" class="text-danger"></span>
+            </div>
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary" style="margin-top: 2rem">Save</button>
         </form>
+    </div>
+    <div class="col-lg-6">
+        <img class="img-thumbnail img-fluid" src="@Model.Input.ProfilePictureUrl" height="400" width="400"/>
     </div>
 </div>
 

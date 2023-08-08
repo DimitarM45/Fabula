@@ -30,7 +30,7 @@ public class UserProfileViewModel
 
     public string? Bio { get; set; }
 
-    public string? WebsiteURL { get; set; }
+    public string? WebsiteUrl { get; set; }
 
     public IEnumerable<UserViewModel> Followers { get; set; }
 

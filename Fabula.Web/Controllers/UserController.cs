@@ -4,6 +4,7 @@ using Core.Contracts;
 using ViewModels.Composition;
 
 using Microsoft.AspNetCore.Mvc;
+using Fabula.Web.ViewModels.User;
 
 public class UserController : BaseController
 {
@@ -20,17 +21,34 @@ public class UserController : BaseController
 
     public async Task<IActionResult> MyWorks()
     {
-        string? userId = userService.GetUserId();
+        try
+        {
+            string? userId = userService.GetUserId();
 
-        IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
+            IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
 
-        return View(compositionViewModels);
+            return View(compositionViewModels);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 
     public async Task<IActionResult> Profile(string userId)
     {
+        try
+        {
+            UserProfileViewModel? profileViewModel = await userService.GetProfileAsync(userId);
 
+            if (profileViewModel == null)
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
-        return View();
+            return View(profileViewModel);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 }

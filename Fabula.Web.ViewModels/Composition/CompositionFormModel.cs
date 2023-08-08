@@ -30,12 +30,11 @@ public class CompositionFormModel
 
     public string Title { get; set; } = null!;
 
+    [Url(ErrorMessage = InvalidStringErrorMessage)]
     [Required(AllowEmptyStrings = false, 
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(UrlMaxLength, MinimumLength = UrlMinLength,
         ErrorMessage = StringLengthErrorMessage)]
-    [RegularExpression(UrlRegex, 
-        ErrorMessage = InvalidStringErrorMessage)]
 
     public string CoverUrl { get; set; } = null!;
 
