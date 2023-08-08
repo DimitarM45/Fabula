@@ -1,9 +1,3 @@
-# Fabula
-## Welcome to Fabula, A web application built for the purposes of sharing, and interacting with user-written stories and other literary pieces. (SoftUni ASP.NET Core Advanced Project)
-![resources](https://docs.google.com/drawings/d/e/2PACX-1vQmPs7h_ddV2VTg5-pLqY93AP6PvxxctLXX66WlQhJZ5dHcB2EO6Y2Fghdv7FtCYaKXqQkw0AacFcbc/pub?w=1784&h=873)
-
-[^1]: The Fabula entity diagram illustrates the entities used for data structuring and the relationships between them. Fabula uses Microsoft SQL Server (MSSQL) to manage its data.
-
 <a name="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
@@ -14,29 +8,28 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/DimitarM45/Fabula">
-    <img src="Fabula.Web/wwwroot/images/Fabula Logo.png" alt="Logo" width="1280" height="720">
+    <img src="Fabula.Web/wwwroot/images/FabulaLogo.png" alt="Logo" width="1000" height="500">
   </a>
 
-<h3 align="center">Fabula</h3>
+<h1 align="center">Fabula</h1>
 
   <p align="center">
-    Welcome to Fabula, A web application built for the purposes of sharing, and interacting with user-written stories and other literary pieces.
+    Welcome to Fabula, a web application built for the purposes of sharing, and interacting with user-written literary pieces.
     <br />
     <a href="https://github.com/DimitarM45/Fabula"><strong>Explore the docs »</strong></a>
   </p>
 </div>
 
-
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![License][license-shield]][license-url]
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -48,10 +41,7 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#overview-of-core-concept-and-functionality">Overview of core concept and functionality</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -60,7 +50,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Fabula is a web project built entirely with ASP.NET Core, using Microsoft SQL Server (SQL) as its database. It also makes use of Bootstrap and MDBootstrap and some JavaScript libraries that provide additional functionality and aid in making the website more interactive and user-friendly. The platform was built as part of my assignment for [SoftUni's C# Web Advanced Course](https://softuni.bg/modules/108/csharp-web/1404) final exam.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -68,27 +58,24 @@
 
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
+* [SimpleMDE Markdown Editor](https://simplemde.com/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Overview of core concept and functionality
 
+Below is a thorough explanation of the main functionality of Fabula that provides clarity and is mostly meant for the examiner(s) should they find it necessary.
+The explanations are separated into 7 categories, one for each entity.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+The following image is a representation of Fabula's database structure.
 
-<!-- CONTRIBUTING -->
-## Contributing
+![resources](https://docs.google.com/drawings/d/e/2PACX-1vQmPs7h_ddV2VTg5-pLqY93AP6PvxxctLXX66WlQhJZ5dHcB2EO6Y2Fghdv7FtCYaKXqQkw0AacFcbc/pub?w=1784&h=873)
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Composition
+The composition entity is the core of Fabula's concept and, therefore, database structure. Compositions or "works" represent the user-written literary pieces. I chose the word "composition" since it best encapsulates all possible literary genres. Compositions are categorized by genre, where each work can have at least one or multiple genres. Each composition also has an author, comments, ratings and it may itself be a part of a list.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### Genre
+The genre entity is paramount in categorizing user-created works. Fabula has a relatively big collection of genres which users could navigate with ease and add their desired genres to their works. Genres can also be favorited w  
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
