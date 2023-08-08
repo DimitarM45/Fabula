@@ -67,15 +67,35 @@ Fabula is a web project built entirely with ASP.NET Core, using Microsoft SQL Se
 Below is a thorough explanation of the main functionality of Fabula that provides clarity and is mostly meant for the examiner(s) should they find it necessary.
 The explanations are separated into 7 categories, one for each entity.
 
-The following image is a representation of Fabula's database structure.
+The following image is a representation of Fabula's database structure[^1].
 
 ![resources](https://docs.google.com/drawings/d/e/2PACX-1vQmPs7h_ddV2VTg5-pLqY93AP6PvxxctLXX66WlQhJZ5dHcB2EO6Y2Fghdv7FtCYaKXqQkw0AacFcbc/pub?w=1784&h=873)
 
-### Composition
-The composition entity is the core of Fabula's concept and, therefore, database structure. Compositions or "works" represent the user-written literary pieces. I chose the word "composition" since it best encapsulates all possible literary genres. Compositions are categorized by genre, where each work can have at least one or multiple genres. Each composition also has an author, comments, ratings and it may itself be a part of a list.
+## Composition
+The composition entity is the core of Fabula's concept and, therefore, database structure. Compositions or "works" represent the user-written literary pieces. I chose the word "composition" since it best encapsulates all possible literary genres. Compositions are categorized by genre, where each work can have at least one or multiple genres. Each composition also has an author, comments, ratings and it may itself be a part of a list. Works can be tagged as NSFW if they contain explicit content. Compositions support complete CRUD operations (delete is implemented as soft-delete). If a work is deleted it can be restored within 30 days ("permanently" deleted works are still only soft-deleted, however they're impossible to restore with user capabilities).
 
-### Genre
-The genre entity is paramount in categorizing user-created works. Fabula has a relatively big collection of genres which users could navigate with ease and add their desired genres to their works. Genres can also be favorited w  
+## Genre
+The genre entity is paramount in categorizing user-created works. Fabula has a relatively big collection of genres which users could navigate with ease and add their desired genres to their works. Genres can also be favorited by users in the Identity/Account/Manage page of the application. As of now favoriting genres only serves the purpose of having them displayed on one's profile for others to see. Genres don't support CRUD operations as they are not intended to.
+
+## List
+The list entity represents reading lists of user-curated stories. Any user can create a reading list by adding any existing work to one. Lists are automatically marked as NSFW depending on whether they contain any NSFW stories. Lists support complete CRUD operations (delete is implemented as soft-delete). Each list has its own follows (people who've followed/liked the list).
+
+## Rating
+The rating entity is related to compositions. It represents user ratings on works on a scale of 1 (worst) to 5 (best). Ratings can only be created, read and deleted (soft-delete). 
+
+## Comment
+The comment entity corresponds to user-written comments on works. Comments support only creation, reading and deletion (soft-delete) and may have replies. Comments have their own author and can be liked.
+
+## User
+The user entity (provided by ASP.NET Core Identity) provides structure for user account and profile data. I have extended it to ApplicationUser in order to add some new properties: first name, last name, bio, profile picture url, website url, birthdate etc. ASP.NET Core Identity provides us with a system that governs users, authentication and authorization, which I have modified in certain ways (e.g. registration and login logic have been moved to AccountController).
+### Roles:
+The roles are seeded automatically upon creation of the database.
+
+#### User role
+The default role that is given to everybody upon successful registration. Has no special permissions (requied as per the exam regulations).
+
+#### Admin role
+The admin role is a special role granting any users that possess it special permissions (requied as per the exam regulations). It allows deletion and modification of any and all works and grants access to the admin area.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -95,6 +115,7 @@ Project Link: [https://github.com/DimitarM45/Fabula](https://github.com/github_u
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+[^1]:Disclaimer: For simplicity's sake not all existing entity relationships are shown on the diagram. Some of these relationships have been documented in the explanation section.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -116,4 +137,3 @@ Project Link: [https://github.com/DimitarM45/Fabula](https://github.com/github_u
 [Bootstrap-url]: https://getbootstrap.com
 [JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
 [JQuery-url]: https://jquery.com 
-
