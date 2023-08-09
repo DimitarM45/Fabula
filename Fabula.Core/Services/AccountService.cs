@@ -74,11 +74,11 @@ public class AccountService : IAccountService
         return (result, user.Id.ToString());
     }
 
-    public async Task AddRoleToAccountAsync(string userId)
+    public async Task AddRoleToAccountAsync(string userId, string role)
     {
         ApplicationUser user = await userManager.FindByIdAsync(userId);
 
-        await userManager.AddToRoleAsync(user, "User");
+        await userManager.AddToRoleAsync(user, role);
     }
 
     public async Task SignInAccountAsync(string userId)

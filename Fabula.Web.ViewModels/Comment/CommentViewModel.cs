@@ -17,8 +17,6 @@ public class CommentViewModel
 
     public int Likes { get; set; }
 
-    public string? CompositionId { get; set; }
-
     public DateTime PublishedOn { get; set; }
 
     public IEnumerable<CommentViewModel> Replies { get; set; }

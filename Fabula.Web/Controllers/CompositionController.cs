@@ -2,12 +2,16 @@
 
 using Core.Contracts;
 using Core.ServiceModels;
+using Common.Messages.Enums;
 using ViewModels.Composition;
 
+using static Common.Messages.LoggerMessages;
+using static Common.Messages.ErrorMessages.Shared;
 using static Common.Messages.ErrorMessages.Composition;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+
 using System.Security.Claims;
 
 public class CompositionController : BaseController
@@ -16,28 +20,24 @@ public class CompositionController : BaseController
 
     private readonly ICompositionService compositionService;
 
-    private readonly ICommentService commentService;
-
-    private readonly IRatingService ratingService;
-
     private readonly IUserService userService;
 
     private readonly IAccountService accountService;
 
+    private readonly ILogger<CompositionController> logger;
+
     public CompositionController(
         IGenreService genreService,
         ICompositionService compositionService,
-        ICommentService commentService,
-        IRatingService ratingService,
         IUserService userService,
-        IAccountService accountService)
+        IAccountService accountService,
+        ILogger<CompositionController> logger)
     {
         this.genreService = genreService;
         this.compositionService = compositionService;
-        this.commentService = commentService;
-        this.ratingService = ratingService;
         this.userService = userService;
         this.accountService = accountService;
+        this.logger = logger;
     }
 
     [HttpGet]
@@ -46,6 +46,8 @@ public class CompositionController : BaseController
     public async Task<IActionResult> All([FromQuery] CompositionQueryModel query)
     {
         CompositionQueryModel? compositionQueryModel = null;
+
+        string? userId = userService.GetUserId();
 
         try
         {
@@ -59,8 +61,18 @@ public class CompositionController : BaseController
 
             compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            logger.LogWarning(string.Format(Warning,
+                e.Message, 
+                e.StackTrace, 
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName + 
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
@@ -75,12 +87,24 @@ public class CompositionController : BaseController
     {
         CompositionFormModel compositionFormModel = new CompositionFormModel();
 
+        string? userId = userService.GetUserId();
+
         try
         {
             compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
@@ -128,6 +152,8 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Read(string compositionId)
     {
+        string? userId = userService.GetUserId();
+
         try
         {
             CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
@@ -136,15 +162,23 @@ public class CompositionController : BaseController
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
 
             compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
-            compositionReadViewModel.Comments = await commentService.GetForPreviewByIdAsync(compositionId);
-            compositionReadViewModel.Ratings = await ratingService.GetRatingsByIdAsync(compositionId);
 
-            //TODO: Add tags if necessary
+            //TODO: Add comments, ratings, comments, tags if necessary
 
             return View(compositionReadViewModel);
         }
-        catch
+        catch (Exception e)
         {
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
@@ -157,7 +191,7 @@ public class CompositionController : BaseController
         {
             await compositionService.DeleteByIdAsync(compositionId);
 
-            return RedirectToAction("Works", "User", new {UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)});
+            return RedirectToAction("Works", "User", new { UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) });
         }
         catch (Exception)
         {
@@ -261,7 +295,7 @@ public class CompositionController : BaseController
         }
 
         if (isRestored)
-            return RedirectToAction("Read", new { CompositionId = compositionId});
+            return RedirectToAction("Read", new { CompositionId = compositionId });
 
         TempData["FailedRestore"] = FailedRestoreErrorMessage;
 

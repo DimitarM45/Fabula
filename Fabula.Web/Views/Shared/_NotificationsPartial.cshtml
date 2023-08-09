@@ -1,0 +1,21 @@
+﻿﻿@using Fabula.Common.Messages.Enums;
+
+@if (TempData.ContainsKey(NotificationType.ErrorMessage.ToString()))
+{
+    <script>toastr.error('@TempData[NotificationType.ErrorMessage.ToString()]');</script>
+}
+
+@if (TempData.ContainsKey(NotificationType.WarningMessage.ToString()))
+{
+    <script>toastr.warning('@TempData[NotificationType.WarningMessage.ToString()]');</script>
+}
+
+@if (TempData.ContainsKey(NotificationType.InformationMessage.ToString()))
+{
+    <script>toastr.info('@TempData[NotificationType.InformationMessage.ToString()]');</script>
+}
+
+@if (TempData.ContainsKey(NotificationType.SuccessMessage.ToString()))
+{
+    <script>toastr.success('@TempData[NotificationType.SuccessMessage.ToString()]');</script>
+}

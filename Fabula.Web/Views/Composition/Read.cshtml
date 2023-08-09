@@ -15,50 +15,52 @@
 }
 
 <div class="container">
-    @foreach (RatingViewModel rating in Model.Ratings)
-    {
-        <partial name="_RatingPreviewPartial" model="rating"></partial>
-    }
-    <div class="card text-bg-info">
-        <div class="col-lg">
-            <div class="card-body">
+    <div class="row">
+        <div class="col-sm-2">
+            <a asp-controller="Rating" asp-action="All" asp-route-compositionid="@Model.Id" class="btn btn-primary">All ratings</a>
+            @await Component.InvokeAsync("RatingsPreview", new { numberOfRatings = 6, compositionId = Model.Id})
+        </div>
+        <div class="col-md-8">
+            <div class="card text-bg-info">
+                <div class="card-body">
                     <img src="@Model.CoverUrl" class="card-img-top" alt="Image not found :(" />
-                <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
-                <p class="text-center" style="text-decoration: none; font-size: small">
-                    Written by:
-                    <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
-                </p>
-                <br />
-                <p class="text-center" style="font-size: small">
-                    Genres:
-                </p>
-                <p class="text-center" style="text-decoration: none; font-size: small">
-                    @for (int i = 0; i < Model.Genres.Count(); i++)
+                    <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
+                    <p class="text-center" style="text-decoration: none; font-size: small">
+                        Written by:
+                        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
+                    </p>
+                    <br />
+                    <p class="text-center" style="font-size: small">
+                        Genres:
+                    </p>
+                    <p class="text-center" style="text-decoration: none; font-size: small">
+                        @for (int i = 0; i < Model.Genres.Count(); i++)
+                        {
+                            <a asp-controller="Composition"
+                               asp-action="All"
+                               asp-route-currentPage=""
+                               asp-route-selectedGenres="@Model.Genres.ToArray()[i].Id"
+                               asp-route-searchTerm=""
+                               asp-route-dateSorting=""
+                               asp-route-ratingSorting="">
+                                @Model.Genres.ToArray()[i].Name
+                            </a>
+                        }
+                    </p>
+                    <textarea disabled>@Model.Content</textarea>
+                    @if (isAuthenticated && isAuthor || isAdmin)
                     {
-                        <a asp-controller="Composition"
-                           asp-action="All"
-                           asp-route-currentPage=""
-                           asp-route-selectedGenres="@Model.Genres.ToArray()[i].Id"
-                           asp-route-searchTerm=""
-                           asp-route-dateSorting=""
-                           asp-route-ratingSorting="">
-                            @Model.Genres.ToArray()[i].Name
-                        </a>
+                        <div class="text-center" style="margin-top: 2rem">
+                            <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary mt-3">Edit</a>
+                        </div>
                     }
-                </p>
-                <textarea disabled>@Model.Content</textarea>
-                @if (isAuthenticated && isAuthor || isAdmin)
-                {
-                    <div class="text-center" style="margin-top: 2rem">
-                        <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary mt-3">Edit</a>
-                    </div>
-                }
+                </div>
             </div>
         </div>
-        @foreach (CommentCompositionViewModel comment in Model.Comments)
-        {
-            <partial name="_CommentPreviewPartial" model="comment"></partial>
-        }
+        <div class="col-sm-2">
+            <a asp-controller="Comment" asp-action="All" asp-route-compositionid="@Model.Id" class="btn btn-primary text-center">All comments</a>
+            @await Component.InvokeAsync("CommentsPreview", new { numberOfComments = 6, compositionId = Model.Id})
+        </div>
     </div>
 </div>
 

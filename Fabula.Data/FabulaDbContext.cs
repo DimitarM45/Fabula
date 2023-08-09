@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using System.Reflection;
+using System.Reflection.Emit;
 
 public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {

@@ -47,7 +47,7 @@ public class AccountController : BaseController
 
             if (userResult.Result.Succeeded)
             {
-                await accountService.AddRoleToAccountAsync(userResult.UserId);
+                await accountService.AddRoleToAccountAsync(userResult.UserId, "User");
 
                 await accountService.SignInAccountAsync(userResult.UserId);
 

@@ -1,13 +1,13 @@
 ﻿namespace Fabula.Common.Messages;
 
 /// <summary>
-/// Custom validation error messages when validating incoming data.
+/// Custom validation error messages when validating incoming data and visualizing notifications.
 /// </summary>
 
 public static class ErrorMessages
 {
     /// <summary>
-    /// Error messages shared by multiple form models or actions.
+    /// Error messages shared by multiple form models and/or actions and notifications.
     /// </summary>
 
     public static class Shared
@@ -17,10 +17,12 @@ public static class ErrorMessages
         public const string StringRequiredErrorMessage = "{0} is required!";
 
         public const string InvalidStringErrorMessage = "{0} is invalid!";
+
+        public const string FailedResourceRetrieval = "An error occurred trying to retrieve your requested resource! Please try again!";
     }
 
     /// <summary>
-    /// Error messages used for the composition form models or related actions./>
+    /// Error messages used for the composition form models and/or related actions and notifications./>
     /// </summary>
 
     public static class Composition
@@ -33,6 +35,10 @@ public static class ErrorMessages
 
         public const string FailedEditingCompositionErrorMessage = "An error occurred trying to edit your story!";
     }
+
+    /// <summary>
+    /// Error messages used for the authentication form models and/or related actions and notifications./>
+    /// </summary>
 
     public static class Authentication
     {

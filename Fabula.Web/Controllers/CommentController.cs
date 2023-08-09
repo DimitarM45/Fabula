@@ -1,20 +1,33 @@
 ﻿namespace Fabula.Web.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
+using Core.Contracts;
+using ViewModels.Comment;
 
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 public class CommentController : BaseController
 {
-    public async Task<IActionResult> All(string compositionId)
+    private readonly ICommentService commentService;
+
+    public CommentController(ICommentService commentService)
     {
-        return View();
+        this.commentService = commentService;
     }
 
-    [ChildActionOnly]
-
-    public async Task<IActionResult> CompositionPreview(string compositionId)
+    public async Task<IActionResult> All(string compositionId)
     {
-        return View("_CommentPreviewPartial");
+        try
+        {
+            CommentsAllViewModel? commentViewModels = await commentService.GetAllByIdAsync(compositionId);
+
+            if (commentViewModels == null)
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
+
+            return View(commentViewModels);
+        }
+        catch (Exception)
+        {
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 }

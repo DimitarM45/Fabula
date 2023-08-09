@@ -16,7 +16,7 @@ public interface IAccountService
 
     Task<(SignInResult Result, string UserId)> LoginAccountAsync(LoginFormModel formModel);
 
-    Task AddRoleToAccountAsync(string userId);
+    Task AddRoleToAccountAsync(string userId, string role);
 
     Task<bool> IsInRoleAsync(string userId, string roleName);
 }

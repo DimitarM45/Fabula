@@ -18,17 +18,16 @@ public class CommentService : ICommentService
         this.dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<CommentViewModel>> GetAllByIdAsync(string compositionId)
+    public async Task<CommentsAllViewModel?> GetAllByIdAsync(string compositionId)
     {
         IEnumerable<CommentViewModel> commentViewModels = await dbContext.Comments
             .AsNoTracking()
-            .Where(c => c.DeletedOn == null)
+            .Where(c => c.DeletedOn == null && c.CompositionId.ToString() == compositionId)
             .Select(c => new CommentViewModel()
             {
                 Id = c.Id.ToString(),
                 Content = c.Content,
                 PublishedOn = c.PublishedOn,
-                CompositionId = c.CompositionId.ToString(),
                 Likes = c.Likes.Count(),
                 Replies = c.Replies.Where(r => r.DeletedOn == null)
                     .Select(r => new CommentViewModel()
@@ -36,14 +35,28 @@ public class CommentService : ICommentService
                         Id = r.Id.ToString(),
                         Content = r.Content,
                         PublishedOn = r.PublishedOn,
-                        CompositionId = r.CompositionId.ToString(),
                         Likes = c.Likes.Count()
                     })
                     .ToList()
             })
             .ToListAsync();
 
-        return commentViewModels;
+        Composition? composition = await dbContext.Compositions
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId);
+
+        if (composition == null)
+            return null;
+
+        string compositionTitle = composition.Title;
+
+        CommentsAllViewModel commentsAllViewModel = new CommentsAllViewModel()
+        {
+            CompositionId = compositionId,
+            CompositionTitle = compositionTitle
+        };
+
+        return commentsAllViewModel;
     }
 
     public async Task<IEnumerable<CommentCompositionViewModel>> GetForPreviewByIdAsync(string compositionId)
@@ -55,7 +68,6 @@ public class CommentService : ICommentService
             {
                 Id = c.Id.ToString(),
                 Content = c.Content,
-                CompositionId = c.CompositionId.ToString(),
                 Likes = c.Likes.Count(),
                 PublishedOn = c.PublishedOn,
                 Replies = c.Replies.Count()

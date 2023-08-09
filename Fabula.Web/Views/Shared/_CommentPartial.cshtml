@@ -1,0 +1,28 @@
+﻿@model CommentViewModel
+
+<div class="container">
+    <div class="card text-bg-primary">
+        <div class="card-body">
+            <div class="col">
+                <img class="rounded-circle me-1" src="@Model?.Author?.ProfilePictureUrl" alt="Image not found :(" height="30" width="30" />
+            </div>
+            <h5 class="card-title">
+                <a asp-controller="User" asp-action="Profile" asp-route-userId="@Model?.Author?.Id" style="text-decoration: none">
+                    ($"@{
+                        @Model?.Author?.Username
+                    }")
+                </a>
+            </h5>
+            <p class="card-text">@Model?.Content</p>
+            <div class="card-footer">
+                <p class="card-text">Posted on: @Model?.PublishedOn.ToString()</p>
+                <a class="card-link" asp-controller="Comment" asp-action="Read" asp-route-commentId="@Model?.Id" style="text-decoration: none">
+                    @Model?.Likes likes
+                </a>
+                <a class="card-link" asp-controller="Comment" asp-action="Read" asp-route-commentId="@Model?.Id" style="text-decoration: none">
+                    @Model?.Replies replies
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

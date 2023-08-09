@@ -9,4 +9,8 @@ public static class GlobalConstants
     public const int ReleaseYear = 2023;
 
     public const int CompositionRecoveryDayLimit = 30;
+
+    public const string AdminRoleName = "Admin";
+
+    public const string AdminAreaName = "Admin";
 }

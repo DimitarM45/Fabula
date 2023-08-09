@@ -34,7 +34,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("FavoritesId");
 
-                    b.ToTable("ApplicationUserGenre");
+                    b.ToTable("ApplicationUserGenre", (string)null);
                 });
 
             modelBuilder.Entity("CompositionGenre", b =>
@@ -49,7 +49,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("GenresId");
 
-                    b.ToTable("CompositionGenre");
+                    b.ToTable("CompositionGenre", (string)null);
                 });
 
             modelBuilder.Entity("CompositionTag", b =>
@@ -64,7 +64,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("CompositionTag");
+                    b.ToTable("CompositionTag", (string)null);
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.ApplicationUser", b =>
@@ -211,7 +211,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("CompositionId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
 
                     b.HasComment("Comments made by users");
                 });
@@ -272,7 +272,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("Compositions");
+                    b.ToTable("Compositions", (string)null);
 
                     b.HasComment("User-written compositions");
                 });
@@ -294,7 +294,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
 
                     b.HasComment("Genre of a composition");
 
@@ -555,7 +555,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Lists");
+                    b.ToTable("Lists", (string)null);
 
                     b.HasComment("Reading lists");
                 });
@@ -593,7 +593,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
 
                     b.HasComment("Rating of composition");
                 });
@@ -615,7 +615,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
 
                     b.HasComment("Tags for better categorization of literary works");
 
@@ -891,7 +891,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("CompositionId");
 
-                    b.ToTable("UsersFavoriteCompositions");
+                    b.ToTable("UsersFavoriteCompositions", (string)null);
 
                     b.HasComment("Mapping table for users and the compositions they've favorited");
                 });
@@ -910,7 +910,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("UsersFollowedLists");
+                    b.ToTable("UsersFollowedLists", (string)null);
 
                     b.HasComment("Mapping table for users and the lists they've followed");
                 });
@@ -929,7 +929,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("CommentId");
 
-                    b.ToTable("UsersLikedComments");
+                    b.ToTable("UsersLikedComments", (string)null);
 
                     b.HasComment("Mapping table for users and the comments they've liked");
                 });
@@ -948,7 +948,7 @@ namespace Fabula.Data.Migrations
 
                     b.HasIndex("ListId");
 
-                    b.ToTable("UsersLikedLists");
+                    b.ToTable("UsersLikedLists", (string)null);
 
                     b.HasComment("Mapping table for users and the lists they've liked");
                 });

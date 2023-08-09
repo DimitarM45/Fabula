@@ -1,0 +1,11 @@
+﻿@model CommentsAllViewModel
+@{
+    ViewData["Title"] = $"Comments - {Model.CompositionTitle}";
+}
+
+@foreach (CommentViewModel comment in Model.Comments)
+{
+    <div class="row">
+        <partial name="_CommentPartial" model="comment"></partial>
+    </div>
+}

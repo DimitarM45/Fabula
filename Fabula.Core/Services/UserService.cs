@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 public class UserService : IUserService
 {
@@ -17,11 +18,15 @@ public class UserService : IUserService
 
     private readonly FabulaDbContext dbContext;
 
+    private readonly UserManager<ApplicationUser> userManager;
+
     public UserService(IHttpContextAccessor context,
-        FabulaDbContext dbContext)
+        FabulaDbContext dbContext,
+        UserManager<ApplicationUser> userManager)
     {
         this.context = context;
         this.dbContext = dbContext;
+        this.userManager = userManager;
     }
 
     public string? GetUserId()
