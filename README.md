@@ -50,7 +50,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Fabula is a web project built entirely with ASP.NET Core, using Microsoft SQL Server (SQL) as its database. It also makes use of Bootstrap and MDBootstrap and some JavaScript libraries that provide additional functionality and aid in making the website more interactive and user-friendly. The platform was built as part of my assignment for [SoftUni's C# Web Advanced Course](https://softuni.bg/modules/108/csharp-web/1404) final exam.
+Fabula is a web project built entirely with ASP.NET Core, using Microsoft SQL (MSSQL) Server as its database. It also makes use of Bootstrap and MDBootstrap and some JavaScript libraries that provide additional functionality and aid in making the website more interactive and user-friendly. The platform was built as part of my assignment for [SoftUni's C# Web Advanced Course](https://softuni.bg/modules/108/csharp-web/1404) final exam.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
