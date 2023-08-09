@@ -59,6 +59,7 @@ Fabula is a web project built entirely with ASP.NET Core, using Microsoft SQL (M
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
 * [SimpleMDE Markdown Editor](https://simplemde.com/)
+* [Toastr](https://codeseven.github.io/toastr/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
