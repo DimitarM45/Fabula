@@ -95,7 +95,7 @@ The roles are seeded automatically upon creation of the database.
 The default role that is given to everybody upon successful registration. Has no special permissions (requied as per the exam regulations).
 
 #### Admin role
-The admin role is a special role granting any users that possess it special permissions (requied as per the exam regulations). It allows deletion and modification of any and all works and grants access to the admin area.
+The admin role is a special role granting any users that possess it special permissions (requied as per the exam regulations). It allows deletion and modification of any and all works and grants access to the admin area. The admin area features a dashboard page with useful statistical information meant for admins as well as pages that give an admin the ability to create new roles and give them to specific users. The first admin in the database is added manually and any other admins can be added from the admin area.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
