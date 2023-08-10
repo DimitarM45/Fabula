@@ -6,8 +6,10 @@ using Contracts;
 using Data.Models;
 using ServiceModels;
 using Web.ViewModels.Tag;
+using Web.ViewModels.User;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
+using Web.ViewModels.Admin.Composition;
 
 using static Common.GlobalConstants;
 
@@ -29,6 +31,7 @@ public class CompositionService : ICompositionService
     }
 
     public async Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
+        string? userId = null,
         string? searchTerm = null,
         int currentPage = 1,
         int compositionsPerPage = 1,
@@ -37,7 +40,7 @@ public class CompositionService : ICompositionService
     {
         IQueryable<Composition>? compositionsQuery = dbContext.Compositions
             .AsNoTracking()
-            .Where(c => c.DeletedOn == null)
+            .Where(c => c.DeletedOn == null && (userId != null ? c.AuthorId.ToString() == userId : true))
             .AsQueryable();
 
         if (selectedGenres != null && selectedGenres.Any())
@@ -96,8 +99,12 @@ public class CompositionService : ICompositionService
                 Title = c.Title,
                 Synopsis = c.Synopsis,
                 CoverUrl = c.CoverUrl,
-                Author = c.Author.UserName,
-                AuthorId = c.Author.Id.ToString(),
+                Author = new UserViewModel()
+                {
+                    Id = c.AuthorId.ToString(),
+                    Username = c.Author.UserName,
+                    ProfilePictureUrl = c.Author.ProfilePictureUrl
+                },
                 HasAdultContent = c.hasAdultContent,
                 Rating = !c.Ratings.Any() ? null : c.Ratings.Average(r => r.Value),
                 PublishedOn = c.PublishedOn,
@@ -113,7 +120,8 @@ public class CompositionService : ICompositionService
         CompositionQueryModel compositionsQueryModel = new CompositionQueryModel()
         {
             Compositions = compositionViewModels,
-            CompositionsCount = compositionsQuery.Count()
+            CompositionsCount = compositionsQuery.Count(),
+            UserId = userId
         };
 
         return compositionsQueryModel;
@@ -181,8 +189,12 @@ public class CompositionService : ICompositionService
             Synopsis = composition.Synopsis,
             Content = composition.Content,
             CoverUrl = composition.CoverUrl,
-            Author = composition.Author.UserName,
-            AuthorId = composition.Author.Id.ToString(),
+            Author = new UserViewModel()
+            { 
+                Id = composition.AuthorId.ToString(),
+                Username = composition.Author.UserName,
+                ProfilePictureUrl = composition.Author.ProfilePictureUrl
+            },
             hasAdultContent = composition.hasAdultContent,
             PublishedOn = composition.PublishedOn,
             Favorites = composition.Favorites.Count()
@@ -311,5 +323,30 @@ public class CompositionService : ICompositionService
         int count = await dbContext.Compositions.CountAsync(c => c.DeletedOn == null);
 
         return count;
+    }
+
+    public async Task<IEnumerable<CompositionDashboardViewModel>> GetAllForAdminDashboardAsync()
+    {
+        IEnumerable<CompositionDashboardViewModel> compositionDashboardViewModels = await dbContext.Compositions
+            .AsNoTracking()
+            .Select(c => new CompositionDashboardViewModel()
+            {
+                Id = c.Id.ToString(),
+                Title = c.Title,
+                Author = new UserViewModel()
+                {
+                    Id = c.AuthorId.ToString(),
+                    Username = c.Author.UserName,
+                    ProfilePictureUrl = c.Author.ProfilePictureUrl
+                },
+                DeletedOn = c.DeletedOn,
+                PublishedOn = c.PublishedOn,
+                Comments = c.Comments.Count(),
+                Ratings = c.Ratings.Count(),
+                Rating = c.Ratings == null ? 0 : c.Ratings.Average(r => r.Value)
+            })
+            .ToListAsync();
+
+        return compositionDashboardViewModels;
     }
 }

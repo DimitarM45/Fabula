@@ -53,11 +53,18 @@ public class CompositionController : BaseController
         {
             compositionQueryModel = await compositionService.GetAllAsync(
                     query.SelectedGenres,
+                    query.UserId,
                     query.SearchTerm,
                     query.CurrentPage,
                     query.CompositionsPerPage,
                     query.DateSorting,
                     query.RatingSorting);
+
+            if (query.UserId != null)
+            {
+                compositionQueryModel.UserId = query.UserId;
+                compositionQueryModel.Username = await userService.GetUsernameAsync(query.UserId);
+            }
 
             compositionQueryModel.Genres = await genreService.GetAllForSelectAsync();
         }
@@ -207,7 +214,7 @@ public class CompositionController : BaseController
 
         if (userId == null)
         {
-            TempData["NoUser"] = FailedEditingCompositionErrorMessage;
+            TempData[NotificationType.ErrorMessage.ToString()] = FailedEditingCompositionErrorMessage;
 
             return View();
         }

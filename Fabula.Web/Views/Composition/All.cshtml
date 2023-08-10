@@ -1,10 +1,21 @@
 ﻿@using System.Globalization;
 @model CompositionQueryModel
 @{
-    ViewData["Title"] = "Works";
+    string possessiveS = "\'s";
+
+    ViewData["Title"] = $"{(Model.Username != null ? Model.Username + possessiveS : null)} Works";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
+@if (Model.Username != null)
+{
+    <h1 class="text-center">
+        <a style="text-decoration: none" asp-controller="User" asp-action="Profile" asp-route-userId="@Model.UserId">@Model.Username</a>'s Works
+    </h1>
+}
+else
+{
+    <h1 class="text-center">@ViewData["Title"]</h1>
+}
 <hr />
 <form method="get">
     <div class="container">
@@ -41,6 +52,7 @@
                     </select>
                 </div>
             </div>
+            <input hidden asp-for="UserId" class="form-control" value="@Model.UserId">
             <div class="form-group col-md-3">
                 <div class="form-group mt-4">
                     <input type="submit" value="Search" class="btn btn-primary" />
@@ -66,6 +78,7 @@
                 <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
                    asp-controller="Composition"
                    asp-action="All"
+                   asp-route-userId="@Model.UserId"
                    asp-route-currentPage="1"
                    asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                    asp-route-searchTerm="@Model.SearchTerm"
@@ -76,6 +89,7 @@
                 <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
                    asp-controller="Composition"
                    asp-action="All"
+                   asp-route-userId="@Model.UserId"
                    asp-route-currentPage="@previousPage"
                    asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                    asp-route-searchTerm="@Model.SearchTerm"
@@ -90,6 +104,7 @@
                     <a class="btn btn-primary"
                        asp-controller="Composition"
                        asp-action="All"
+                       asp-route-userId="@Model.UserId"
                        asp-route-currentPage="@previousPage"
                        asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                        asp-route-searchTerm="@Model.SearchTerm"
@@ -108,6 +123,7 @@
                     <a class="btn btn-primary"
                        asp-controller="Composition"
                        asp-action="All"
+                       asp-route-userId="@Model.UserId"
                        asp-route-currentPage="@(Model.CurrentPage + 1)"
                        asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                        asp-route-searchTerm="@Model.SearchTerm"
@@ -124,6 +140,7 @@
                 <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
                    asp-controller="Composition"
                    asp-action="All"
+                   asp-route-userId="@Model.UserId"
                    asp-route-currentPage="@(Model.CurrentPage + 1)"
                    asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                    asp-route-searchTerm="@Model.SearchTerm"
@@ -136,6 +153,7 @@
                 <a class="btn btn-primary @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
                    asp-controller="Composition"
                    asp-action="All"
+                   asp-route-userId="@Model.UserId"
                    asp-route-currentPage="@maxPage"
                    asp-route-selectedGenres="@($"{(!Model.SelectedGenres.Any() ? "" : Model.SelectedGenres)}")"
                    asp-route-searchTerm="@Model.SearchTerm"

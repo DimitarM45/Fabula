@@ -1,12 +1,14 @@
 ﻿namespace Fabula.Core.Contracts;
 
 using Enums;
+using Fabula.Web.ViewModels.Admin.Composition;
 using ServiceModels;
 using Web.ViewModels.Composition;
 
 public interface ICompositionService
 {
     Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
+        string? userId = null,
         string? searchTerm = null,
         int currentPage = 1,
         int compositionsPerPage = 1,
@@ -30,4 +32,6 @@ public interface ICompositionService
     Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId);
 
     Task<int> GetCountAsync();
+
+    Task<IEnumerable<CompositionDashboardViewModel>> GetAllForAdminDashboardAsync();
 }

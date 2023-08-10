@@ -105,4 +105,14 @@ public static class ValidationConstants
         public const int EmailMinLength = 3;
         public const int EmailMaxLength = 320;
     }
+
+    /// <summary>
+    /// Validation constants used for the role entity or its form models.
+    /// </summary>
+
+    public static class Role
+    {
+        public const int NameMinLength = 3;
+        public const int NameMaxLength = 15;
+    }
 }

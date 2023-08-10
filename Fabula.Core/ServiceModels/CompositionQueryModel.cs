@@ -15,9 +15,13 @@ public class CompositionQueryModel
         SelectedGenres = new HashSet<int>();
     }
 
-    public int CompositionsPerPage { get; set; } = 10;
+    public int CompositionsPerPage { get; set; } = CompositionsPerPageCount;
 
     public string? SearchTerm { get; set; }
+
+    public string? UserId { get; set; }
+
+    public string? Username { get; set; }
 
     public DateSorting DateSorting { get; set; }
 

@@ -2,20 +2,52 @@
 
 @if (TempData.ContainsKey(NotificationType.ErrorMessage.ToString()))
 {
-    <script>toastr.error('@TempData[NotificationType.ErrorMessage.ToString()]');</script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true
+        }
+
+        toastr.error('@TempData[NotificationType.ErrorMessage.ToString()]');
+    </script>
 }
 
 @if (TempData.ContainsKey(NotificationType.WarningMessage.ToString()))
 {
-    <script>toastr.warning('@TempData[NotificationType.WarningMessage.ToString()]');</script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true
+        }
+
+        toastr.warning('@TempData[NotificationType.WarningMessage.ToString()]');
+    </script>
 }
 
 @if (TempData.ContainsKey(NotificationType.InformationMessage.ToString()))
 {
-    <script>toastr.info('@TempData[NotificationType.InformationMessage.ToString()]');</script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true
+        }
+
+        toastr.info('@TempData[NotificationType.InformationMessage.ToString()]');
+    </script>
 }
 
 @if (TempData.ContainsKey(NotificationType.SuccessMessage.ToString()))
 {
-    <script>toastr.success('@TempData[NotificationType.SuccessMessage.ToString()]');</script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "positionClass": "toast-top-center",
+            "preventDuplicates": true
+        }
+
+        toastr.success('@TempData[NotificationType.SuccessMessage.ToString()]');
+    </script>
 }

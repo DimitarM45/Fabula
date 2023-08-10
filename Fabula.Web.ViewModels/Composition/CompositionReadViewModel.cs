@@ -3,6 +3,7 @@
 using Genre;
 using Rating;
 using Comment;
+using Fabula.Web.ViewModels.User;
 
 public class CompositionReadViewModel
 {
@@ -24,9 +25,7 @@ public class CompositionReadViewModel
 
     public string? Synopsis { get; set; }
 
-    public string? AuthorId { get; set; }
-
-    public string? Author { get; set; }
+    public UserViewModel? Author { get; set; }
 
     public int Favorites { get; set; }
 

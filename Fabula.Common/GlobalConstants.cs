@@ -10,7 +10,11 @@ public static class GlobalConstants
 
     public const int CompositionRecoveryDayLimit = 30;
 
+    public const int CompositionsPerPageCount = 10;
+
     public const string AdminRoleName = "Admin";
 
     public const string AdminAreaName = "Admin";
+
+    public const string UserRoleName = "User";
 }

@@ -2,8 +2,11 @@
 
 using Core.Contracts;
 using ViewModels.Account;
+using Common.Messages.Enums;
 
+using static Common.GlobalConstants;
 using static Common.Messages.ErrorMessages.Authentication;
+using static Common.Messages.SuccessMessages.Authentication;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -47,7 +50,9 @@ public class AccountController : BaseController
 
             if (userResult.Result.Succeeded)
             {
-                await accountService.AddRoleToAccountAsync(userResult.UserId, "User");
+                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulRegistrationMessage;
+
+                await accountService.AddRoleToAccountAsync(userResult.UserId, UserRoleName);
 
                 await accountService.SignInAccountAsync(userResult.UserId);
 
@@ -87,6 +92,8 @@ public class AccountController : BaseController
 
             if (userResult.Result.Succeeded)
             {
+                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulLoginMessage;
+
                 if (await accountService.IsInRoleAsync(userResult.UserId, "Admin"))
                     return RedirectToAction("SelectArea", "Home");
 

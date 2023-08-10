@@ -1,5 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
+using Fabula.Web.ViewModels.User;
 using Genre;
 
 public class CompositionViewModel
@@ -17,9 +18,7 @@ public class CompositionViewModel
 
     public string? Synopsis { get; set; }
 
-    public string? AuthorId { get; set; }
-
-    public string? Author { get; set; }
+    public UserViewModel? Author { get; set; }
 
     public DateTime PublishedOn { get; set; }
 

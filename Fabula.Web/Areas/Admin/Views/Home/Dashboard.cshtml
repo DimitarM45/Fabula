@@ -1,7 +1,159 @@
-﻿@{
+﻿@model DashboardViewModel
+@{
     ViewData["Title"] = "Dashboard";
 }
 
 <div class="text-center">
-    <img src="~/images/FabulaLogoAdmin.png" height="650" width="1100" />
+    <img src="~/images/FabulaLogoAdmin.png" height="250" width="500" />
+    <h1>Dashboard</h1>
+</div>
+<hr />
+<br />
+<div class="container">
+    <div class="col">
+        <h2 class="text-center">Users</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Posted compositions</th>
+                    <th scope="col">Posted comments</th>
+                    <th scope="col">Posted ratings</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int counter = 1;
+
+                    foreach (UserDashboardViewModel user in Model.Users.OrderBy(u => u.Username))
+                    {
+                        <tr>
+                            <th scope="row">@(counter++)</th>
+                            <td>
+                                <a style="text-decoration: none" asp-area="" asp-controller="User" asp-action="Profile" asp-route-userId="@user.Id">
+                                    <img class="rounded-circle me-1" src="@user.ProfilePictureUrl" height="25" width="25">
+                                    @user.Username
+                                </a>
+                            </td>
+                            <td>@user.Role</td>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="Composition"
+                                   asp-action="All"
+                                   asp-route-userId="@user.Id"
+                                   asp-route-currentPage="1"
+                                   asp-route-selectedGenres=""
+                                   asp-route-searchTerm=""
+                                   asp-route-dateSorting=""
+                                   asp-route-ratingSorting="">
+                                    @user.WrittenCompositions
+                                </a>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none" asp-area="" asp-controller="Rating" asp-action="All" asp-route-userId="@user.Id">
+                                    @user.WrittenComments
+                                </a>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none" asp-area="" asp-controller="Composition" asp-action="All" asp-route-userId="@user.Id">
+                                    @user.WrittenReviews
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <hr />
+    <br />
+    <div class="col">
+        <h2 class="text-center">Compositions</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Posted on</th>
+                    <th scope="col">Comments</th>
+                    <th scope="col">Ratings</th>
+                    <th scope="col">Rating score</th>
+                    <th scope="col">Deleted on</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    counter = 1;
+
+                    foreach (CompositionDashboardViewModel composition in Model.Compositions.OrderByDescending(c => c.PublishedOn))
+                    {
+                        <tr>
+                            <th scope="row">@(counter++)</th>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="Composition"
+                                   asp-action="Read"
+                                   asp-route-compositionId="@composition.Id">
+                                    @composition.Title
+                                </a>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="User"
+                                   asp-action="Profile"
+                                   asp-route-userId="@composition?.Author?.Id">
+                                    <img class="rounded-circle me-1" src="@composition?.Author?.ProfilePictureUrl" height="25" width="25">
+                                    @composition?.Author?.Username
+                                </a>
+                            </td>
+                            <td>@composition?.PublishedOn.ToString()</td>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="Comment"
+                                   asp-action="All"
+                                   asp-route-compositionId="@composition?.Id">
+                                    @composition?.Comments
+                                </a>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="Rating"
+                                   asp-action="All"
+                                   asp-route-compositionId="@composition?.Id">
+                                    @composition?.Ratings
+                                </a>
+                            </td>
+                            <td>
+                                <a style="text-decoration: none"
+                                   asp-area=""
+                                   asp-controller="Rating"
+                                   asp-action="All"
+                                   asp-route-compositionId="@composition?.Id">
+                                    @composition?.Rating
+                                </a>
+                            </td>
+                            <td>
+                                @if (composition?.DeletedOn == null)
+                                {
+                                    Html.Encode("&#10060;");
+                                }
+                                else
+                                {
+                                    @composition?.DeletedOn.ToString()
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

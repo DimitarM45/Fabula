@@ -4,13 +4,17 @@ using Data;
 using Contracts;
 using Data.Models;
 using Web.ViewModels.User;
+using Web.ViewModels.Admin.User;
+
+using static Common.GlobalConstants;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 public class UserService : IUserService
 {
@@ -71,5 +75,39 @@ public class UserService : IUserService
         int count = await dbContext.Users.CountAsync();
 
         return count;
+    }
+
+    public async Task<IEnumerable<UserDashboardViewModel>> GetAllForAdminDashboardAsync()
+    {
+        IEnumerable<UserDashboardViewModel> userDashboardViewModels = await userManager.Users
+            .AsNoTracking()
+            .Select(u => new UserDashboardViewModel()
+            {
+                Id = u.Id.ToString(),
+                Username = u.UserName,
+                ProfilePictureUrl = u.ProfilePictureUrl,
+                WrittenCompositions = u.WrittenCompositions.Count(),
+            })
+            .ToListAsync();
+
+        foreach (UserDashboardViewModel userViewModel in userDashboardViewModels)
+        {
+            ApplicationUser? user = await userManager.FindByIdAsync(userViewModel.Id);
+
+            if (user != null)
+                userViewModel.Role = (await userManager.GetRolesAsync(user))[0];
+        }
+
+        return userDashboardViewModels;
+    }
+
+    public async Task<string?> GetUsernameAsync(string userId)
+    {
+        ApplicationUser? user = await userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return null;
+
+        return user.UserName;
     }
 }

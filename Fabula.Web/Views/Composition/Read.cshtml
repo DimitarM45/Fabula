@@ -10,7 +10,7 @@
     ApplicationUser? user = await userManager.FindByIdAsync(userId);
 
     bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
-    bool isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.AuthorId;
+    bool isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model?.Author?.Id;
     bool isAdmin = await userManager.IsInRoleAsync(user, "Admin");
 }
 
@@ -27,14 +27,14 @@
                     <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
                     <p class="text-center" style="text-decoration: none; font-size: small">
                         Written by:
-                        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none">@Model.Author</a>
+                        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model?.Author?.Id" style="text-decoration: none">@Model.Author</a>
                     </p>
                     <br />
                     <p class="text-center" style="font-size: small">
                         Genres:
                     </p>
                     <p class="text-center" style="text-decoration: none; font-size: small">
-                        @for (int i = 0; i < Model.Genres.Count(); i++)
+                        @for (int i = 0; i < Model?.Genres.Count(); i++)
                         {
                             <a asp-controller="Composition"
                                asp-action="All"

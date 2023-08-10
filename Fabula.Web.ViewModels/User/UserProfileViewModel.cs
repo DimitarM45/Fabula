@@ -1,9 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.User;
 
-using List;
 using Genre;
-using Rating;
-using Composition;
 
 public class UserProfileViewModel
 {

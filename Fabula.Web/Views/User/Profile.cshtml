@@ -42,7 +42,17 @@
                                 <a class="card-link">@Model.WebsiteUrl</a>
                             </p>
                             <a class="card-link" asp-controller="User" asp-action="Followers">Followers: @Model.Followers</a>
-                            <a class="card-link" asp-controller="User" asp-action="Works" asp-route-userId="@Model.Id">Works: @Model.WrittenCompositions</a>
+                            <a class="card-link"
+                               asp-controller="Composition"
+                               asp-action="All"
+                               asp-route-userId="@Model.Id"
+                               asp-route-currentPage="1"
+                               asp-route-selectedGenres=""
+                               asp-route-searchTerm=""
+                               asp-route-dateSorting=""
+                               asp-route-ratingSorting="">
+                                Works: @Model.WrittenCompositions
+                            </a>
                             <a class="card-link" asp-controller="User" asp-action="Favorites">Favorite works: @Model.FavoriteCompositions</a>
                         </div>
                     </div>

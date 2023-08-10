@@ -5,9 +5,9 @@
     <img class="card-img-top" src="@Model.CoverUrl" alt="Image not found :(">
     <div class="card-body">
         <h5 class="card-title">@Model.Title</h5>
-        <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model.AuthorId" style="text-decoration: none" class="card-link text-info">@Model.Author</a></h6>
-        <p class="card-text">@Model.Synopsis</p>
-        @for (int i = 0; i < Model.Genres.Count(); i++)
+        <h6><a asp-controller="User" asp-action="Profile" asp-route-userid="@Model?.Author?.Id" style="text-decoration: none" class="card-link text-info">@Model?.Author?.Username</a></h6>
+        <p class="card-text">@Model?.Synopsis</p>
+        @for (int i = 0; i < Model?.Genres.Count(); i++)
         {
             if (i < 2)
             {
@@ -22,9 +22,9 @@
                 </a>
             }
         }
-        @if (Model.Rating == null)
+        @if (Model?.Rating == null)
         {
-            <h6 class="card-subtitle" style="font-size: smaller">This story hasnt been rated yet</h6>
+            <h6 class="card-subtitle" style="font-size: smaller">This story hasn't been rated yet</h6>
         }
         else
         {
@@ -32,11 +32,11 @@
         }
     </div>
     <div class="card-footer">
-        @if (Model.HasAdultContent)
+        @if (Model?.HasAdultContent ?? false)
         {
             <h6 class="text-danger">&#128286; Adult content</h6>
         }
-        <h6 class="card-subtitle">Posted on: @Model.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
+        <h6 class="card-subtitle">Posted on: @Model?.PublishedOn.ToString("dd MMM yyyy", CultureInfo.InvariantCulture)</h6>
     </div>
-    <a asp-action="Read" asp-route-compositionid="@Model.Id" class="btn btn-info">Read</a>
+    <a asp-action="Read" asp-route-compositionid="@Model?.Id" class="btn btn-info">Read</a>
 </div>
