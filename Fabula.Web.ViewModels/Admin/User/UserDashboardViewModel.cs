@@ -14,5 +14,5 @@ public class UserDashboardViewModel
 
     public int WrittenComments { get; set; }
 
-    public int WrittenReviews { get; set; }
+    public int PostedRatings { get; set; }
 }

@@ -4,14 +4,40 @@
 }
 
 <div class="container text-center">
-    <h1>@ViewData["Title"]</h1>
+    <h1>Add new role</h1>
 </div>
 <hr />
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-6 g-4">
+    <form method="post" asp-controller="Role" asp-action="Create">
+        <div class="form-group">
+            <partial name="_RoleFormPartial" model="Model.RoleFormModel"></partial>
+            <div class="text-center">
+                <input class="btn btn-primary mt-3 btn-primary" type="submit" value="Create" />
+            </div>
+        </div>
+    </form>
+</div>
+<br />
+<div class="container text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr />
+<div class="container text-center">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach (RoleViewModel role in Model.Roles)
         {
-
+            <div class="col">
+                <div class="card text-bg-primary">
+                    <div class="card-body">
+                        <h3 class="card-text">@($"{role.Name} - Users: {role.Users}")</h3>
+                        <a asp-controller="Role" asp-action="Edit" asp-route-roleId="@role.Id" class="btn btn-info">Edit</a>
+                    </div>
+                </div>
+            </div>
         }
     </div>
 </div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"></partial>
+}

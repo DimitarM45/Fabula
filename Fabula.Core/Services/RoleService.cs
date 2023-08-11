@@ -61,6 +61,9 @@ public class RoleService : IRoleService
     {
         IdentityRole<Guid> roleToDelete = await roleManager.FindByIdAsync(roleId);
 
+        if (roleToDelete == null)
+            return;
+
         await roleManager.DeleteAsync(roleToDelete);
     }
 

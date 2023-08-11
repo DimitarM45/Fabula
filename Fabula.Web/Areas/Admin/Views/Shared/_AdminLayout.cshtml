@@ -31,21 +31,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <div>
-                                <a class="btn dropdown-toggle" href="#" role="button" style="margin-top: 3px"
-                                   id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Manage roles
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                    <li>
-                                        <a class="dropdown-item nav-link text-dark" asp-controller="Role" asp-action="All">All roles</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item nav-link text-dark" asp-controller="Role" asp-action="Add">Add roles</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <li>
+                            <a class="nav-link text-dark" asp-controller="Role" asp-action="All">Roles</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-success" asp-area="" asp-controller="Home" asp-action="Index">User area</a>

@@ -1,0 +1,35 @@
+﻿@model RoleFormModel
+@{
+    ViewData["Title"] = $"Edit - {Model.Name}";
+}
+
+<div class="container text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr />
+<div class="container">
+    <form method="post" asp-controller="Role" asp-action="Edit">
+        <div class="form-group">
+            <partial name="_RoleFormPartial" model="Model"></partial>
+            <div class="text-center" style="margin-top: 2rem">
+                <input class="btn btn-primary" type="submit" value="Edit" />
+            </div>
+        </div>
+    </form>
+    <form method="post" onsubmit="return confirmAction()" asp-controller="Role" asp-action="Delete" asp-route-roleId="@Model.Id">
+        <div class="text-center" style="margin-top: 2rem">
+            <input type="submit" value="Delete &#10060;" class="btn btn-danger" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial"></partial>
+
+    <script>
+        function confirmAction() {
+            var confirmed = window.confirm("Are you sure you want to delete this role? Once deleted this role can never be recovered!");
+            return confirmed;
+        }
+    </script>
+}

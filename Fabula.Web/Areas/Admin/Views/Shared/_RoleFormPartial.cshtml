@@ -1,0 +1,10 @@
+﻿@model RoleFormModel
+
+<div class="form-outline text-center">
+    <input hidden asp-for="Id" value="@Model.Id" />
+    <label class="form-label text-center" asp-for="Name">Role name</label>
+    <input class="text-center" type="text" asp-for="Name" placeholder="Name of role..." />
+</div>
+<div class="text-center">
+    <span asp-validation-for="Name" class="small text-danger"></span>
+</div>

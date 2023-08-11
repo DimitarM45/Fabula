@@ -55,11 +55,16 @@ public class RoleController : BaseController
 
     [HttpGet]
 
-    public async Task<IActionResult> Update(string roleId)
+    public async Task<IActionResult> Edit(string roleId)
     {
         try
         {
             RoleFormModel? roleFormModel = await roleService.GetForEditAsync(roleId);
+
+            if (roleFormModel == null)
+            {
+                return RedirectToAction();
+            }
 
             return View(roleFormModel);
         }
@@ -71,7 +76,7 @@ public class RoleController : BaseController
 
     [HttpPost]
 
-    public async Task<IActionResult> Update(RoleFormModel roleFormModel)
+    public async Task<IActionResult> Edit(RoleFormModel roleFormModel)
     {
         if (!ModelState.IsValid)
         {

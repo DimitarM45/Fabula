@@ -38,10 +38,22 @@ public class CompositionService : ICompositionService
         DateSorting dateSorting = DateSorting.Newest,
         RatingSorting ratingSorting = RatingSorting.BestRated)
     {
-        IQueryable<Composition>? compositionsQuery = dbContext.Compositions
-            .AsNoTracking()
-            .Where(c => c.DeletedOn == null && (userId != null ? c.AuthorId.ToString() == userId : true))
-            .AsQueryable();
+        IQueryable<Composition>? compositionsQuery = null;
+
+        if (!string.IsNullOrWhiteSpace(userId) && userId != string.Empty)
+        {
+            compositionsQuery = dbContext.Compositions
+                .AsNoTracking()
+                .Where(c => c.AuthorId.ToString() == userId && c.DeletedOn == null)
+                .AsQueryable();
+        }
+        else
+        {
+            compositionsQuery = dbContext.Compositions
+                .AsNoTracking()
+                .Where(c => c.DeletedOn == null)
+                .AsQueryable();
+        }
 
         if (selectedGenres != null && selectedGenres.Any())
         {
@@ -190,7 +202,7 @@ public class CompositionService : ICompositionService
             Content = composition.Content,
             CoverUrl = composition.CoverUrl,
             Author = new UserViewModel()
-            { 
+            {
                 Id = composition.AuthorId.ToString(),
                 Username = composition.Author.UserName,
                 ProfilePictureUrl = composition.Author.ProfilePictureUrl

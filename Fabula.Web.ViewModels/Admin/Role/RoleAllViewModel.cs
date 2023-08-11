@@ -2,7 +2,12 @@
 
 public class RoleAllViewModel
 {
-    public RoleFormModel? RoleFormModel { get; set; }
+    public RoleAllViewModel()
+    {
+        Roles = new HashSet<RoleViewModel>();
+    }
 
-    public IEnumerable<RoleViewModel>? Roles { get; set; }
+    public RoleFormModel RoleFormModel { get; set; } = null!;
+
+    public IEnumerable<RoleViewModel> Roles { get; set; }
 }
