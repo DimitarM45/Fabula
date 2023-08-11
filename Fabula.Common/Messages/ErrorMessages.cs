@@ -6,6 +6,8 @@
 
 public static class ErrorMessages
 {
+    private const string PleaseTryAgainString = "Please try again!";
+
     /// <summary>
     /// Error messages shared by multiple form models and/or actions and notifications.
     /// </summary>
@@ -18,7 +20,10 @@ public static class ErrorMessages
 
         public const string InvalidStringErrorMessage = "{0} is invalid!";
 
-        public const string FailedResourceRetrieval = "An error occurred trying to retrieve your requested resource! Please try again!";
+        public const string GeneralErrorMessage = "An error occurred!" + " " + PleaseTryAgainString;
+
+        public const string InvalidInputDataErrorMessage = "Invalid input data!" + " " + PleaseTryAgainString;
+
     }
 
     /// <summary>
@@ -46,6 +51,12 @@ public static class ErrorMessages
 
         public const string IncorrectLoginCredentialErrorMessage = "Wrong password or username/email!";
 
-        public const string FailedLoginErrorMessage = "Invalid login attempt!";
+        public const string InvalidLoginAttemptErrorMessage = "Invalid login attempt!";
+
+        public const string FailedRegistrationErrorMessage = "Registration failed!" + " " + PleaseTryAgainString;
+
+        public const string FailedLoginErrorMessage = "Login failed!" + " " + PleaseTryAgainString;
+
+        public const string AccountLockoutErrorMessage = "Login attempt limit exceeded! Try again later.";
     }
 }

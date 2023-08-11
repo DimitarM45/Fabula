@@ -2,16 +2,26 @@
 
 using Core.Contracts;
 using ViewModels.Admin.Role;
+using Common.Messages.Enums;
+
+using static Common.Messages.LoggerMessages;
+using static Common.Messages.ErrorMessages.Shared;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+using System.Security.Claims;
 
 public class RoleController : BaseController
 {
-    public readonly IRoleService roleService;
+    private readonly IRoleService roleService;
 
-    public RoleController(IRoleService roleService)
+    private readonly ILogger logger;
+
+    public RoleController(IRoleService roleService, ILogger logger)
     {
         this.roleService = roleService;
+        this.logger = logger;
     }
 
     [HttpGet]
@@ -26,7 +36,19 @@ public class RoleController : BaseController
         }
         catch (Exception e)
         {
-            return RedirectToAction();
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 
@@ -36,9 +58,11 @@ public class RoleController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            ModelState.AddModelError(string.Empty, "Invalid input data!");
+            ModelState.AddModelError(string.Empty, InvalidInputDataErrorMessage);
 
-            return RedirectToAction();
+            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+
+            return RedirectToAction("All");
         }
 
         try
@@ -49,7 +73,19 @@ public class RoleController : BaseController
         }
         catch (Exception e)
         {
-            return RedirectToAction();
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 
@@ -68,9 +104,21 @@ public class RoleController : BaseController
 
             return View(roleFormModel);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return RedirectToAction();
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 
@@ -80,7 +128,9 @@ public class RoleController : BaseController
     {
         if (!ModelState.IsValid)
         {
-            ModelState.AddModelError(string.Empty, "Invalid input data!");
+            ModelState.AddModelError(string.Empty, InvalidInputDataErrorMessage);
+
+            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
 
             return View(roleFormModel);
         }
@@ -93,7 +143,19 @@ public class RoleController : BaseController
         }
         catch (Exception e)
         {
-            return RedirectToAction();
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 
@@ -109,7 +171,19 @@ public class RoleController : BaseController
         }
         catch (Exception e)
         {
-            return RedirectToAction();
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
 }

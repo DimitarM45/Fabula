@@ -5,6 +5,8 @@ using ViewModels.Account;
 using Common.Messages.Enums;
 
 using static Common.GlobalConstants;
+using static Common.Messages.LoggerMessages;
+using static Common.Messages.ErrorMessages.Shared;
 using static Common.Messages.ErrorMessages.Authentication;
 using static Common.Messages.SuccessMessages.Authentication;
 
@@ -12,13 +14,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 
+using System.Security.Claims;
+
 public class AccountController : BaseController
 {
     private IAccountService accountService;
 
-    public AccountController(IAccountService accountService)
+    private ILogger logger;
+
+    public AccountController(IAccountService accountService, ILogger logger)
     {
         this.accountService = accountService;
+        this.logger = logger;
     }
 
     [HttpGet]
@@ -42,12 +49,19 @@ public class AccountController : BaseController
 
         bool isBirthdateCorrect = userBirthdate < DateTime.Now.AddYears(-3);
 
-        if (ModelState.IsValid && isBirthdateValid && isBirthdateCorrect)
+        if (!ModelState.IsValid || !isBirthdateValid || !isBirthdateCorrect)
         {
-            formModel.ParsedBirthdate = userBirthdate;
+            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
 
-            (IdentityResult Result, string UserId) userResult = await accountService.CreateAccountAsync(formModel);
+            return RedirectToAction("Register");
+        }
 
+        formModel.ParsedBirthdate = userBirthdate;
+
+        (IdentityResult Result, string UserId) userResult = await accountService.CreateAccountAsync(formModel);
+
+        try
+        {
             if (userResult.Result.Succeeded)
             {
                 TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulRegistrationMessage;
@@ -61,14 +75,34 @@ public class AccountController : BaseController
 
                 return LocalRedirect(formModel.Utilities.ReturnUrl);
             }
-
-            foreach (var error in userResult.Result.Errors)
+            else
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                foreach (var error in userResult.Result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                TempData[NotificationType.ErrorMessage.ToString()] = FailedRegistrationErrorMessage;
+
+                return RedirectToAction("Register");
             }
         }
+        catch (Exception e)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        return RedirectToAction("Register");
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
+
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 
     [HttpGet]
@@ -88,17 +122,26 @@ public class AccountController : BaseController
     {
         if (ModelState.IsValid)
         {
+            ModelState.AddModelError(string.Empty, InvalidLoginAttemptErrorMessage);
+
+            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+
+            return RedirectToAction("Login");
+        }
+
+        try
+        {
             var userResult = await accountService.LoginAccountAsync(formModel);
 
             if (userResult.Result.Succeeded)
             {
-                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulLoginMessage;
-
                 if (await accountService.IsInRoleAsync(userResult.UserId, "Admin"))
                     return RedirectToAction("SelectArea", "Home");
 
                 if (formModel.Utilities.ReturnUrl == null)
                     return RedirectToAction("Index", "Home");
+
+                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulLoginMessage;
 
                 return LocalRedirect(formModel.Utilities.ReturnUrl);
             }
@@ -107,19 +150,37 @@ public class AccountController : BaseController
                 return RedirectToAction("LoginWith2fa", new { ReturnUrl = formModel.Utilities.ReturnUrl, RememberMe = formModel.RememberMe });
 
             if (userResult.Result.IsLockedOut)
+            {
+                TempData[NotificationType.ErrorMessage.ToString()] = AccountLockoutErrorMessage;
+
                 return RedirectToAction("Lockout");
+            }
 
             else
             {
                 ModelState.AddModelError("Login", IncorrectLoginCredentialErrorMessage);
 
+                TempData[NotificationType.ErrorMessage.ToString()] = FailedLoginErrorMessage;
+
                 return RedirectToAction("Login");
             }
         }
+        catch (Exception e)
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        ModelState.AddModelError("Login", FailedLoginErrorMessage);
+            logger.LogWarning(string.Format(Warning,
+                e.Message,
+                e.StackTrace,
+                userId == null ? NonExistentUser : userId,
+                "/" + ControllerContext.ActionDescriptor.ControllerName +
+                "/" + ControllerContext.ActionDescriptor.ActionName,
+                DateTime.Now));
 
-        return RedirectToAction("Login");
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 }
 

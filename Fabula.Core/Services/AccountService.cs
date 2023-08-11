@@ -7,7 +7,6 @@ using Web.ViewModels.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,22 +21,18 @@ public class AccountService : IAccountService
 
     private readonly IUserEmailStore<ApplicationUser> emailStore;
 
-    private readonly IEmailSender emailSender;
-
     private readonly IHttpContextAccessor httpContextAccessor;
 
     public AccountService(
         UserManager<ApplicationUser> userManager,
         IUserStore<ApplicationUser> userStore,
         SignInManager<ApplicationUser> signInManager,
-        IEmailSender emailSender,
         IHttpContextAccessor httpContextAccessor)
     {
         this.userManager = userManager;
         this.userStore = userStore;
         this.emailStore = GetEmailStore();
         this.signInManager = signInManager;
-        this.emailSender = emailSender;
         this.httpContextAccessor = httpContextAccessor;
     }
 
@@ -55,7 +50,7 @@ public class AccountService : IAccountService
         return registerFormModel;
     }
 
-    // Purposefully written to return a tuple in order to separate account creation logic from account signing in logic
+    // Purposefully written to return a tuple in order to separate account creation logic from account sign-in logic
 
     public async Task<(IdentityResult Result, string UserId)> CreateAccountAsync(RegisterFormModel formModel)
     {
@@ -114,28 +109,10 @@ public class AccountService : IAccountService
     }
 
     private ApplicationUser CreateUser()
-    {
-        try
-        {
-            return Activator.CreateInstance<ApplicationUser>();
-        }
-        catch
-        {
-            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
-        }
-    }
+        => Activator.CreateInstance<ApplicationUser>();
 
     private IUserEmailStore<ApplicationUser> GetEmailStore()
-    {
-        if (!userManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException("The default UI requires a user store with email support.");
-        }
-
-        return (IUserEmailStore<ApplicationUser>)userStore;
-    }
+        => (IUserEmailStore<ApplicationUser>)userStore;
 
     public async Task<bool> IsInRoleAsync(string userId, string roleName)
     {

@@ -47,8 +47,6 @@ public class CompositionController : BaseController
     {
         CompositionQueryModel? compositionQueryModel = null;
 
-        string? userId = userService.GetUserId();
-
         try
         {
             compositionQueryModel = await compositionService.GetAllAsync(
@@ -70,6 +68,8 @@ public class CompositionController : BaseController
         }
         catch (Exception e)
         {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             logger.LogWarning(string.Format(Warning,
                 e.Message, 
                 e.StackTrace, 
@@ -78,7 +78,7 @@ public class CompositionController : BaseController
                 "/" + ControllerContext.ActionDescriptor.ActionName,
                 DateTime.Now));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }

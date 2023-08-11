@@ -2,8 +2,6 @@
 
 using Ganss.Xss;
 
-using AngleSharp.Common;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
@@ -27,15 +25,15 @@ public class HtmlSanitizerMiddleware : IMiddleware
 
             IFormCollection formFields = await context.Request.ReadFormAsync();
 
-            //Dictionary<string, StringValues> modifiedFormFields = new Dictionary<string, StringValues>();
+            Dictionary<string, StringValues> modifiedFormFields = new Dictionary<string, StringValues>();
 
-            //foreach ((string key, StringValues value) in formFields)
-            //{
+            foreach ((string key, StringValues value) in formFields)
+            {
 
-            //    modifiedFormFields[key] = sanitizer.Sanitize(value.ToString());
-            //}
+                modifiedFormFields[key] = sanitizer.Sanitize(value.ToString());
+            }
 
-            //context.Request.Form = new FormCollection(modifiedFormFields);
+            context.Request.Form = new FormCollection(modifiedFormFields);
         }
 
         await next(context);

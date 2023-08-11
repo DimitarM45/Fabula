@@ -27,7 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{305476DC-A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Core.Tests", "Fabula.Core.Tests\Fabula.Core.Tests.csproj", "{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Sandbox", "Fabula.Sandbox\Fabula.Sandbox.csproj", "{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fabula.Sandbox", "Fabula.Sandbox\Fabula.Sandbox.csproj", "{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fabula.Web.Tests", "Fabula.Web.Tests\Fabula.Web.Tests.csproj", "{BC3C184D-D9A2-436C-8F8A-32113E388089}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3518F459-0CD5-4AB8-B96A-6A6E6EF56A59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC3C184D-D9A2-436C-8F8A-32113E388089}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC3C184D-D9A2-436C-8F8A-32113E388089}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC3C184D-D9A2-436C-8F8A-32113E388089}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC3C184D-D9A2-436C-8F8A-32113E388089}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +94,7 @@ Global
 		{257EC9B4-8173-41B4-8F83-E3D74278BC32} = {6E0695D6-C3F6-4256-92C2-C9661B2433C5}
 		{78D46E1B-0665-466B-A5E7-B8344843D26B} = {6E0695D6-C3F6-4256-92C2-C9661B2433C5}
 		{CF565A58-FFD0-4BC2-ADDF-969AC13FDD84} = {305476DC-A300-4E77-B6E0-CD683D6ED5B9}
+		{BC3C184D-D9A2-436C-8F8A-32113E388089} = {610A9A68-CCCA-42D6-8D59-60B3B5E44278}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC52624A-45C9-4ED1-8E74-B5F3B179F8C9}
