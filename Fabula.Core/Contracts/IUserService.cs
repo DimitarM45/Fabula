@@ -14,4 +14,6 @@ public interface IUserService
     Task<IEnumerable<UserDashboardViewModel>> GetAllForAdminDashboardAsync();
 
     Task<string?> GetUsernameAsync(string userId);
+
+    Task AddRoleToUserAsync(string userId, string roleName);
 }

@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 
 public class RoleFormModel
 {
+    public string? Id { get; set; }
+
     [Required(AllowEmptyStrings = false,
         ErrorMessage = StringRequiredErrorMessage)]
     [StringLength(NameMaxLength, MinimumLength = NameMinLength,

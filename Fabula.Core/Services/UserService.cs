@@ -6,8 +6,6 @@ using Data.Models;
 using Web.ViewModels.User;
 using Web.ViewModels.Admin.User;
 
-using static Common.GlobalConstants;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -109,5 +107,20 @@ public class UserService : IUserService
             return null;
 
         return user.UserName;
+    }
+
+    public async Task AddRoleToUserAsync(string userId, string roleId)
+    {
+        ApplicationUser? user = await userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return;
+
+        IdentityRole<Guid>? role = await dbContext.Roles.FirstOrDefaultAsync(r => r.Id.ToString() == roleId);
+
+        if (role == null)
+            return;
+
+        await userManager.AddToRoleAsync(user, role.Name);
     }
 }

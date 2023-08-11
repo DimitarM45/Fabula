@@ -1,0 +1,17 @@
+﻿@model RoleAllViewModel
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<div class="container text-center">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr />
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-6 g-4">
+        @foreach (RoleViewModel role in Model.Roles)
+        {
+
+        }
+    </div>
+</div>

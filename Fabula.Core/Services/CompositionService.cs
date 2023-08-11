@@ -341,9 +341,9 @@ public class CompositionService : ICompositionService
                 },
                 DeletedOn = c.DeletedOn,
                 PublishedOn = c.PublishedOn,
-                Comments = c.Comments.Count(),
-                Ratings = c.Ratings.Count(),
-                Rating = c.Ratings == null ? 0 : c.Ratings.Average(r => r.Value)
+                Comments = c.Comments.Count(c => c.DeletedOn == null),
+                Ratings = c.Ratings.Count(c => c.DeletedOn == null),
+                Rating = c.Ratings.Count(c => c.DeletedOn == null) == 0 ? 0.0 : c.Ratings.Average(r => r.Value)
             })
             .ToListAsync();
 

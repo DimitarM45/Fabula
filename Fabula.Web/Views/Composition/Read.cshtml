@@ -11,23 +11,23 @@
 
     bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
     bool isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model?.Author?.Id;
-    bool isAdmin = await userManager.IsInRoleAsync(user, "Admin");
+    bool isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
 }
 
 <div class="container">
     <div class="row">
         <div class="col-sm-2">
-            <a asp-controller="Rating" asp-action="All" asp-route-compositionid="@Model.Id" class="btn btn-primary">All ratings</a>
-            @await Component.InvokeAsync("RatingsPreview", new { numberOfRatings = 6, compositionId = Model.Id})
+            <a asp-controller="Rating" asp-action="All" asp-route-compositionid="@Model?.Id" class="btn btn-primary">All ratings</a>
+            @await Component.InvokeAsync("RatingsPreview", new { numberOfRatings = 6, compositionId = Model?.Id})
         </div>
         <div class="col-md-8">
             <div class="card text-bg-info">
                 <div class="card-body">
-                    <img src="@Model.CoverUrl" class="card-img-top" alt="Image not found :(" />
-                    <h1 class="text-center" style="padding-top: 20px">@Model.Title</h1>
+                    <img src="@Model?.CoverUrl" class="card-img-top" alt="Image not found :(" />
+                    <h1 class="text-center" style="padding-top: 20px">@Model?.Title</h1>
                     <p class="text-center" style="text-decoration: none; font-size: small">
                         Written by:
-                        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model?.Author?.Id" style="text-decoration: none">@Model.Author</a>
+                        <a asp-controller="User" asp-action="Profile" asp-route-userid="@Model?.Author?.Id" style="text-decoration: none">@Model?.Author?.Username</a>
                     </p>
                     <br />
                     <p class="text-center" style="font-size: small">
@@ -47,19 +47,19 @@
                             </a>
                         }
                     </p>
-                    <textarea disabled>@Model.Content</textarea>
+                    <textarea disabled>@Model?.Content</textarea>
                     @if (isAuthenticated && isAuthor || isAdmin)
                     {
                         <div class="text-center" style="margin-top: 2rem">
-                            <a asp-action="Edit" asp-route-compositionid="@Model.Id" class="btn btn-primary mt-3">Edit</a>
+                            <a asp-action="Edit" asp-route-compositionid="@Model?.Id" class="btn btn-primary mt-3">Edit</a>
                         </div>
                     }
                 </div>
             </div>
         </div>
         <div class="col-sm-2">
-            <a asp-controller="Comment" asp-action="All" asp-route-compositionid="@Model.Id" class="btn btn-primary text-center">All comments</a>
-            @await Component.InvokeAsync("CommentsPreview", new { numberOfComments = 6, compositionId = Model.Id})
+            <a asp-controller="Comment" asp-action="All" asp-route-compositionid="@Model?.Id" class="btn btn-primary text-center">All comments</a>
+            @await Component.InvokeAsync("CommentsPreview", new { numberOfComments = 6, compositionId = Model?.Id})
         </div>
     </div>
 </div>
