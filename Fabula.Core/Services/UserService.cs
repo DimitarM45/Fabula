@@ -43,6 +43,11 @@ public class UserService : IUserService
         ApplicationUser? user = await dbContext.Users
             .AsNoTracking()
             .Include(u => u.Followers)
+            .Include(u => u.WrittenCompositions)
+            .Include(u => u.FavoriteCompositions)
+            .Include(u => u.FollowedLists)
+            .Include(u => u.Ratings)
+            .Include(u => u.CreatedLists)
             .FirstOrDefaultAsync(u => u.Id.ToString() == userId);
 
         if (user == null)
@@ -62,7 +67,7 @@ public class UserService : IUserService
             CreatedLists = user.CreatedLists.Count(),
             FollowedLists = user.FollowedLists.Count(),
             Ratings = user.Ratings.Count(),
-            WrittenCompositions = user.Ratings.Count()
+            WrittenCompositions = user.WrittenCompositions.Count()
         };
 
         return userProfile;
@@ -122,5 +127,41 @@ public class UserService : IUserService
             return;
 
         await userManager.AddToRoleAsync(user, role.Name);
+    }
+
+    public async Task AddFavoriteGenreToUserAsync(string userId, int genreId)
+    {
+        ApplicationUser? user = await userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return;
+
+        Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+
+        if (genre == null)
+            return;
+
+        UserFavoriteGenre userGenre = new UserFavoriteGenre()
+        {
+            UserId = Guid.Parse(userId),
+            GenreId = genreId
+        };
+
+        await dbContext.UsersFavoriteGenres.AddAsync(userGenre);
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveFavoriteGenreFromUserAsync(string userId, int genreId)
+    {
+        UserFavoriteGenre? userGenre = await dbContext.UsersFavoriteGenres
+            .FirstOrDefaultAsync(ug => ug.UserId.ToString() == userId && ug.GenreId == genreId);
+
+        if (userGenre == null)
+            return;
+
+        dbContext.UsersFavoriteGenres.Remove(userGenre);
+
+        await dbContext.SaveChangesAsync();
     }
 }

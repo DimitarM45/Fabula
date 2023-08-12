@@ -1,7 +1,7 @@
 ﻿namespace Fabula.Core.Contracts;
 
-using Fabula.Web.ViewModels.Admin.User;
 using Web.ViewModels.User;
+using Web.ViewModels.Admin.User;
 
 public interface IUserService
 {
@@ -16,4 +16,8 @@ public interface IUserService
     Task<string?> GetUsernameAsync(string userId);
 
     Task AddRoleToUserAsync(string userId, string roleName);
+
+    Task AddFavoriteGenreToUserAsync(string userId, int genreId);
+
+    Task RemoveFavoriteGenreFromUserAsync(string userId, int genreId);
 }

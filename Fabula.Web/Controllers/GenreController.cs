@@ -26,6 +26,7 @@ public class GenreController : BaseController
         this.logger = logger;
     }
 
+    [HttpGet]
     [AllowAnonymous]
 
     public async Task<IActionResult> All()

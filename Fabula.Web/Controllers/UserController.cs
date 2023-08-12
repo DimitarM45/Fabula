@@ -6,10 +6,13 @@ using Infrastructure.Utilities;
 
 using static Common.Messages.LoggerMessages;
 using static Common.Messages.NotificationTypes;
+using static Common.Messages.ErrorMessages.Genre;
 using static Common.Messages.ErrorMessages.Shared;
+using static Common.Messages.SuccessMessages.Genre;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 using System.Security.Claims;
 
@@ -35,6 +38,9 @@ public class UserController : BaseController
         this.logger = logger;
     }
 
+    [HttpGet]
+    [AllowAnonymous]
+
     public async Task<IActionResult> Profile(string userId)
     {
         try
@@ -43,7 +49,7 @@ public class UserController : BaseController
 
             if (profileViewModel == null)
             {
-                TempData[WarningNotification] = 
+                TempData[WarningNotification] =
                     string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
 
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
@@ -66,8 +72,67 @@ public class UserController : BaseController
         }
     }
 
-    public async Task<IActionResult> DeletedWorks()
+    [HttpPost]
+
+    public async Task<IActionResult> FavoriteGenre(int genreId)
     {
-        return View();
+        string? userId = userService.GetUserId();
+
+        try
+        {
+            if (userId != null)
+            {
+                await userService.AddFavoriteGenreToUserAsync(userId, genreId);
+
+                TempData[SuccessNotification] = SuccessfulFavoriteGenreAddMessage;
+
+                return RedirectToAction("Profile", new { UserId = userId });
+            }
+
+            TempData[ErrorNotification] = FailedGenreFavoriteAddition;
+
+            return RedirectToAction("All", "Genre");
+        }
+        catch (Exception e)
+        {
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
+    }
+
+    [HttpPost]
+
+    public async Task<IActionResult> UnfavoriteGenre(int genreId)
+    {
+        string? userId = userService.GetUserId();
+
+        try
+        {
+            if (userId != null)
+            {
+                await userService.RemoveFavoriteGenreFromUserAsync(userId, genreId);
+
+                TempData[SuccessNotification] = SuccessfulFavoriteGenreRemoveMessage;
+
+                return RedirectToAction("Profile", new { UserId = userId });
+            }
+
+            TempData[ErrorNotification] = FailedGenreFavoriteRemoval;
+
+            return RedirectToAction("Profile", new { UserId = userId });
+        }
+        catch (Exception e)
+        {
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        }
     }
 }

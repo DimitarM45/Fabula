@@ -168,10 +168,7 @@ public class CompositionService : ICompositionService
         Composition? composition = await dbContext.Compositions
             .AsNoTracking()
             .Include(c => c.Author)
-            .Include(c => c.Comments)
-            .ThenInclude(c => c.Author)
-            .Include(c => c.Ratings)
-            .ThenInclude(r => r.User)
+            .Include(c => c.Favorites)
             .FirstOrDefaultAsync(c => c.Id.ToString() == compositionId && c.DeletedOn == null);
 
         if (composition == null)

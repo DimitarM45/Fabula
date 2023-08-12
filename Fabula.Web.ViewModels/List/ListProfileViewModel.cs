@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.List;
 
-using Fabula.Web.ViewModels.Composition;
+using Composition;
 
 public class ListProfileViewModel
 {

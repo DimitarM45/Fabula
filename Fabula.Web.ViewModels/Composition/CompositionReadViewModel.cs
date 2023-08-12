@@ -1,9 +1,9 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
+using User;
 using Genre;
 using Rating;
 using Comment;
-using Fabula.Web.ViewModels.User;
 
 public class CompositionReadViewModel
 {

@@ -1,6 +1,6 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
-using Fabula.Web.ViewModels.User;
+using User;
 using Genre;
 
 public class CompositionViewModel

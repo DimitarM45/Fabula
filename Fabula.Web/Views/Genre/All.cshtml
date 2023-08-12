@@ -1,11 +1,12 @@
-﻿@model IEnumerable<AllGenreViewModel>
+﻿@using System.Security.Claims;
+@model IEnumerable<AllGenreViewModel>
 @{
     ViewData["Title"] = "Genres";
 }
 
 <h1 class="text-center">Genres</h1>
 <hr />
-<div class="row row-cols-1 row-cols-md-6 g-4">
+<div class="row row-cols-1 row-cols-md-5 g-4">
     @{
         @foreach (var group in Model.GroupBy(g => g.Name?[0]).OrderBy(g => g.Key))
         {
@@ -23,7 +24,15 @@
                                    asp-route-currentPage=""
                                    asp-route-searchTerm=""
                                    asp-route-dateSorting=""
-                                   asp-route-ratingSorting="">@genre.Name (@genre.CompositionCount)</a>
+                                   asp-route-ratingSorting="">
+                                    @genre.Name (@genre.CompositionCount)
+                                    @if (User?.Identity?.IsAuthenticated ?? false)
+                                    {
+                                        <form method="post" asp-controller="User" asp-action="FavoriteGenre" asp-route-genreId="@genre.Id">
+                                            <input type="submit" class="btn-sm" value="&#11088;" />
+                                        </form>
+                                    }
+                                </a>
                             </li>
                         }
                     </ul>

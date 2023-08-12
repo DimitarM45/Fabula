@@ -6,7 +6,6 @@
 
 public static class ErrorMessages
 {
-
     /// <summary>
     /// Error messages shared by multiple form models and/or actions and notifications.
     /// </summary>
@@ -24,12 +23,10 @@ public static class ErrorMessages
         public const string InvalidInputDataErrorMessage = "Invalid input data!";
 
         public const string ResourceNotFoundErrorMessage = "The {0} you're looking for wasn't found!";
-
-        public const string PleaseTryAgainString = " Please try again!";
     }
 
     /// <summary>
-    /// Error messages used for the composition form models and/or related actions and notifications./>
+    /// Error messages used for composition form models and/or related actions and notifications./>
     /// </summary>
 
     public static class Composition
@@ -44,16 +41,20 @@ public static class ErrorMessages
     }
 
     /// <summary>
-    /// Error messages used for the authentication form models and/or related actions and notifications./>
+    /// Error messages used for genre form models and/or related actions and notifications./>
     /// </summary>
     
     public static class Genre
     {
         public const string NoGenreErrorMessage = "No valid genre was provided!";
+
+        public const string FailedGenreFavoriteAddition = "An error occurred trying to add this genre to your favorites!";
+
+        public const string FailedGenreFavoriteRemoval = "An error occurred trying to remove this genre from your favorites!";
     }
 
     /// <summary>
-    /// Error messages used for the authentication form models and/or related actions and notifications./>
+    /// Error messages used for authentication form models and/or related actions and notifications./>
     /// </summary>
 
     public static class Authentication
@@ -81,7 +82,7 @@ public static class ErrorMessages
     }
 
     /// <summary>
-    /// Error messages used for the account management form models and/or related actions and notifications./>
+    /// Error messages used for account management form models and/or related actions and notifications./>
     /// </summary>
 
     public static class AccountManagement

@@ -1,7 +1,8 @@
 ﻿namespace Fabula.Web.ViewComponents;
 
 using Core.Contracts;
-using Fabula.Web.ViewModels.Comment;
+using ViewModels.Comment;
+
 using Microsoft.AspNetCore.Mvc;
 
 public class CommentsPreviewViewComponent : ViewComponent

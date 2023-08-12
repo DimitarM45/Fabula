@@ -7,11 +7,20 @@
 
     string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    ApplicationUser? user = await userManager.FindByIdAsync(userId);
+    ApplicationUser? user = null;
 
     bool isAuthenticated = User?.Identity?.IsAuthenticated ?? false;
-    bool isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model?.Author?.Id;
-    bool isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
+
+    bool isAuthor = false;
+    bool isAdmin = false;
+
+    if (isAuthenticated)
+    {
+        user = await userManager.FindByIdAsync(userId);
+        isAuthor = User.FindFirstValue(ClaimTypes.NameIdentifier) == Model?.Author?.Id;
+        isAdmin = await userManager.IsInRoleAsync(user, AdminRoleName);
+    }
+
 }
 
 <div class="container">

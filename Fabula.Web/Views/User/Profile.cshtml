@@ -12,27 +12,43 @@
                     <div class="col">
                         <img class="rounded-circle me-1" src="@Model.ProfilePictureUrl" alt="Image not found :(" height="100" width="100" />
                     </div>
-                    <div class="col">
-                        @foreach (GenreViewModel genre in Model.FavoriteGenres)
-                        {
-                            <div class="row">
-                                <a style="text-decoration: none; color: midnightblue"
-                                   asp-controller="Composition"
-                                   asp-action="All"
-                                   asp-route-selectedGenres="@genre.Id"
-                                   asp-route-currentPage=""
-                                   asp-route-searchTerm=""
-                                   asp-route-dateSorting=""
-                                   asp-route-ratingSorting="">@genre.Name</a>
-                            </div>
-                        }
-                    </div>
                     <h5 class="card-title">@($"@{Model.Username}")</h5>
                     <h4 class="card-title">@($"{Model.FirstName} {Model.LastName}")</h4>
                     @if ((User?.Identity?.IsAuthenticated ?? false) && User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Id)
                     {
                         <a asp-area="Identity" asp-page="/Account/Manage/Index" class="card-link btn btn-info">Manage Account</a>
                     }
+                    <div class="col">
+                        @if (Model.FavoriteGenres.Any())
+                        {
+                            <h4 class="text-info">Favorite genres:</h4>
+                            @foreach (GenreViewModel genre in Model.FavoriteGenres)
+                            {
+                                <div class="row">
+                                    <a style="text-decoration: none; color: midnightblue"
+                                       asp-controller="Composition"
+                                       asp-action="All"
+                                       asp-route-selectedGenres="@genre.Id"
+                                       asp-route-currentPage=""
+                                       asp-route-searchTerm=""
+                                       asp-route-dateSorting=""
+                                       asp-route-ratingSorting="">
+                                        @genre.Name
+                                        @if ((User?.Identity?.IsAuthenticated ?? false) && User.FindFirstValue(ClaimTypes.NameIdentifier) == Model.Id)
+                                        {
+                                            <form method="post" asp-controller="User" asp-action="UnfavoriteGenre" asp-route-genreId="@genre.Id">
+                                                <input type="submit" class="btn-sm" value="&#10060;" />
+                                            </form>
+                                        }
+                                    </a>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <h4 class="text-info">@Model.Username doesn't have any favorite genres yet!</h4>
+                        }
+                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="card">
