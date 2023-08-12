@@ -75,9 +75,9 @@ builder.Services.AddControllersWithViews();
 
 WebApplication app = builder.Build();
 
-// To view the custom error pages - switch to Production or remove the conditions and only leave the second code block.
+// exception handler is turned on by default, if you wish to use developer exception pages change .IsEnvironment("Dev") to .IsDevelopment()
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsEnvironment("Dev"))
 {
     app.UseMigrationsEndPoint();
     app.UseDeveloperExceptionPage();
