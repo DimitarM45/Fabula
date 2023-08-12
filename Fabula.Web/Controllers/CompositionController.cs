@@ -140,6 +140,8 @@ public class CompositionController : BaseController
 
             string compositionId = await compositionService.AddAsync(formModel, userId);
 
+            await genreService.AddToCompositionAsync(compositionId, formModel.Genres);
+
             TempData[SuccessNotification] =
                 string.Format(SuccessfulResourceCreationMessage,
                 GetControllerName().ToLower(),
@@ -226,22 +228,22 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Edit(string compositionId)
     {
+        CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
+
         string? userId = userService.GetUserId();
 
         if (userId == null)
         {
             TempData[ErrorNotification] = FailedEditingCompositionErrorMessage;
 
-            return View();
+            return RedirectToAction("All");
         }
 
         try
         {
-            CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
-
             if (compositionFormModel == null)
             {
-                TempData[ErrorNotification] = 
+                TempData[ErrorNotification] =
                     string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
 
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
@@ -286,11 +288,15 @@ public class CompositionController : BaseController
                 return View(formModel);
             }
 
+            await genreService.RemoveFromCompositionAsync(formModel.Id!, formModel.Genres);
+
+            await genreService.AddToCompositionAsync(formModel.Id!, formModel.Genres);
+
             await compositionService.UpdateAsync(formModel);
 
             TempData[SuccessNotification] =
-                string.Format(SuccessfulResourceUpdateMessage, 
-                    GetControllerName().ToLower(), 
+                string.Format(SuccessfulResourceUpdateMessage,
+                    GetControllerName().ToLower(),
                     formModel.Title);
 
             return RedirectToAction("Read", new { CompositionId = formModel.Id });

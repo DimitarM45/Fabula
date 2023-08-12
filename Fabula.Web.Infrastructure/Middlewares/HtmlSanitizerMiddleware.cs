@@ -29,15 +29,14 @@ public class HtmlSanitizerMiddleware : IMiddleware
 
             foreach ((string key, StringValues value) in formFields)
             {
-                if (value.ToString().StartsWith("true") || value.ToString().StartsWith("false"))
-                {
-                    modifiedFormFields[key] =
-                        value.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries)[0];
-                }
-                else
-                {
-                    modifiedFormFields[key] = sanitizer.Sanitize(value.ToString());
-                }
+                ICollection<string?> stringValues = new List<string?>();
+
+                foreach (var valueString in value)
+                    stringValues.Add(sanitizer.Sanitize(valueString));
+
+                StringValues modifiedStringValues = new StringValues(stringValues.ToArray());
+
+                modifiedFormFields[key] = modifiedStringValues;
             }
 
             context.Request.Form = new FormCollection(modifiedFormFields);

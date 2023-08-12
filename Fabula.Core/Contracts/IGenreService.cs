@@ -10,7 +10,9 @@ public interface IGenreService
 
     Task<IEnumerable<GenreViewModel>> GetByIdAsync(string compositionId);
 
-    Task<IEnumerable<string>> GetAllNamesAsync();
-
     Task<IEnumerable<GenreViewModel>> GetForUserAsync(string userId);
+
+    Task AddToCompositionAsync(string compositionId, IEnumerable<int> genreIds);
+
+    Task RemoveFromCompositionAsync(string compositionId, IEnumerable<int> genreIds);
 }

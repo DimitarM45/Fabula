@@ -25,9 +25,12 @@ public class CompositionService : ICompositionService
 {
     private readonly FabulaDbContext dbContext;
 
-    public CompositionService(FabulaDbContext dbContext)
+    private readonly IGenreService genreService;
+
+    public CompositionService(FabulaDbContext dbContext, IGenreService genreService)
     {
         this.dbContext = dbContext;
+        this.genreService = genreService;
     }
 
     public async Task<CompositionQueryModel> GetAllAsync(IEnumerable<int>? selectedGenres = null,
@@ -143,6 +146,7 @@ public class CompositionService : ICompositionService
     {
         Composition composition = new Composition()
         {
+            Id = Guid.NewGuid(),
             Title = formModel.Title,
             Synopsis = formModel.Synopsis,
             Content = formModel.Content,
@@ -151,17 +155,6 @@ public class CompositionService : ICompositionService
             PublishedOn = DateTime.Now,
             hasAdultContent = formModel.HasAdultContent,
         };
-
-        foreach (int genreId in formModel.Genres)
-        {
-            CompositionGenre? genre = await dbContext.CompositionsGenres.FirstOrDefaultAsync(g => g.GenreId == genreId);
-
-            if (genre != null)
-                composition.Genres.Add(genre);
-        }
-
-        if (composition.Genres.Count == 0)
-            throw new InvalidOperationException(NoGenreErrorMessage);
 
         await dbContext.Compositions.AddAsync(composition);
 
@@ -252,30 +245,16 @@ public class CompositionService : ICompositionService
         Composition? compositionToUpdate = await dbContext.Compositions
             .FirstOrDefaultAsync(c => c.Id.ToString() == formModel.Id && c.DeletedOn == null);
 
-        if (compositionToUpdate != null)
-        {
-            ICollection<Genre> genresToUpdate = new List<Genre>();
+        if (compositionToUpdate == null)
+            return;
 
-            foreach (int genreId in formModel.Genres)
-            {
-                Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+        compositionToUpdate.Title = formModel.Title;
+        compositionToUpdate.Content = formModel.Content;
+        compositionToUpdate.Synopsis = formModel.Synopsis;
+        compositionToUpdate.CoverUrl = formModel.CoverUrl;
+        compositionToUpdate.hasAdultContent = formModel.HasAdultContent;
 
-                if (genre != null)
-                    genresToUpdate.Add(genre);
-            }
-
-            if (genresToUpdate.Count == 0)
-                throw new InvalidOperationException(NoGenreErrorMessage);
-
-            compositionToUpdate.Title = formModel.Title;
-            compositionToUpdate.Content = formModel.Content;
-            compositionToUpdate.Synopsis = formModel.Synopsis;
-            compositionToUpdate.CoverUrl = formModel.CoverUrl;
-
-            // TODO: FIX
-
-            await dbContext.SaveChangesAsync();
-        }
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<string?> GetRandomIdAsync()

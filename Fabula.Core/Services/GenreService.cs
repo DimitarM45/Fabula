@@ -5,6 +5,8 @@ using Contracts;
 using Data.Models;
 using Web.ViewModels.Genre;
 
+using static Common.Messages.ErrorMessages.Genre;
+
 using Microsoft.EntityFrameworkCore;
 
 using System.Threading.Tasks;
@@ -64,11 +66,6 @@ public class GenreService : IGenreService
         return genreViewModels;
     }
 
-    public Task<IEnumerable<string>> GetAllNamesAsync()
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<GenreViewModel>> GetForUserAsync(string userId)
     {
         IEnumerable<GenreViewModel> genreViewModels = await dbContext.Genres
@@ -82,5 +79,45 @@ public class GenreService : IGenreService
             .ToListAsync();
 
         return genreViewModels;
+    }
+
+    public async Task AddToCompositionAsync(string compositionId, IEnumerable<int> genreIds)
+    {
+        ICollection<CompositionGenre> genresToAdd = new List<CompositionGenre>();
+
+        foreach (int genreId in genreIds)
+        {
+            Genre? genre = await dbContext.Genres
+                .FirstOrDefaultAsync(g => g.Id == genreId);
+
+            if (genre == null)
+                continue;
+
+            CompositionGenre genreToAdd = new CompositionGenre()
+            {
+                CompositionId = Guid.Parse(compositionId),
+                GenreId = genreId
+            };
+
+            genresToAdd.Add(genreToAdd);
+        }
+
+        if (genresToAdd.Count == 0)
+            throw new InvalidOperationException(NoGenreErrorMessage);
+
+        await dbContext.CompositionsGenres.AddRangeAsync(genresToAdd);
+
+        await dbContext.SaveChangesAsync();
+    }
+
+    public async Task RemoveFromCompositionAsync(string compositionId, IEnumerable<int> genreIds)
+    {
+        IEnumerable<CompositionGenre> genresToDelete = await dbContext.CompositionsGenres
+            .Where(cg => cg.CompositionId.ToString() == compositionId)
+            .ToListAsync();
+
+        dbContext.CompositionsGenres.RemoveRange(genresToDelete);
+
+        await dbContext.SaveChangesAsync();
     }
 }
