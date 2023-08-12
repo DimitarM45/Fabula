@@ -4,8 +4,11 @@
 
 using Data.Models;
 
+using static Common.Messages.NotificationTypes;
 using static Common.Messages.ErrorMessages.Shared;
 using static Common.ValidationConstants.ApplicationUser;
+using static Common.Messages.ErrorMessages.AccountManagement;
+using static Common.Messages.SuccessMessages.AccountManagement;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -34,9 +37,6 @@ public class IndexModel : PageModel
     public string WebsiteUrl { get; set; }
 
     public string Bio { get; set; }
-
-    [TempData]
-    public string StatusMessage { get; set; }
 
     [BindProperty]
     public InputModel Input { get; set; }
@@ -86,7 +86,12 @@ public class IndexModel : PageModel
         ApplicationUser user = await _userManager.GetUserAsync(User);
 
         if (user == null)
-            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+        {
+            TempData[ErrorNotification] =
+                string.Format(ResourceNotFoundErrorMessage, "user");
+
+            return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
+        }
 
         await LoadAsync(user);
 
@@ -118,7 +123,7 @@ public class IndexModel : PageModel
 
             if (!setPhoneResult.Succeeded)
             {
-                StatusMessage = "Unexpected error when trying to set phone number.";
+                TempData[ErrorNotification] = PhoneNumberSetErrorMessage;
 
                 return RedirectToPage();
             }
@@ -129,7 +134,7 @@ public class IndexModel : PageModel
 
             if (!setBioResult.Succeeded)
             {
-                StatusMessage = "Unexpected error when trying to set bio.";
+                TempData[ErrorNotification] = BioSetErrorMessage;
 
                 return RedirectToPage();
             }
@@ -140,7 +145,7 @@ public class IndexModel : PageModel
 
             if (!setProfilePictureUrlResult.Succeeded)
             {
-                StatusMessage = "Unexpected error when trying to set profile picture url.";
+                TempData[ErrorNotification] = ProfilePictureUrlSetErrorMessage;
 
                 return RedirectToPage();
             }
@@ -151,7 +156,7 @@ public class IndexModel : PageModel
 
             if (!setProfilePictureUrlResult.Succeeded)
             {
-                StatusMessage = "Unexpected error when trying to set website url.";
+                TempData[ErrorNotification] = WebsiteUrlSetErrorMessage;
 
                 return RedirectToPage();
             }
@@ -159,7 +164,7 @@ public class IndexModel : PageModel
 
         await _signInManager.RefreshSignInAsync(user);
 
-        StatusMessage = "Your profile has been updated";
+        TempData[SuccessNotification] = SuccessfulAccountDetailsUpdate;
 
         return RedirectToPage();
     }

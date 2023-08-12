@@ -2,10 +2,11 @@
 
 using Core.Contracts;
 using ViewModels.Account;
-using Common.Messages.Enums;
+using Infrastructure.Utilities;
 
 using static Common.GlobalConstants;
 using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
 using static Common.Messages.ErrorMessages.Shared;
 using static Common.Messages.ErrorMessages.Authentication;
 using static Common.Messages.SuccessMessages.Authentication;
@@ -22,7 +23,7 @@ public class AccountController : BaseController
 
     private ILogger logger;
 
-    public AccountController(IAccountService accountService, ILogger logger)
+    public AccountController(IAccountService accountService, ILogger<AccountController> logger)
     {
         this.accountService = accountService;
         this.logger = logger;
@@ -47,11 +48,11 @@ public class AccountController : BaseController
 
         bool isBirthdateValid = DateTime.TryParse(formModel.Birthdate, out userBirthdate);
 
-        bool isBirthdateCorrect = userBirthdate < DateTime.Now.AddYears(-3);
+        bool isBirthdateCorrect = userBirthdate <= DateTime.Now.AddYears(-MinimumAgeRequirement);
 
         if (!ModelState.IsValid || !isBirthdateValid || !isBirthdateCorrect)
         {
-            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+            TempData[ErrorNotification] = InvalidInputDataErrorMessage;
 
             return RedirectToAction("Register");
         }
@@ -64,7 +65,7 @@ public class AccountController : BaseController
         {
             if (userResult.Result.Succeeded)
             {
-                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulRegistrationMessage;
+                TempData[ErrorNotification] = SuccessfulRegistrationMessage;
 
                 await accountService.AddRoleToAccountAsync(userResult.UserId, UserRoleName);
 
@@ -78,11 +79,9 @@ public class AccountController : BaseController
             else
             {
                 foreach (var error in userResult.Result.Errors)
-                {
                     ModelState.AddModelError(string.Empty, error.Description);
-                }
 
-                TempData[NotificationType.ErrorMessage.ToString()] = FailedRegistrationErrorMessage;
+                TempData[ErrorNotification] = FailedRegistrationErrorMessage;
 
                 return RedirectToAction("Register");
             }
@@ -91,15 +90,10 @@ public class AccountController : BaseController
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -124,7 +118,7 @@ public class AccountController : BaseController
         {
             ModelState.AddModelError(string.Empty, InvalidLoginAttemptErrorMessage);
 
-            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+            TempData[ErrorNotification] = InvalidInputDataErrorMessage;
 
             return RedirectToAction("Login");
         }
@@ -141,7 +135,7 @@ public class AccountController : BaseController
                 if (formModel.Utilities.ReturnUrl == null)
                     return RedirectToAction("Index", "Home");
 
-                TempData[NotificationType.SuccessMessage.ToString()] = SuccessfulLoginMessage;
+                TempData[SuccessNotification] = SuccessfulLoginMessage;
 
                 return LocalRedirect(formModel.Utilities.ReturnUrl);
             }
@@ -151,7 +145,7 @@ public class AccountController : BaseController
 
             if (userResult.Result.IsLockedOut)
             {
-                TempData[NotificationType.ErrorMessage.ToString()] = AccountLockoutErrorMessage;
+                TempData[ErrorNotification] = AccountLockoutErrorMessage;
 
                 return RedirectToAction("Lockout");
             }
@@ -160,7 +154,7 @@ public class AccountController : BaseController
             {
                 ModelState.AddModelError("Login", IncorrectLoginCredentialErrorMessage);
 
-                TempData[NotificationType.ErrorMessage.ToString()] = FailedLoginErrorMessage;
+                TempData[ErrorNotification] = FailedLoginErrorMessage;
 
                 return RedirectToAction("Login");
             }
@@ -169,15 +163,10 @@ public class AccountController : BaseController
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }

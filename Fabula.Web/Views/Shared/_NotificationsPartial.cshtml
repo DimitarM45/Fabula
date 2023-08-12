@@ -1,6 +1,6 @@
-﻿﻿@using Fabula.Common.Messages.Enums;
+﻿﻿@using static Fabula.Common.Messages.NotificationTypes;
 
-@if (TempData.ContainsKey(NotificationType.ErrorMessage.ToString()))
+@if (TempData.ContainsKey(ErrorNotification))
 {
     <script>
         toastr.options = {
@@ -9,11 +9,11 @@
             "preventDuplicates": true
         }
 
-        toastr.error('@TempData[NotificationType.ErrorMessage.ToString()]');
+        toastr.error('@TempData[ErrorNotification]');
     </script>
 }
 
-@if (TempData.ContainsKey(NotificationType.WarningMessage.ToString()))
+@if (TempData.ContainsKey(WarningNotification))
 {
     <script>
         toastr.options = {
@@ -22,11 +22,11 @@
             "preventDuplicates": true
         }
 
-        toastr.warning('@TempData[NotificationType.WarningMessage.ToString()]');
+        toastr.warning('@TempData[WarningNotification]');
     </script>
 }
 
-@if (TempData.ContainsKey(NotificationType.InformationMessage.ToString()))
+@if (TempData.ContainsKey(InformationNotificaiton))
 {
     <script>
         toastr.options = {
@@ -35,11 +35,11 @@
             "preventDuplicates": true
         }
 
-        toastr.info('@TempData[NotificationType.InformationMessage.ToString()]');
+        toastr.info('@TempData[InformationNotificaiton]');
     </script>
 }
 
-@if (TempData.ContainsKey(NotificationType.SuccessMessage.ToString()))
+@if (TempData.ContainsKey(SuccessNotification))
 {
     <script>
         toastr.options = {
@@ -48,6 +48,6 @@
             "preventDuplicates": true
         }
 
-        toastr.success('@TempData[NotificationType.SuccessMessage.ToString()]');
+        toastr.success('@TempData[SuccessNotification]');
     </script>
 }

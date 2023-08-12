@@ -6,7 +6,6 @@
 
 public static class ErrorMessages
 {
-    private const string PleaseTryAgainString = "Please try again!";
 
     /// <summary>
     /// Error messages shared by multiple form models and/or actions and notifications.
@@ -20,10 +19,13 @@ public static class ErrorMessages
 
         public const string InvalidStringErrorMessage = "{0} is invalid!";
 
-        public const string GeneralErrorMessage = "An error occurred!" + " " + PleaseTryAgainString;
+        public const string GeneralErrorMessage = "Something went wrong!";
 
-        public const string InvalidInputDataErrorMessage = "Invalid input data!" + " " + PleaseTryAgainString;
+        public const string InvalidInputDataErrorMessage = "Invalid input data!";
 
+        public const string ResourceNotFoundErrorMessage = "The {0} you're looking for wasn't found!";
+
+        public const string PleaseTryAgainString = " Please try again!";
     }
 
     /// <summary>
@@ -34,7 +36,7 @@ public static class ErrorMessages
     {
         public const string GenreCountErrorMessage = "A composition must have at least {1} genre!";
 
-        public const string FailedRestoreErrorMessage = "Your work couldn't be restored!.";
+        public const string FailedRestoreErrorMessage = "Your work couldn't be restored!";
 
         public const string FailedCreatingCompositionErrorMessage = "An error occurred trying to create your story!";
 
@@ -53,10 +55,26 @@ public static class ErrorMessages
 
         public const string InvalidLoginAttemptErrorMessage = "Invalid login attempt!";
 
-        public const string FailedRegistrationErrorMessage = "Registration failed!" + " " + PleaseTryAgainString;
+        public const string FailedRegistrationErrorMessage = "Registration failed!";
 
-        public const string FailedLoginErrorMessage = "Login failed!" + " " + PleaseTryAgainString;
+        public const string FailedLoginErrorMessage = "Login failed!";
 
         public const string AccountLockoutErrorMessage = "Login attempt limit exceeded! Try again later.";
+    }
+
+    public static class Authorization
+    {
+        public const string UnauthorizedErrorMessage = "Unauthorized action!";
+    }
+
+    public static class AccountManagement
+    {
+        public const string PhoneNumberSetErrorMessage = "An unexpected error when trying to set phone number!";
+
+        public const string BioSetErrorMessage = "An unexpected error occurred when trying to set bio!";
+
+        public const string ProfilePictureUrlSetErrorMessage = "An unexpected error occurred when trying to set profile picture url!";
+
+        public const string WebsiteUrlSetErrorMessage = "An unexpected error when trying to set website url!";
     }
 }

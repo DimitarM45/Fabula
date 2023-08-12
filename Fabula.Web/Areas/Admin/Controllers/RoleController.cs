@@ -2,15 +2,18 @@
 
 using Core.Contracts;
 using ViewModels.Admin.Role;
-using Common.Messages.Enums;
 
 using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
 using static Common.Messages.ErrorMessages.Shared;
+using static Common.Messages.SuccessMessages.Shared;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using System.Security.Claims;
+using Fabula.Web.Infrastructure.Utilities;
+using Fabula.Common.Messages;
 
 public class RoleController : BaseController
 {
@@ -18,7 +21,7 @@ public class RoleController : BaseController
 
     private readonly ILogger logger;
 
-    public RoleController(IRoleService roleService, ILogger logger)
+    public RoleController(IRoleService roleService, ILogger<RoleController> logger)
     {
         this.roleService = roleService;
         this.logger = logger;
@@ -38,15 +41,10 @@ public class RoleController : BaseController
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -60,7 +58,7 @@ public class RoleController : BaseController
         {
             ModelState.AddModelError(string.Empty, InvalidInputDataErrorMessage);
 
-            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+            TempData[ErrorNotification] = InvalidInputDataErrorMessage;
 
             return RedirectToAction("All");
         }
@@ -69,21 +67,21 @@ public class RoleController : BaseController
         {
             await roleService.AddAsync(roleFormModel);
 
+            TempData[SuccessNotification] = 
+                string.Format(SuccessfulResourceCreationMessage,
+                    GetControllerName().ToLower(),
+                    roleFormModel.Name);
+
             return RedirectToAction("All");
         }
         catch (Exception e)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -99,7 +97,10 @@ public class RoleController : BaseController
 
             if (roleFormModel == null)
             {
-                return RedirectToAction();
+                TempData[WarningNotification] = 
+                    string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
+
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
             }
 
             return View(roleFormModel);
@@ -108,15 +109,10 @@ public class RoleController : BaseController
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -130,7 +126,7 @@ public class RoleController : BaseController
         {
             ModelState.AddModelError(string.Empty, InvalidInputDataErrorMessage);
 
-            TempData[NotificationType.ErrorMessage.ToString()] = InvalidInputDataErrorMessage;
+            TempData[ErrorNotification] = InvalidInputDataErrorMessage;
 
             return View(roleFormModel);
         }
@@ -139,21 +135,21 @@ public class RoleController : BaseController
         {
             await roleService.UpdateAsync(roleFormModel);
 
+            TempData[SuccessNotification] =
+                string.Format(SuccessfulResourceUpdateMessage, 
+                    GetControllerName().ToLower(), 
+                    roleFormModel.Name);
+
             return RedirectToAction("All");
         }
         catch (Exception e)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -167,21 +163,19 @@ public class RoleController : BaseController
         {
             await roleService.DeleteAsync(roleId);
 
+            TempData[SuccessNotification] =
+                string.Format(SuccessfulResourceDeletionMessage, GetControllerName().ToLower());
+
             return RedirectToAction("All");
         }
         catch (Exception e)
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }

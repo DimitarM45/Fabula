@@ -1,10 +1,11 @@
 ﻿namespace Fabula.Web.Areas.Admin.Controllers;
 
 using Core.Contracts;
-using Common.Messages.Enums;
+using Infrastructure.Utilities; 
 using ViewModels.Admin.Dashboard;
 
 using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
 using static Common.Messages.ErrorMessages.Shared;
 
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class HomeController : BaseController
 
     private readonly ILogger logger;
 
-    public HomeController(IUserService userService, ICompositionService compositionService, ILogger logger)
+    public HomeController(IUserService userService, ICompositionService compositionService, ILogger<HomeController> logger)
     {
         this.userService = userService;
         this.compositionService = compositionService;
@@ -40,15 +41,10 @@ public class HomeController : BaseController
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }

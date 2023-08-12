@@ -2,9 +2,18 @@
 
 using Core.Contracts;
 using ViewModels.Home;
+using Infrastructure.Utilities;
+
+using static Common.GlobalConstants;
+using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
+using static Common.Messages.ErrorMessages.Shared;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+
+using System.Security.Claims;
 
 public class HomeController : BaseController
 {
@@ -12,10 +21,13 @@ public class HomeController : BaseController
 
     private readonly ICompositionService compositionService;
 
-    public HomeController(IUserService userService, ICompositionService compositionService)
+    private readonly ILogger logger;
+
+    public HomeController(IUserService userService, ICompositionService compositionService, ILogger<HomeController> logger)
     {
         this.userService = userService;
         this.compositionService = compositionService;
+        this.logger = logger;
     }
 
     [HttpGet]
@@ -30,8 +42,15 @@ public class HomeController : BaseController
             homeViewModel.CompositionsCount = await compositionService.GetCountAsync();
             homeViewModel.UsersCount = await userService.GetCountAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
@@ -42,15 +61,11 @@ public class HomeController : BaseController
     [HttpGet("/privacy")]
 
     public IActionResult Privacy()
-    {
-        return View();
-    }
+        => View();
 
     [HttpGet("/area/select")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = AdminRoleName)]
 
     public IActionResult SelectArea()
-    {
-        return View();
-    }
+        => View();
 }

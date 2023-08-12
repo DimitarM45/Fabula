@@ -2,17 +2,19 @@
 
 using Core.Contracts;
 using Core.ServiceModels;
-using Common.Messages.Enums;
 using ViewModels.Composition;
+using Infrastructure.Utilities;
 
+using static Common.GlobalConstants;
 using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
 using static Common.Messages.ErrorMessages.Shared;
+using static Common.Messages.SuccessMessages.Shared;
 using static Common.Messages.ErrorMessages.Composition;
+using static Common.Messages.ErrorMessages.Authorization;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-
-using System.Security.Claims;
 
 public class CompositionController : BaseController
 {
@@ -24,7 +26,7 @@ public class CompositionController : BaseController
 
     private readonly IAccountService accountService;
 
-    private readonly ILogger<CompositionController> logger;
+    private readonly ILogger logger;
 
     public CompositionController(
         IGenreService genreService,
@@ -68,17 +70,12 @@ public class CompositionController : BaseController
         }
         catch (Exception e)
         {
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string? userId = userService.GetUserId();
 
-            logger.LogWarning(string.Format(Warning,
-                e.Message, 
-                e.StackTrace, 
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName + 
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            TempData[NotificationType.ErrorMessage.ToString()] = GeneralErrorMessage;
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -94,23 +91,18 @@ public class CompositionController : BaseController
     {
         CompositionFormModel compositionFormModel = new CompositionFormModel();
 
-        string? userId = userService.GetUserId();
-
         try
         {
             compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
         }
         catch (Exception e)
         {
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            string? userId = userService.GetUserId();
 
-            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -130,6 +122,8 @@ public class CompositionController : BaseController
 
                 ModelState.AddModelError("", "Invalid input when creating composition!");
 
+                TempData[ErrorNotification] = InvalidInputDataErrorMessage;
+
                 return View(formModel);
             }
 
@@ -139,17 +133,29 @@ public class CompositionController : BaseController
             {
                 formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
-                TempData["Error"] = FailedCreatingCompositionErrorMessage;
+                TempData[ErrorNotification] = FailedCreatingCompositionErrorMessage;
 
                 return View(formModel);
             }
 
             string compositionId = await compositionService.AddAsync(formModel, userId);
 
+            TempData[SuccessNotification] =
+                string.Format(SuccessfulResourceCreationMessage,
+                GetControllerName().ToLower(),
+                formModel.Title);
+
             return RedirectToAction("Read", new { CompositionId = compositionId });
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            string? userId = userService.GetUserId();
+
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
@@ -159,14 +165,17 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Read(string compositionId)
     {
-        string? userId = userService.GetUserId();
-
         try
         {
             CompositionReadViewModel? compositionReadViewModel = await compositionService.GetByIdAsync(compositionId);
 
             if (compositionReadViewModel == null)
-                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+            {
+                TempData[ErrorNotification] =
+                    string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
+
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
+            }
 
             compositionReadViewModel.Genres = await genreService.GetByIdAsync(compositionId);
 
@@ -176,15 +185,12 @@ public class CompositionController : BaseController
         }
         catch (Exception e)
         {
-            logger.LogWarning(string.Format(Warning,
-                e.Message,
-                e.StackTrace,
-                userId == null ? NonExistentUser : userId,
-                "/" + ControllerContext.ActionDescriptor.ControllerName +
-                "/" + ControllerContext.ActionDescriptor.ActionName,
-                DateTime.Now));
+            string? userId = userService.GetUserId();
 
-            TempData[NotificationType.ErrorMessage.ToString()] = FailedResourceRetrieval;
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
 
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
@@ -198,10 +204,20 @@ public class CompositionController : BaseController
         {
             await compositionService.DeleteByIdAsync(compositionId);
 
-            return RedirectToAction("Works", "User", new { UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) });
+            TempData[SuccessNotification] =
+                string.Format(SuccessfulResourceDeletionMessage, GetControllerName().ToLower());
+
+            return RedirectToAction("User", "Deleted");
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            string? userId = userService.GetUserId();
+
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
@@ -214,7 +230,7 @@ public class CompositionController : BaseController
 
         if (userId == null)
         {
-            TempData[NotificationType.ErrorMessage.ToString()] = FailedEditingCompositionErrorMessage;
+            TempData[ErrorNotification] = FailedEditingCompositionErrorMessage;
 
             return View();
         }
@@ -224,17 +240,31 @@ public class CompositionController : BaseController
             CompositionFormModel? compositionFormModel = await compositionService.GetForEditAsync(compositionId);
 
             if (compositionFormModel == null)
-                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+            {
+                TempData[ErrorNotification] = 
+                    string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
 
-            if (userId != compositionFormModel.AuthorId && !await accountService.IsInRoleAsync(userId, "Admin"))
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
+            }
+
+            if (userId != compositionFormModel.AuthorId && !await accountService.IsInRoleAsync(userId, AdminRoleName))
+            {
+                TempData[WarningNotification] = UnauthorizedErrorMessage;
+
                 return RedirectToAction("HandleErrors", "Error", new { statusCode = 401 });
+            }
 
             compositionFormModel.GenresToSelect = await genreService.GetAllForSelectAsync();
 
             return View(compositionFormModel);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
@@ -247,19 +277,33 @@ public class CompositionController : BaseController
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Invalid input when creating composition!");
+                ModelState.AddModelError(string.Empty, InvalidInputDataErrorMessage);
 
                 formModel.GenresToSelect = await genreService.GetAllForSelectAsync();
+
+                TempData[ErrorNotification] = InvalidInputDataErrorMessage;
 
                 return View(formModel);
             }
 
             await compositionService.UpdateAsync(formModel);
 
+            TempData[SuccessNotification] =
+                string.Format(SuccessfulResourceUpdateMessage, 
+                    GetControllerName().ToLower(), 
+                    formModel.Title);
+
             return RedirectToAction("Read", new { CompositionId = formModel.Id });
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            string? userId = userService.GetUserId();
+
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }
@@ -269,21 +313,31 @@ public class CompositionController : BaseController
 
     public async Task<IActionResult> Random()
     {
-        string? randomId = null;
-
         try
         {
-            randomId = await compositionService.GetRandomIdAsync();
+            string? randomId = await compositionService.GetRandomIdAsync();
+
+            if (randomId == null)
+            {
+                TempData[ErrorNotification] =
+                    string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
+
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
+            }
+
+            return RedirectToAction("Read", new { CompositionId = randomId });
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            string? userId = userService.GetUserId();
+
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
-
-        if (randomId == null)
-            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-
-        return RedirectToAction("Read", new { CompositionId = randomId });
     }
 
     [HttpGet]
@@ -292,20 +346,31 @@ public class CompositionController : BaseController
     {
         bool isRestored = false;
 
+        string? userId = userService.GetUserId();
+
         try
         {
             isRestored = await compositionService.RestoreByIdAsync(compositionId);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
+
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
 
         if (isRestored)
+        {
+            TempData[SuccessNotification] = SuccessfulResourceRestorationMessage;
+
             return RedirectToAction("Read", new { CompositionId = compositionId });
+        }
 
-        TempData["FailedRestore"] = FailedRestoreErrorMessage;
+        TempData[ErrorNotification] = FailedRestoreErrorMessage;
 
-        return View("MyWorks", "User");
+        return RedirectToAction("Deleted");
     }
 }

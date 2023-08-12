@@ -8,5 +8,17 @@ using Microsoft.AspNetCore.Authorization;
 
 public class BaseController : Controller
 {
+    protected string GetControllerName()
+    {
+        string controllerName = ControllerContext.ActionDescriptor.ControllerName;
 
+        return controllerName;
+    }
+
+    protected string GetActionName()
+    {
+        string actionName = ControllerContext.ActionDescriptor.ActionName;
+
+        return actionName;
+    }
 }

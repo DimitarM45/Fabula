@@ -73,9 +73,7 @@
 
     <script>
         $(document).ready(function () {
-            var minAge = 13;
-
-            var endDate = new Date().getFullYear() - minAge;
+            var endDate = new Date().getFullYear() - MinimumAgeRequirement;
 
             $('.datepicker').datepicker({
                 format: 'dd-mm-yyyy',

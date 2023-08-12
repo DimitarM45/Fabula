@@ -2,9 +2,16 @@
 
 using Core.Contracts;
 using ViewModels.User;
-using ViewModels.Composition;
+using Infrastructure.Utilities;
+
+using static Common.Messages.LoggerMessages;
+using static Common.Messages.NotificationTypes;
+using static Common.Messages.ErrorMessages.Shared;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+
+using System.Security.Claims;
 
 public class UserController : BaseController
 {
@@ -14,13 +21,18 @@ public class UserController : BaseController
 
     private readonly IGenreService genreService;
 
-    public UserController(IUserService userService,
+    private readonly ILogger logger;
+
+    public UserController(
+        IUserService userService,
         ICompositionService compositionService,
-        IGenreService genreService)
+        IGenreService genreService,
+        ILogger<UserController> logger)
     {
         this.userService = userService;
         this.compositionService = compositionService;
         this.genreService = genreService;
+        this.logger = logger;
     }
 
     public async Task<IActionResult> Profile(string userId)
@@ -30,31 +42,26 @@ public class UserController : BaseController
             UserProfileViewModel? profileViewModel = await userService.GetProfileAsync(userId);
 
             if (profileViewModel == null)
-                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
+            {
+                TempData[WarningNotification] = 
+                    string.Format(ResourceNotFoundErrorMessage, GetControllerName().ToLower());
+
+                return RedirectToAction("HandleErrors", "Error", new { statusCode = 404 });
+            }
 
             profileViewModel.FavoriteGenres = await genreService.GetForUserAsync(userId);
 
-            if (profileViewModel == null)
-                return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-
             return View(profileViewModel);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
-        }
-    }
+            string? user = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    public async Task<IActionResult> Works(string userId)
-    {
-        try
-        {
-            IEnumerable<CompositionProfileViewModel> compositionViewModels = await compositionService.GetAllForUserAsync(userId);
+            logger.LogWarning(
+                LogMessageFormatter.FormatWarningLogMessage(Warning, e, userId, GetControllerName(), GetActionName()));
 
-            return View("All", new { compositionViewModels });
-        }
-        catch (Exception)
-        {
+            TempData[ErrorNotification] = GeneralErrorMessage;
+
             return RedirectToAction("HandleErrors", "Error", new { statusCode = 500 });
         }
     }

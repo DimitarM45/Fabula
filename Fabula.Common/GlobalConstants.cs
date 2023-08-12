@@ -12,6 +12,8 @@ public static class GlobalConstants
 
     public const int CompositionsPerPageCount = 10;
 
+    public const int MinimumAgeRequirement = 13;
+
     public const string AdminRoleName = "Admin";
 
     public const string AdminAreaName = "Admin";
