@@ -1,9 +1,9 @@
 ﻿namespace Fabula.Core.Contracts;
 
 using Enums;
-using Fabula.Web.ViewModels.Admin.Composition;
 using ServiceModels;
 using Web.ViewModels.Composition;
+using Web.ViewModels.Admin.Composition;
 
 public interface ICompositionService
 {
@@ -28,8 +28,6 @@ public interface ICompositionService
     Task<string?> GetRandomIdAsync();
 
     Task<bool> RestoreByIdAsync(string compositionId);
-
-    Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId);
 
     Task<int> GetCountAsync();
 

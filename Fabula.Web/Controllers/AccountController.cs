@@ -65,11 +65,11 @@ public class AccountController : BaseController
         {
             if (userResult.Result.Succeeded)
             {
-                TempData[ErrorNotification] = SuccessfulRegistrationMessage;
-
                 await accountService.AddRoleToAccountAsync(userResult.UserId, UserRoleName);
 
                 await accountService.SignInAccountAsync(userResult.UserId);
+
+                TempData[SuccessNotification] = SuccessfulRegistrationMessage;
 
                 if (formModel.Utilities.ReturnUrl == null)
                     return RedirectToAction("Index", "Home");
@@ -114,7 +114,7 @@ public class AccountController : BaseController
 
     public async Task<IActionResult> Login(LoginFormModel formModel)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
             ModelState.AddModelError(string.Empty, InvalidLoginAttemptErrorMessage);
 
@@ -129,13 +129,13 @@ public class AccountController : BaseController
 
             if (userResult.Result.Succeeded)
             {
-                if (await accountService.IsInRoleAsync(userResult.UserId, "Admin"))
+                TempData[SuccessNotification] = SuccessfulLoginMessage;
+
+                if (await accountService.IsInRoleAsync(userResult.UserId, AdminRoleName))
                     return RedirectToAction("SelectArea", "Home");
 
                 if (formModel.Utilities.ReturnUrl == null)
                     return RedirectToAction("Index", "Home");
-
-                TempData[SuccessNotification] = SuccessfulLoginMessage;
 
                 return LocalRedirect(formModel.Utilities.ReturnUrl);
             }

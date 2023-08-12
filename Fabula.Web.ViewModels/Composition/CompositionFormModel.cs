@@ -1,6 +1,5 @@
 ﻿namespace Fabula.Web.ViewModels.Composition;
 
-using Tag;
 using Genre;
 using Attributes;
 using Attributes.Enums;
@@ -16,7 +15,6 @@ public class CompositionFormModel
 {
     public CompositionFormModel()
     {
-        Tags = new HashSet<TagFormModel>();
         Genres = new HashSet<int>();
         GenresToSelect = new HashSet<GenreViewModel>();
     }
@@ -55,8 +53,6 @@ public class CompositionFormModel
     public string? AuthorId { get; set; }
 
     public bool HasAdultContent { get; set; }
-
-    public ICollection<TagFormModel> Tags { get; set; }
 
     [ElementCount(1, CountStrategy.Minimum,
         ErrorMessage = GenreCountErrorMessage)]

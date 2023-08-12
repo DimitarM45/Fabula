@@ -46,6 +46,15 @@ public static class ErrorMessages
     /// <summary>
     /// Error messages used for the authentication form models and/or related actions and notifications./>
     /// </summary>
+    
+    public static class Genre
+    {
+        public const string NoGenreErrorMessage = "No valid genre was provided!";
+    }
+
+    /// <summary>
+    /// Error messages used for the authentication form models and/or related actions and notifications./>
+    /// </summary>
 
     public static class Authentication
     {
@@ -62,10 +71,18 @@ public static class ErrorMessages
         public const string AccountLockoutErrorMessage = "Login attempt limit exceeded! Try again later.";
     }
 
+    /// <summary>
+    /// Error messages used for authorization and/or related actions and notifications./>
+    /// </summary>
+
     public static class Authorization
     {
         public const string UnauthorizedErrorMessage = "Unauthorized action!";
     }
+
+    /// <summary>
+    /// Error messages used for the account management form models and/or related actions and notifications./>
+    /// </summary>
 
     public static class AccountManagement
     {

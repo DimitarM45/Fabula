@@ -27,7 +27,7 @@ public class GenreService : IGenreService
             {
                 Id = g.Id,
                 Name = g.Name,
-                CompositionCount = g.Compositions.Count(c => c.DeletedOn == null)
+                CompositionCount = g.Compositions.Count(c => c.Composition.DeletedOn == null)
             })
             .ToListAsync();
 
@@ -56,8 +56,8 @@ public class GenreService : IGenreService
             .SelectMany(c => c.Genres
                 .Select(g => new GenreViewModel()
                 {
-                    Id = g.Id,
-                    Name = g.Name,
+                    Id = g.GenreId,
+                    Name = g.Genre.Name,
                 }))
             .ToListAsync();
 
@@ -73,7 +73,7 @@ public class GenreService : IGenreService
     {
         IEnumerable<GenreViewModel> genreViewModels = await dbContext.Genres
             .AsNoTracking()
-            .Where(g => g.Favorites.Any(f => f.Id.ToString() == userId))
+            .Where(g => g.Favorites.Any(f => f.UserId.ToString() == userId))
             .Select(g => new GenreViewModel()
             {
                 Id = g.Id,

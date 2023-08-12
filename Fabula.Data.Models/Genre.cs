@@ -12,8 +12,8 @@ public class Genre
 {
     public Genre()
     {
-        Compositions = new HashSet<Composition>();
-        Favorites = new HashSet<ApplicationUser>();
+        Compositions = new HashSet<CompositionGenre>();
+        Favorites = new HashSet<UserFavoriteGenre>();
     }
 
     [Required]
@@ -27,7 +27,7 @@ public class Genre
 
     public string Name { get; set; } = null!;
 
-    public IEnumerable<Composition> Compositions { get; set; }
+    public IEnumerable<CompositionGenre> Compositions { get; set; }
 
-    public IEnumerable<ApplicationUser> Favorites { get; set; }
+    public IEnumerable<UserFavoriteGenre> Favorites { get; set; }
 }

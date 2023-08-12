@@ -5,7 +5,7 @@ using Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-public class UserFavoritePieceConfiguration : IEntityTypeConfiguration<UserFavoriteComposition>
+public class UserFavoriteCompositionConfiguration : IEntityTypeConfiguration<UserFavoriteComposition>
 {
     public void Configure(EntityTypeBuilder<UserFavoriteComposition> builder)
     {

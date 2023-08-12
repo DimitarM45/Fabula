@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 using System.Reflection;
-using System.Reflection.Emit;
 
 public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
@@ -24,8 +23,6 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
 
     public DbSet<Comment> Comments { get; set; } = null!;
 
-    public DbSet<Tag> Tags { get; set; } = null!;
-
     public DbSet<List> Lists { get; set; } = null!;
 
     public DbSet<UserLikedComment> UsersLikedComments { get; set; } = null!;
@@ -35,6 +32,10 @@ public class FabulaDbContext : IdentityDbContext<ApplicationUser, IdentityRole<G
     public DbSet<UserFollowedList> UsersFollowedLists { get; set; } = null!;
 
     public DbSet<UserLikedList> UsersLikedLists { get; set; } = null!;
+
+    public DbSet<UserFavoriteGenre> UsersFavoriteGenres { get; set; } = null!;
+
+    public DbSet<CompositionGenre> CompositionsGenres { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

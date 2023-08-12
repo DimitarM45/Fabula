@@ -5,13 +5,13 @@ using Enums;
 using Contracts;
 using Data.Models;
 using ServiceModels;
-using Web.ViewModels.Tag;
 using Web.ViewModels.User;
 using Web.ViewModels.Genre;
 using Web.ViewModels.Composition;
 using Web.ViewModels.Admin.Composition;
 
 using static Common.GlobalConstants;
+using static Common.Messages.ErrorMessages.Genre;
 
 using Z.EntityFramework.Plus;
 
@@ -59,7 +59,7 @@ public class CompositionService : ICompositionService
         {
             compositionsQuery = dbContext.Compositions
                 .AsNoTracking()
-                .Where(c => c.Genres.Any(g => selectedGenres.Contains(g.Id)));
+                .Where(c => c.Genres.Any(g => selectedGenres.Contains(g.GenreId)));
         }
 
         if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm != string.Empty)
@@ -122,8 +122,8 @@ public class CompositionService : ICompositionService
                 PublishedOn = c.PublishedOn,
                 Genres = c.Genres.Select(g => new GenreViewModel()
                 {
-                    Id = g.Id,
-                    Name = g.Name
+                    Id = g.Genre.Id,
+                    Name = g.Genre.Name
                 })
                 .ToList()
             })
@@ -154,24 +154,14 @@ public class CompositionService : ICompositionService
 
         foreach (int genreId in formModel.Genres)
         {
-            Genre? genre = await dbContext.Genres.FirstOrDefaultAsync(g => g.Id == genreId);
+            CompositionGenre? genre = await dbContext.CompositionsGenres.FirstOrDefaultAsync(g => g.GenreId == genreId);
 
             if (genre != null)
                 composition.Genres.Add(genre);
         }
 
         if (composition.Genres.Count == 0)
-            throw new InvalidOperationException("No valid genre was provided!");
-
-        foreach (TagFormModel tagFormModel in formModel.Tags)
-        {
-            Tag? tag = await dbContext.Tags.FirstOrDefaultAsync(t => t.Name == tagFormModel.Name);
-
-            if (tag == null)
-                tag = new Tag() { Name = tagFormModel.Name };
-
-            composition.Tags.Add(tag);
-        }
+            throw new InvalidOperationException(NoGenreErrorMessage);
 
         await dbContext.Compositions.AddAsync(composition);
 
@@ -260,7 +250,7 @@ public class CompositionService : ICompositionService
     public async Task UpdateAsync(CompositionFormModel formModel)
     {
         Composition? compositionToUpdate = await dbContext.Compositions
-            .FirstOrDefaultAsync(c => c.Id.ToString() == formModel.Id);
+            .FirstOrDefaultAsync(c => c.Id.ToString() == formModel.Id && c.DeletedOn == null);
 
         if (compositionToUpdate != null)
         {
@@ -275,13 +265,14 @@ public class CompositionService : ICompositionService
             }
 
             if (genresToUpdate.Count == 0)
-                throw new InvalidOperationException("No valid genre was provided!");
+                throw new InvalidOperationException(NoGenreErrorMessage);
 
             compositionToUpdate.Title = formModel.Title;
             compositionToUpdate.Content = formModel.Content;
             compositionToUpdate.Synopsis = formModel.Synopsis;
             compositionToUpdate.CoverUrl = formModel.CoverUrl;
-            compositionToUpdate.Genres = genresToUpdate;
+
+            // TODO: FIX
 
             await dbContext.SaveChangesAsync();
         }
@@ -323,11 +314,6 @@ public class CompositionService : ICompositionService
         }
 
         return isRestoredSuccessfully;
-    }
-
-    public async Task<IEnumerable<CompositionProfileViewModel>> GetAllForUserAsync(string userId)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<int> GetCountAsync()

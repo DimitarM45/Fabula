@@ -4,6 +4,7 @@ using Fabula.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fabula.Data.Migrations
 {
     [DbContext(typeof(FabulaDbContext))]
-    partial class FabulaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230812102055_RemovedTagEntity")]
+    partial class RemovedTagEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace Fabula.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CompositionGenre", b =>
+                {
+                    b.Property<Guid>("CompositionsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("GenresId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CompositionsId", "GenresId");
+
+                    b.HasIndex("GenresId");
+
+                    b.ToTable("CompositionGenre");
+                });
 
             modelBuilder.Entity("Fabula.Data.Models.ApplicationUser", b =>
                 {
@@ -230,25 +247,6 @@ namespace Fabula.Data.Migrations
                     b.ToTable("Compositions");
 
                     b.HasComment("User-written compositions");
-                });
-
-            modelBuilder.Entity("Fabula.Data.Models.CompositionGenre", b =>
-                {
-                    b.Property<Guid>("CompositionId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasComment("Id of composition");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int")
-                        .HasComment("Id of genre");
-
-                    b.HasKey("CompositionId", "GenreId");
-
-                    b.HasIndex("GenreId");
-
-                    b.ToTable("CompositionsGenres");
-
-                    b.HasComment("Mapping table for compositions and their genres");
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.Genre", b =>
@@ -697,15 +695,15 @@ namespace Fabula.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e44b992-d52e-4a14-93f1-f3d0c79e1ffc"),
-                            ConcurrencyStamp = "79e116e1-18ca-4553-aecc-aff86e880fb5",
+                            Id = new Guid("77a5d16e-2090-4fab-8679-dee143402c4d"),
+                            ConcurrencyStamp = "db920785-869f-427b-9ffd-5268fd9455f2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("6922988f-b782-4299-b845-78c020efffca"),
-                            ConcurrencyStamp = "4cdffa84-04f0-477f-91f8-cbba10a99a96",
+                            Id = new Guid("63ae6c73-83c9-4a7e-bc17-0f731374d040"),
+                            ConcurrencyStamp = "1ae5e579-c4d4-4025-b9f2-c03fdff8cad7",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -818,6 +816,21 @@ namespace Fabula.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CompositionGenre", b =>
+                {
+                    b.HasOne("Fabula.Data.Models.Composition", null)
+                        .WithMany()
+                        .HasForeignKey("CompositionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fabula.Data.Models.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Fabula.Data.Models.ApplicationUser", b =>
                 {
                     b.HasOne("Fabula.Data.Models.ApplicationUser", null)
@@ -861,25 +874,6 @@ namespace Fabula.Data.Migrations
                         .HasForeignKey("ListId");
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("Fabula.Data.Models.CompositionGenre", b =>
-                {
-                    b.HasOne("Fabula.Data.Models.Composition", "Composition")
-                        .WithMany("Genres")
-                        .HasForeignKey("CompositionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Fabula.Data.Models.Genre", "Genre")
-                        .WithMany("Compositions")
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Composition");
-
-                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.List", b =>
@@ -1094,15 +1088,11 @@ namespace Fabula.Data.Migrations
 
                     b.Navigation("Favorites");
 
-                    b.Navigation("Genres");
-
                     b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Fabula.Data.Models.Genre", b =>
                 {
-                    b.Navigation("Compositions");
-
                     b.Navigation("Favorites");
                 });
 

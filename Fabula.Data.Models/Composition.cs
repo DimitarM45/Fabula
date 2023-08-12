@@ -13,8 +13,7 @@ public class Composition
 {
     public Composition()
     {
-        Tags = new HashSet<Tag>();
-        Genres = new HashSet<Genre>();
+        Genres = new HashSet<CompositionGenre>();
         Ratings = new HashSet<Rating>();
         Comments = new HashSet<Comment>();
         Favorites = new HashSet<UserFavoriteComposition>();
@@ -71,9 +70,7 @@ public class Composition
 
     public bool hasAdultContent { get; set; }
 
-    public ICollection<Tag> Tags { get; set; }
-
-    public ICollection<Genre> Genres { get; set; }
+    public ICollection<CompositionGenre> Genres { get; set; }
 
     public IEnumerable<Rating> Ratings { get; set; }
 
