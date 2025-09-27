@@ -107,11 +107,6 @@ Distributed under the GNU General Public License v3.0. See `LICENSE.txt` for mor
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTACT -->
-## Contact
-
-Dimitar Minchev - dimitar45minchev@gmail.com
-
 Project Link: [https://github.com/DimitarM45/Fabula](https://github.com/github_username/repo_name)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
